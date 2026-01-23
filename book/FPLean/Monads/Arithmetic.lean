@@ -307,8 +307,8 @@ One way to do this is to add a function {lit}`choose` to the language of express
 The result of the evaluator is now a multiset of values, rather than a single value.
 The rules for evaluation into a multiset are:
  * Constants $`n` evaluate to singleton sets $`\{n\}`.
- * Arithmetic operators other than division are called on each pair from the Cartesian product of the operators, so $`X + Y` evaluates to $`\{ x + y \mid x ∈ X, y ∈ Y \}`.
- * Division $`X / Y` evaluates to $`\{ x / y \mid x ∈ X, y ∈ Y, y ≠ 0\}`. In other words, all $`0` values in $`Y`  are thrown out.
+ * Arithmetic operators other than division are called on each pair from the Cartesian product of the operators, so $`X + Y` evaluates to $`\{ x + y \mid x \in X, y \in Y \}`.
+ * Division $`X / Y` evaluates to $`\{ x / y \mid x \in X, y \in Y, y \ne 0\}`. In other words, all $`0` values in $`Y`  are thrown out.
  * A choice $`\mathrm{choose}(x, y)` evaluates to $`\{ x, y \}`.
 
 For example, $`1 + \mathrm{choose}(2, 5)` evaluates to $`\{ 3, 6 \}`, $`1 + 2 / 0` evaluates to $`\{\}`, and $`90 / (\mathrm{choose}(-5, 5) + 5)` evaluates to $`\{ 9 \}`.
@@ -571,11 +571,11 @@ However, passing an argument like this is another form of monad, so an appropria
 
 Using functions as a monad is typically called a _reader_ monad.
 When evaluating expressions in the reader monad, the following rules are used:
- * Constants $`n` evaluate to constant functions $`λ e . n`,
- * Arithmetic operators evaluate to functions that pass their arguments on, so $`f + g` evaluates to $`λ e . f(e) + g(e)`, and
+ * Constants $`n` evaluate to constant functions $`\lambda e . n`,
+ * Arithmetic operators evaluate to functions that pass their arguments on, so $`f + g` evaluates to $`\lambda e . f(e) + g(e)`, and
  * Custom operators evaluate to the result of applying the custom operator to the arguments, so $`f \ \mathrm{OP}\ g` evaluates to
    $$`
-     λ e .
+     \lambda e .
      \begin{cases}
      h(f(e), g(e)) & \mathrm{if}\ e\ \mathrm{contains}\ (\mathrm{OP}, h) \\
      0 & \mathrm{otherwise}

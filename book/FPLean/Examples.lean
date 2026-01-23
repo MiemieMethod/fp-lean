@@ -110,7 +110,10 @@ end
 
 block_extension Block.creativeCommons where
   traverse _ _ _ := pure none
-  toTeX := none
+  toTeX :=
+    open Verso.Output.TeX in
+    some <| fun _ _ _ _ _ => do
+      pure \TeX{"This work is licensed under a Creative Commons Attribution 4.0 International License."}
   toHtml :=
     open Verso.Output.Html in
     some <| fun _ _ _ _ _ =>
@@ -156,7 +159,19 @@ div.paragraph > .eval-steps:not(:last-child), div.paragraph > .eval-steps:not(:l
 block_extension Block.leanEvalSteps (steps : Array Highlighted) via withHighlighting where
   data := ToJson.toJson steps
   traverse _ _ _ := pure none
-  toTeX := none
+  toTeX :=
+    open Verso.Output.TeX in
+    some <| fun _ _ _ data _ => do
+      match FromJson.fromJson? data with
+      | .error err =>
+        TeX.logError <| "Couldn't deserialize Lean code block while rendering HTML: " ++ err
+        pure .empty
+      | .ok (steps : Array Highlighted) =>
+        let i := steps.map (·.indentation) |>.toList |>.min? |>.getD 0
+        return \TeX{
+          \Lean{← steps.mapM (·.deIndent i |>.toTeX (g := Verso.Genre.Manual))}
+        }
+
   extraCss := [evalStepsStyle]
   toHtml :=
     open Verso.Output.Html in
@@ -175,7 +190,10 @@ block_extension Block.leanEvalSteps (steps : Array Highlighted) via withHighligh
 
 block_extension Block.leanEqReason where
   traverse _ _ _ := pure none
-  toTeX := none
+  toTeX :=
+    open Verso.Output.TeX in
+    some <| fun _ goB _ _ contents => do
+      contents.mapM goB
   toHtml :=
     open Verso.Output.Html in
     some <| fun _ goB _ _ contents => do
@@ -233,7 +251,7 @@ div.paragraph > .eq-steps:not(:last-child) {
 
 block_extension Block.leanEqSteps where
   traverse _ _ _ := pure none
-  toTeX := none
+  toTeX := some <| fun _ goB _ _ contents => contents.mapM goB
   extraCss := [eqStepsStyle]
   toHtml :=
     open Verso.Output.Html in
@@ -587,7 +605,12 @@ end
 inline_extension Inline.shellCommand (command : String) where
   traverse _ _ _ := pure none
   data := .str command
-  toTeX := none
+  toTeX :=
+    open Verso.Output.TeX in
+    some <| fun _ _ (data : Json) _ => do
+      match data with
+      | .str s => return \TeX{ \texttt{ \Lean{s} } }
+      | _ => TeX.logError s!"Failed to deserialize commands:\n{data}"; return .empty
   toHtml := some fun _ _ data _ => do
     let .str command := data
       | HtmlT.logError s!"Failed to deserialize commands:\n{data}"
@@ -612,10 +635,38 @@ inline_extension Inline.shellCommand (command : String) where
 "#
   ]
 
+
 block_extension Block.shellCommand (command : String) (prompt : Option String) where
   traverse _ _ _ := pure none
   data := .arr #[.str command, prompt.map .str |>.getD .null]
-  toTeX := none
+  toTeX :=
+    open Verso.Output.TeX in
+    some fun _ _ _ data _ => do
+      let .arr #[.str cmd, prompt?] := data
+        | TeX.logError s!"Failed to deserialize commands:\n{data}"
+          return .empty
+      let prompt? := match prompt? with | .str s => some s | _ => none
+      return \TeX{
+        \begin{shell}
+        \Lean{if let some p := prompt? then \TeX{\prompt{} \Lean{p} } else .empty}
+        \Lean{.raw cmd}
+        \end{shell}
+      }
+  usePackages := [r#"\usepackage{fancyvrb}"#, r#"\usepackage{xcolor}"#]
+  preamble := [
+    r#"
+\definecolor{promptcolor}{RGB}{0,120,0}
+
+\DefineVerbatimEnvironment{shell}{Verbatim}{
+  frame=single,
+  framesep=5mm,
+  commandchars=\\\{\},
+  codes={\catcode`$=12}
+}
+
+\newcommand{\prompt}{\textcolor{promptcolor}{\bfseries\$}}
+    "#
+  ]
   toHtml := some fun _ _ _ data _ => do
     let .arr #[.str command, prompt?] := data
       | HtmlT.logError s!"Failed to deserialize commands:\n{data}"
@@ -727,7 +778,36 @@ def commandOutCodeBlock : CodeBlockExpander
 block_extension Block.shellCommands (segments : Array (String × Bool)) where
   traverse _ _ _ := pure none
   data := toJson segments
-  toTeX := none
+  toTeX :=
+    open Verso.Output.TeX in
+    some fun _ _ _ data _ => do
+      let .ok (segments : Array (String × Bool)) := fromJson? data
+        | TeX.logError s!"Failed to deserialize commands:\n{data}"
+          return .empty
+      let pieces := segments.map fun
+        | (s, true) => \TeX{\prompt{} s!"{s}"}
+        | (s, false) => .raw s
+      return \TeX{
+        \begin{shell}
+        \Lean{pieces}
+        \end{shell}
+      }
+  usePackages := [r#"\usepackage{fancyvrb}"#, r#"\usepackage{xcolor}"#]
+  preamble := [
+    r#"
+\definecolor{promptcolor}{RGB}{0,120,0}
+
+\DefineVerbatimEnvironment{shell}{Verbatim}{
+  frame=single,
+  framesep=5mm,
+  commandchars=\\\{\},
+  codes={\catcode`$=12}
+}
+
+\newcommand{\prompt}{\textcolor{promptcolor}{\bfseries\$}}
+    "#
+  ]
+
   toHtml := some fun _ _ _ data _ => do
     let .ok (segments : Array (String × Bool)) := fromJson? data
       | HtmlT.logError s!"Failed to deserialize commands:\n{data}"
