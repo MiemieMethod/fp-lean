@@ -88,6 +88,8 @@ jobs:
     - name: Build Chinese book
       run: |
         pushd book_zh
+        lake build patchVersoWindowsLock
+        lake clean verso
         lake exe fp-lean --depth 2 --without-html-single --verbose
         popd
 
