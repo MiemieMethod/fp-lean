@@ -1,21 +1,19 @@
-# This is a basic workflow to help you get started with Actions
+name: build and deploy Chinese book to gh-pages
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events for the main branch or for release branches
   push:
     branches:
-      - 'master'
-      - 'release/*'
-    tags:
-      - '*'
+      - master
   pull_request:
     branches: [ master ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
 jobs:
   Build:
@@ -26,10 +24,10 @@ jobs:
       run: sudo apt-get install -y expect
 
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Setup Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: 3.10.4
 
@@ -41,16 +39,16 @@ jobs:
 
     - name: Set elan paths
       run: |
-        echo "$HOME/.elan/bin" >> $GITHUB_PATH
+        echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
 
     - name: Install lean toolchain for examples
       run: |
         cd examples
         lean --version
 
-    - name: Install lean toolchain for text
+    - name: Install lean toolchain for Chinese book
       run: |
-        cd book
+        cd book_zh
         lean --version
 
     - name: Cache examples/.lake
@@ -58,20 +56,20 @@ jobs:
       with:
         path: examples/.lake
         # The SHA is in the key to get the most recent cache possible, rather than just saving a single one for each Lean/deps version and not touching it.
-        key: ${{ runner.os }}-${{ hashFiles('examples/lake-manifest.json') }}-${{ hashFiles('examples/lean-toolchain') }}-${{ steps.shortSHA.outputs.short_sha }}
+        key: ${{ runner.os }}-${{ hashFiles('examples/lake-manifest.json') }}-${{ hashFiles('examples/lean-toolchain') }}-${{ github.sha }}
         # Try to restore cache for same OS/Lean/deps, but don't get less specific, because Lake isn't always happy to get build product version mismatches
         restore-keys: |
           ${{ runner.os }}-${{ hashFiles('examples/lake-manifest.json') }}-${{ hashFiles('examples/lean-toolchain') }}-
 
-    - name: Cache book/.lake
+    - name: Cache book_zh/.lake
       uses: actions/cache@v4
       with:
-        path: book/.lake
+        path: book_zh/.lake
         # The SHA is in the key to get the most recent cache possible, rather than just saving a single one for each Lean/deps version and not touching it.
-        key: ${{ runner.os }}-${{ hashFiles('book/lake-manifest.json') }}-${{ hashFiles('book/lean-toolchain') }}-${{ steps.shortSHA.outputs.short_sha }}
+        key: ${{ runner.os }}-${{ hashFiles('book_zh/lake-manifest.json') }}-${{ hashFiles('book_zh/lean-toolchain') }}-${{ github.sha }}
         # Try to restore cache for same OS/Lean/deps, but don't get less specific, because Lake isn't always happy to get build product version mismatches
         restore-keys: |
-          ${{ runner.os }}-${{ hashFiles('book/lake-manifest.json') }}-${{ hashFiles('book/lean-toolchain') }}-
+          ${{ runner.os }}-${{ hashFiles('book_zh/lake-manifest.json') }}-${{ hashFiles('book_zh/lean-toolchain') }}-
 
     - name: Build example code
       run: |
@@ -85,20 +83,20 @@ jobs:
       with:
         path: examples/.lake
         # The SHA is in the key to get the most recent cache possible, rather than just saving a single one for each Lean/deps version and not touching it.
-        key: ${{ runner.os }}-${{ hashFiles('examples/lake-manifest.json') }}-${{ hashFiles('examples/lean-toolchain') }}-${{ steps.shortSHA.outputs.short_sha }}
+        key: ${{ runner.os }}-${{ hashFiles('examples/lake-manifest.json') }}-${{ hashFiles('examples/lean-toolchain') }}-${{ github.sha }}
 
-    - name: Build book
+    - name: Build Chinese book
       run: |
-        pushd book
+        pushd book_zh
         lake exe fp-lean --depth 2 --without-html-single --verbose
         popd
 
-    - name: Save book/.lake
+    - name: Save book_zh/.lake
       uses: actions/cache/save@v4
       with:
-        path: book/.lake
+        path: book_zh/.lake
         # The SHA is in the key to get the most recent cache possible, rather than just saving a single one for each Lean/deps version and not touching it.
-        key: ${{ runner.os }}-${{ hashFiles('book/lake-manifest.json') }}-${{ hashFiles('book/lean-toolchain') }}-${{ steps.shortSHA.outputs.short_sha }}
+        key: ${{ runner.os }}-${{ hashFiles('book_zh/lake-manifest.json') }}-${{ hashFiles('book_zh/lean-toolchain') }}-${{ github.sha }}
 
     # This is to get the cached highlight JSON files
     - name: Save examples/.lake again
@@ -106,43 +104,12 @@ jobs:
       with:
         path: examples/.lake
         # The SHA is in the key to get the most recent cache possible, rather than just saving a single one for each Lean/deps version and not touching it.
-        key: ${{ runner.os }}-${{ hashFiles('examples/lake-manifest.json') }}-${{ hashFiles('examples/lean-toolchain') }}-${{ steps.shortSHA.outputs.short_sha }}
+        key: ${{ runner.os }}-${{ hashFiles('examples/lake-manifest.json') }}-${{ hashFiles('examples/lean-toolchain') }}-${{ github.sha }}
 
 
-    - name: Zip html contents
-      run: |
-        pushd book/_out
-        cp -r html-multi html
-        zip -rq html.zip html/
-        popd
-
-    - id: deploy-info
-      name: Compute Deployment Metadata
-      run: |
-        set -e
-        python3 -c 'import base64; print("alias="+base64.urlsafe_b64encode(bytes.fromhex("${{github.sha}}")).decode("utf-8").rstrip("="))' >> "$GITHUB_OUTPUT"
-        echo "message=`git log -1 --pretty=format:"%s"`" >> "$GITHUB_OUTPUT"
-
-    - name: Release preview zip if a new tag is pushed
-      uses: softprops/action-gh-release@v1
-      if: ${{ startsWith(github.ref, 'refs/tags/pre-') }}
+    - name: Deploy Chinese book to gh-pages
+      if: github.event_name == 'push' && github.ref_name == 'master'
+      uses: JamesIves/github-pages-deploy-action@4.1.5
       with:
-        files: book/_out/html.zip
-        token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Deploy to Netlify hosting
-      uses: nwtgck/actions-netlify@v2.0
-      with:
-        publish-dir: book/_out/html-multi/
-        production-branch: master
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        deploy-message: |
-          ${{ github.event_name == 'pull_request' && format('pr#{0}: {1}', github.event.number, github.event.pull_request.title) || format('ref/{0}: {1}', github.ref_name, steps.deploy-info.outputs.message) }}
-        alias: ${{ steps.deploy-info.outputs.alias }}
-        enable-commit-comment: false
-        enable-pull-request-comment: false
-        github-deployment-environment: "lean-lang.org/functional_programming_lean"
-        fails-without-credentials: true
-      env:
-        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        NETLIFY_SITE_ID: "4e471a74-81e0-42f2-b27c-ca8c80a34f7c"
+        branch: gh-pages
+        folder: book_zh/_out/html-multi

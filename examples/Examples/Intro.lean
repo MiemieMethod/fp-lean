@@ -1401,8 +1401,8 @@ structure SourcePos where
   line : Nat
   column : Nat
 
-%show_term «ArithExpr SourcePos» := ArithExpr SourcePos
-%show_term «ArithExpr Unit» := ArithExpr Unit
+%show_term ArithExpr_SourcePos := ArithExpr SourcePos
+%show_term ArithExpr_Unit := ArithExpr Unit
 %show_name SourcePos as SourcePos.name
 
 end
@@ -2351,11 +2351,11 @@ open SubVerso.Examples
 
 section
 %show_term sizes := (α β : Type) → α → β → α ⊕ β → α × β
-%show_term «Bool × Unit» := Bool × Unit
+%show_term Bool_times_Unit := Bool × Unit
 -- ANCHOR: BoolxUnit
 %show_term BoolxUnit.vals : List (Bool × Unit) := [(true, Unit.unit), (false, Unit.unit)]
 -- ANCHOR_END: BoolxUnit
-%show_term «Bool ⊕ Unit» := Bool ⊕ Unit
+%show_term Bool_sum_Unit := Bool ⊕ Unit
 -- ANCHOR: BooloUnit
 %show_term BooloUnit.vals : List (Bool ⊕ Unit) := [Sum.inl true, Sum.inl false, Sum.inr Unit.unit]
 -- ANCHOR_END: BooloUnit
@@ -2438,11 +2438,11 @@ end
 %show_name Point.x as Point.x.name
 %show_name Point.y as Point.y.name
 %show_name fourAndThree as fourAndThree.name
-%show_term «Option Int» := Option Int
-%show_term «Option (List String)» := Option (List String)
-%show_term «Nat→Bool» := Nat → Bool
-%show_term «Nat→Nat→Nat» := Nat → Nat → Nat
-%show_term «Nat→(Nat→Nat)» := Nat → (Nat → Nat)
+%show_term Option_Int : Type := Option Int
+%show_term Option_List_String : Type := Option (List String)
+%show_term Nat_to_Bool : Type := Nat → Bool
+%show_term Nat_to_Nat_to_Nat : Type := Nat → Nat → Nat
+%show_term Nat_to_paren_Nat_to_Nat : Type := Nat → (Nat → Nat)
 %show_name maximum as maximum.name
 %show_name spaceBetween as spaceBetween.name
 -- ANCHOR: evalEx
@@ -2453,17 +2453,17 @@ end
 %show_term ex5 := if 3 == 4 then "equal" else "not equal"
 -- ANCHOR_END: evalEx
 %show_term zero := 0
-%show_term «0» := 0
-%show_term «5» := 5
-%show_term «Type» := Type
-%show_term «Type→Type» := Type → Type
-%show_term «List Nat» := List Nat
-%show_term «List String» := List String
-%show_term «List (List Point)» := List (List Point)
-%show_term «Prod Nat String» := Prod Nat String
-%show_term «Prod Nat Nat» := Prod Nat Nat
-%show_term «PPoint Nat» := PPoint Nat
-%show_term «Sum String Int» := Sum String Int
+%show_term zero_term : Nat := 0
+%show_term five_term : Nat := 5
+%show_term Type_term : Type 1 := Type
+%show_term Type_to_Type : Type 1 := Type → Type
+%show_term List_Nat : Type := List Nat
+%show_term List_String : Type := List String
+%show_term List_List_Point : Type := List (List Point)
+%show_term Prod_Nat_String : Type := Prod Nat String
+%show_term Prod_Nat_Nat : Type := Prod Nat Nat
+%show_term PPoint_Nat : Type := PPoint Nat
+%show_term Sum_String_Int : Type := Sum String Int
 %show_name List.length as List.length.name
 %show_name List.map as List.map.name
 %show_name Array.map as Array.map.name

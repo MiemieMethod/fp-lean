@@ -11,7 +11,7 @@ def main (argv : List String) : IO UInt32 := do
   stdout.putStrLn "How would you like to be addressed?"
   stdout.flush
 
-  let name := (← stdin.getLine).trim
+  let name := (← stdin.getLine).toSlice.trimAscii.copy
   if name == "" then
     stderr.putStrLn s!"No name provided"
     return 1
@@ -35,7 +35,7 @@ def main (argv : List String) : IO UInt32 := do
     stdout.putStrLn "How would you like to be addressed?"
     stdout.flush
 
-    let name := (← stdin.getLine).trim
+    let name := (← stdin.getLine).toSlice.trimAscii.copy
     if name == "" then
       stderr.putStrLn s!"No name provided"
       pure 1
