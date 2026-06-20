@@ -1,0 +1,2121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      (function(){
+  const {protocol:proto, host:hostName, pathname:path, search:srch, hash:hsh} = window.location;
+  if (!(path.endsWith("/") || path.endsWith(".html"))) {
+    window.location.replace(`${proto}//${hostName}${path}/${srch}${hsh}`);
+  }
+})()</script>
+    <base href="./../../"><meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>实例： cat</title><link rel="stylesheet" href="book.css">
+    <link rel="stylesheet" href="verso-vars.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js" integrity="sha384-zbcZAIxlvJtNE3Dp5nxLXdXtXyxwOdnILY1TDPVmKFhl4r4nSUG1r8bcFXGVa4Te" crossorigin="anonymous"></script>
+    <script src="-verso-search/elasticlunr.min.js"></script>
+    <script src="-verso-search/fuzzysort.min.js"></script>
+    <script src="-verso-search/searchIndex.js"></script>
+    <script type="module" src="-verso-search/search-init.js"></script>
+    <link rel="stylesheet" href="-verso-search/search-box.css">
+    <link rel="stylesheet" href="-verso-search/search-highlight.css">
+    <link rel="stylesheet" href="-verso-search/domain-display.css">
+    <script src="-verso-data/popper.min.js"></script>
+    <script src="-verso-data/katex/math.js"></script>
+    <script src="-verso-data/tippy-bundle.umd.min.js"></script>
+    <script src="-verso-data/katex/katex.js"></script>
+    <link rel="stylesheet" href="-verso-data/tippy-border.css">
+    <link rel="stylesheet" href="-verso-data/katex/katex.css">
+    <style>
+div.paragraph > .eval-steps:not(:first-child), div.paragraph > .eval-steps:not(:first-child) > * {
+  margin-top: 0.5rem;
+}
+
+div.paragraph > .eval-steps:not(:last-child), div.paragraph > .eval-steps:not(:last-child) > * {
+  margin-bottom: 0.5rem;
+}
+
+.eval-steps .hl.lean.block {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.eval-steps .hl.lean.block:not(:last-child)::after {
+  content: "⟹";
+  display: block;
+  margin-left: 1em;
+  font-size: 175%;
+}
+
+</style><style>
+.shell-commands {
+
+}
+.shell-commands > * {
+  display: block;
+  white-space: pre;
+}
+.shell-commands .command::before {
+  content: "$ ";
+  font-weight: 600;
+}
+
+div.paragraph > .shell-commands:not(:first-child) {
+  margin-top: 0.5rem;
+}
+
+div.paragraph > .shell-commands:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+</style><style>
+.eq-steps .hl.lean.block {
+  background-color: #f6f7f6;
+  padding: 1rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+.eq-steps .reason {
+  font-style: italic;
+  margin-left: 2.5em;
+  display: flex;
+}
+.eq-steps .reason::before {
+  content: "={";
+  font-family: var(--verso-code-font-family);
+  font-style: normal;
+  font-weight: 600;
+  margin-right: 0.5em;
+  align-self: center;
+}
+.eq-steps .reason > p {
+  margin: 0;
+  max-width: 25em;
+  align-self: center;
+}
+.eq-steps .reason::after {
+  content: "}=";
+  font-family: var(--verso-code-font-family);
+  font-style: normal;
+  font-weight: 600;
+  margin-left: 1em;
+  align-self: center;
+}
+</style><style>/static/theme.css</style><style>
+.shell-command {
+
+}
+.shell-command.block > * {
+  display: block;
+  white-space: pre;
+}
+.shell-command .command .prompt {
+  font-weight: 600;
+}
+
+div.paragraph > .shell-command:not(:first-child) {
+  margin-top: 0.5rem;
+}
+
+div.paragraph > .shell-command:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+</style><style>
+.example-file {
+  white-space: normal;
+  font-family: var(--verso-structure-font-family);
+  margin: 1rem;
+  width: fit-content;
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+
+  /* These are necessary for the container to behave nicely on mobile */
+  overflow-x: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.example-file::before {
+  counter-reset: linenumber;
+}
+.example-file > .line {
+  display: block;
+  white-space: pre;
+  counter-increment: linenumber;
+  font-family: var(--verso-code-font-family);
+}
+.example-file > .line::before {
+  -webkit-user-select: none;
+  display: inline-block;
+  content: counter(linenumber);
+  border-right: 1px solid #ddd;
+  width: 2em;
+  padding-right: 0.25em;
+  margin-right: 0.25em;
+  font-family: var(--verso-code-font-family);
+  text-align: right;
+}
+.example-file > .line::after {
+  -webkit-user-select: none;
+  display: inline-block;
+  content: "⏎";
+  opacity: 0;
+}
+.example-file > .line:hover::after {
+  opacity: 1;
+}
+.example-file > .line:hover, .example-file > .line:hover::before {
+  background-color: #eee;
+}
+.example-file > .empty {
+  display: block;
+  white-space: pre;
+  font-family: var(--verso-code-font-family);
+  font-style: italic;
+}
+.example-file > .empty::before {
+  -webkit-user-select: none;
+  display: inline-block;
+  content: "";
+  border-right: 1px solid #ddd;
+  width: 2em;
+  padding-right: 0.25em;
+  margin-right: 0.25em;
+  font-family: var(--verso-code-font-family);
+  text-align: right;
+}
+</style><style>/static/fonts/source-code-pro/source-code-pro.css</style><style>
+.namedocs {
+  position: relative;
+  border: solid 1px #98B2C0;
+  border-radius: .5rem;
+  padding-top: var(--verso--box-padding);
+  margin-top: var(--verso--box-vertical-margin);
+  margin-bottom: var(--verso--box-vertical-margin);
+}
+
+.namedocs .text {
+  /* Causes margins on child elements to collapse inside the element, such
+     that the margins don't extend into parent with the background color.
+     The effect is that weird borders in the definition box don't happen anymore. */
+  display: flow-root;
+  /* Add a padding. this is the same as the margin applied to the first and last child.
+     The effect is that the padding looks the same size on all sides. */
+  padding: 0 var(--verso--box-padding);
+  border-top: 1px solid #98B2C0;
+}
+
+.namedocs .text > pre {
+  overflow-x: auto;
+}
+
+.namedocs .signature {
+  font-family: var(--verso-code-font-family);
+  margin-top: 0 !important;
+  margin-left: var(--verso--box-padding) !important;
+  margin-bottom: .75rem !important;
+}
+
+.namedocs .label {
+  display: block;
+  font-size: small;
+  font-family: var(--verso-structure-font-family);
+  position: absolute;
+  top: -0.65rem;
+  left: 1rem;
+  background: #fff;
+  padding: 0 .5rem .125rem;
+  border: 1px solid #98B2C0;
+  border-radius: 1rem;
+  color: #555;
+}
+
+.namedocs h1 {
+  font-size: inherit;
+  font-weight: bold
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.namedocs > .text .constructor {
+  padding-top: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.namedocs > .text .constructor::before {
+  content: '| ';
+  display: block;
+  font-family: var(--verso-code-font-family);
+  font-weight: bold;
+  float: left;
+  width: 0.5rem;
+  white-space: pre;
+}
+
+.namedocs > .text .constructor .name-and-type {
+  padding-left: 0.5rem;
+  float: left;
+  margin-top: 0;
+  max-width: calc(100% - 1rem);
+}
+.namedocs > .text .constructor .docs {
+  clear: both;
+  padding-left: 1rem;
+}
+
+/* These margins work together with the padding on .text */
+.namedocs .text > :first-child {
+  margin-top: var(--verso--box-padding);
+}
+.namedocs .text > :last-child {
+  margin-bottom: var(--verso--box-padding);
+}
+
+.namedocs .methods td, .namedocs .fields td {
+  vertical-align: top;
+}
+.namedocs .inheritance {
+  vertical-align: top;
+  font-size: smaller;
+  font-family: var(--verso-structure-font-family);
+}
+.namedocs .inheritance ol {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+.namedocs .inheritance ol li {
+  list-style-type: none;
+  display: inline-block;
+}
+.namedocs .inheritance ol li::after {
+  content: " > "
+}
+.namedocs .inheritance ol li:last-child::after {
+  content: "";
+}
+
+.namedocs .extends {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+.namedocs .extends li {
+  list-style-type: none;
+  display: inline-block;
+}
+
+.namedocs .extends li label {
+  padding-right: 1rem;
+}
+
+.namedocs .subdocs .name-and-type {
+  font-size: 1rem;
+  margin-left: 0;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0.5rem;
+}
+
+.namedocs .subdocs .docs {
+  margin-left: 1.5rem;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0.5rem;
+}
+
+.namedocs:has(input[data-parent-idx]) [data-inherited-from] {
+  transition-property: opacity, display;
+  transition-duration: 0.4s;
+  transition-behavior: allow-discrete;
+  @starting-style { opacity: 0 !important; }
+}
+
+#this-page-items .tactic-name { font-weight: bold; }
+.namedocs:has(input[data-parent-idx="0"]) [data-inherited-from="0"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="0"]:checked) [data-inherited-from="0"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="0"]:checked):has(.inheritance[data-inherited-from="0"]:hover) [data-inherited-from]:not([data-inherited-from="0"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="1"]) [data-inherited-from="1"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="1"]:checked) [data-inherited-from="1"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="1"]:checked):has(.inheritance[data-inherited-from="1"]:hover) [data-inherited-from]:not([data-inherited-from="1"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="2"]) [data-inherited-from="2"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="2"]:checked) [data-inherited-from="2"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="2"]:checked):has(.inheritance[data-inherited-from="2"]:hover) [data-inherited-from]:not([data-inherited-from="2"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="3"]) [data-inherited-from="3"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="3"]:checked) [data-inherited-from="3"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="3"]:checked):has(.inheritance[data-inherited-from="3"]:hover) [data-inherited-from]:not([data-inherited-from="3"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="4"]) [data-inherited-from="4"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="4"]:checked) [data-inherited-from="4"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="4"]:checked):has(.inheritance[data-inherited-from="4"]:hover) [data-inherited-from]:not([data-inherited-from="4"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="5"]) [data-inherited-from="5"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="5"]:checked) [data-inherited-from="5"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="5"]:checked):has(.inheritance[data-inherited-from="5"]:hover) [data-inherited-from]:not([data-inherited-from="5"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="6"]) [data-inherited-from="6"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="6"]:checked) [data-inherited-from="6"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="6"]:checked):has(.inheritance[data-inherited-from="6"]:hover) [data-inherited-from]:not([data-inherited-from="6"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="7"]) [data-inherited-from="7"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="7"]:checked) [data-inherited-from="7"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="7"]:checked):has(.inheritance[data-inherited-from="7"]:hover) [data-inherited-from]:not([data-inherited-from="7"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="8"]) [data-inherited-from="8"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="8"]:checked) [data-inherited-from="8"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="8"]:checked):has(.inheritance[data-inherited-from="8"]:hover) [data-inherited-from]:not([data-inherited-from="8"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="9"]) [data-inherited-from="9"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="9"]:checked) [data-inherited-from="9"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="9"]:checked):has(.inheritance[data-inherited-from="9"]:hover) [data-inherited-from]:not([data-inherited-from="9"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="10"]) [data-inherited-from="10"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="10"]:checked) [data-inherited-from="10"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="10"]:checked):has(.inheritance[data-inherited-from="10"]:hover) [data-inherited-from]:not([data-inherited-from="10"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="11"]) [data-inherited-from="11"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="11"]:checked) [data-inherited-from="11"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="11"]:checked):has(.inheritance[data-inherited-from="11"]:hover) [data-inherited-from]:not([data-inherited-from="11"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="12"]) [data-inherited-from="12"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="12"]:checked) [data-inherited-from="12"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="12"]:checked):has(.inheritance[data-inherited-from="12"]:hover) [data-inherited-from]:not([data-inherited-from="12"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="13"]) [data-inherited-from="13"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="13"]:checked) [data-inherited-from="13"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="13"]:checked):has(.inheritance[data-inherited-from="13"]:hover) [data-inherited-from]:not([data-inherited-from="13"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="14"]) [data-inherited-from="14"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="14"]:checked) [data-inherited-from="14"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="14"]:checked):has(.inheritance[data-inherited-from="14"]:hover) [data-inherited-from]:not([data-inherited-from="14"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="15"]) [data-inherited-from="15"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="15"]:checked) [data-inherited-from="15"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="15"]:checked):has(.inheritance[data-inherited-from="15"]:hover) [data-inherited-from]:not([data-inherited-from="15"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="16"]) [data-inherited-from="16"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="16"]:checked) [data-inherited-from="16"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="16"]:checked):has(.inheritance[data-inherited-from="16"]:hover) [data-inherited-from]:not([data-inherited-from="16"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="17"]) [data-inherited-from="17"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="17"]:checked) [data-inherited-from="17"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="17"]:checked):has(.inheritance[data-inherited-from="17"]:hover) [data-inherited-from]:not([data-inherited-from="17"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="18"]) [data-inherited-from="18"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="18"]:checked) [data-inherited-from="18"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="18"]:checked):has(.inheritance[data-inherited-from="18"]:hover) [data-inherited-from]:not([data-inherited-from="18"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="19"]) [data-inherited-from="19"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="19"]:checked) [data-inherited-from="19"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="19"]:checked):has(.inheritance[data-inherited-from="19"]:hover) [data-inherited-from]:not([data-inherited-from="19"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="20"]) [data-inherited-from="20"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="20"]:checked) [data-inherited-from="20"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="20"]:checked):has(.inheritance[data-inherited-from="20"]:hover) [data-inherited-from]:not([data-inherited-from="20"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="21"]) [data-inherited-from="21"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="21"]:checked) [data-inherited-from="21"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="21"]:checked):has(.inheritance[data-inherited-from="21"]:hover) [data-inherited-from]:not([data-inherited-from="21"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="22"]) [data-inherited-from="22"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="22"]:checked) [data-inherited-from="22"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="22"]:checked):has(.inheritance[data-inherited-from="22"]:hover) [data-inherited-from]:not([data-inherited-from="22"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="23"]) [data-inherited-from="23"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="23"]:checked) [data-inherited-from="23"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="23"]:checked):has(.inheritance[data-inherited-from="23"]:hover) [data-inherited-from]:not([data-inherited-from="23"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="24"]) [data-inherited-from="24"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="24"]:checked) [data-inherited-from="24"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="24"]:checked):has(.inheritance[data-inherited-from="24"]:hover) [data-inherited-from]:not([data-inherited-from="24"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="25"]) [data-inherited-from="25"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="25"]:checked) [data-inherited-from="25"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="25"]:checked):has(.inheritance[data-inherited-from="25"]:hover) [data-inherited-from]:not([data-inherited-from="25"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="26"]) [data-inherited-from="26"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="26"]:checked) [data-inherited-from="26"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="26"]:checked):has(.inheritance[data-inherited-from="26"]:hover) [data-inherited-from]:not([data-inherited-from="26"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="27"]) [data-inherited-from="27"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="27"]:checked) [data-inherited-from="27"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="27"]:checked):has(.inheritance[data-inherited-from="27"]:hover) [data-inherited-from]:not([data-inherited-from="27"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="28"]) [data-inherited-from="28"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="28"]:checked) [data-inherited-from="28"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="28"]:checked):has(.inheritance[data-inherited-from="28"]:hover) [data-inherited-from]:not([data-inherited-from="28"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="29"]) [data-inherited-from="29"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="29"]:checked) [data-inherited-from="29"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="29"]:checked):has(.inheritance[data-inherited-from="29"]:hover) [data-inherited-from]:not([data-inherited-from="29"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="30"]) [data-inherited-from="30"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="30"]:checked) [data-inherited-from="30"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="30"]:checked):has(.inheritance[data-inherited-from="30"]:hover) [data-inherited-from]:not([data-inherited-from="30"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="31"]) [data-inherited-from="31"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="31"]:checked) [data-inherited-from="31"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="31"]:checked):has(.inheritance[data-inherited-from="31"]:hover) [data-inherited-from]:not([data-inherited-from="31"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="32"]) [data-inherited-from="32"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="32"]:checked) [data-inherited-from="32"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="32"]:checked):has(.inheritance[data-inherited-from="32"]:hover) [data-inherited-from]:not([data-inherited-from="32"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="33"]) [data-inherited-from="33"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="33"]:checked) [data-inherited-from="33"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="33"]:checked):has(.inheritance[data-inherited-from="33"]:hover) [data-inherited-from]:not([data-inherited-from="33"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="34"]) [data-inherited-from="34"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="34"]:checked) [data-inherited-from="34"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="34"]:checked):has(.inheritance[data-inherited-from="34"]:hover) [data-inherited-from]:not([data-inherited-from="34"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="35"]) [data-inherited-from="35"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="35"]:checked) [data-inherited-from="35"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="35"]:checked):has(.inheritance[data-inherited-from="35"]:hover) [data-inherited-from]:not([data-inherited-from="35"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="36"]) [data-inherited-from="36"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="36"]:checked) [data-inherited-from="36"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="36"]:checked):has(.inheritance[data-inherited-from="36"]:hover) [data-inherited-from]:not([data-inherited-from="36"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="37"]) [data-inherited-from="37"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="37"]:checked) [data-inherited-from="37"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="37"]:checked):has(.inheritance[data-inherited-from="37"]:hover) [data-inherited-from]:not([data-inherited-from="37"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="38"]) [data-inherited-from="38"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="38"]:checked) [data-inherited-from="38"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="38"]:checked):has(.inheritance[data-inherited-from="38"]:hover) [data-inherited-from]:not([data-inherited-from="38"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="39"]) [data-inherited-from="39"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="39"]:checked) [data-inherited-from="39"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="39"]:checked):has(.inheritance[data-inherited-from="39"]:hover) [data-inherited-from]:not([data-inherited-from="39"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="40"]) [data-inherited-from="40"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="40"]:checked) [data-inherited-from="40"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="40"]:checked):has(.inheritance[data-inherited-from="40"]:hover) [data-inherited-from]:not([data-inherited-from="40"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="41"]) [data-inherited-from="41"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="41"]:checked) [data-inherited-from="41"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="41"]:checked):has(.inheritance[data-inherited-from="41"]:hover) [data-inherited-from]:not([data-inherited-from="41"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="42"]) [data-inherited-from="42"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="42"]:checked) [data-inherited-from="42"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="42"]:checked):has(.inheritance[data-inherited-from="42"]:hover) [data-inherited-from]:not([data-inherited-from="42"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="43"]) [data-inherited-from="43"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="43"]:checked) [data-inherited-from="43"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="43"]:checked):has(.inheritance[data-inherited-from="43"]:hover) [data-inherited-from]:not([data-inherited-from="43"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="44"]) [data-inherited-from="44"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="44"]:checked) [data-inherited-from="44"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="44"]:checked):has(.inheritance[data-inherited-from="44"]:hover) [data-inherited-from]:not([data-inherited-from="44"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="45"]) [data-inherited-from="45"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="45"]:checked) [data-inherited-from="45"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="45"]:checked):has(.inheritance[data-inherited-from="45"]:hover) [data-inherited-from]:not([data-inherited-from="45"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="46"]) [data-inherited-from="46"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="46"]:checked) [data-inherited-from="46"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="46"]:checked):has(.inheritance[data-inherited-from="46"]:hover) [data-inherited-from]:not([data-inherited-from="46"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="47"]) [data-inherited-from="47"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="47"]:checked) [data-inherited-from="47"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="47"]:checked):has(.inheritance[data-inherited-from="47"]:hover) [data-inherited-from]:not([data-inherited-from="47"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="48"]) [data-inherited-from="48"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="48"]:checked) [data-inherited-from="48"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="48"]:checked):has(.inheritance[data-inherited-from="48"]:hover) [data-inherited-from]:not([data-inherited-from="48"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="49"]) [data-inherited-from="49"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="49"]:checked) [data-inherited-from="49"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="49"]:checked):has(.inheritance[data-inherited-from="49"]:hover) [data-inherited-from]:not([data-inherited-from="49"]) {
+  opacity: 0.5;
+}
+</style><style>
+table.tabular {
+  margin: auto;
+  border-spacing: 1rem;
+}
+table.tabular.left-align {
+  margin-right: auto;
+  margin-left: 0;
+}
+table.tabular.center-align {
+  margin: auto;
+}
+table.tabular.right-align {
+  margin-left auto;
+  margin-right: 0;
+}
+table.tabular td, table.tabular th {
+  text-align: left;
+  vertical-align: top;
+}
+table.tabular td > p:first-child, table.tabular th > p:first-child {
+  margin-top: 0;
+}
+table.tabular td > p:last-child, table.tabular th > p:first-child {
+  margin-bottom: 0;
+}
+</style><style>/static/fonts/source-serif/source-serif-text.css</style><style>/static/fonts/source-sans/source-sans-3.css</style><style>
+.shell-command {
+
+}
+.shell-command.inline > * {
+  display: inline;
+  white-space: pre;
+}
+.shell-command.inline .command::before {
+  content: "$ ";
+  font-weight: 600;
+}
+</style><style>/static/fonts/noto-sans-mono/noto-sans-mono.css</style><style>
+div.paragraph > .eq-steps:not(:first-child) {
+  margin-top: 0.5rem;
+}
+
+div.paragraph > .eq-steps:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+</style><style>
+
+.hl.lean {
+  white-space: pre;
+  font-weight: normal;
+  font-style: normal;
+  font-size: inherit;
+}
+
+.hl.lean .keyword {
+  color: var(--verso-code-keyword-color,);
+  font-weight: var(--verso-code-keyword-weight, bold);
+  font-style: var(--verso-code-keyword-style, normal);
+  font-family: var(--verso-code-keyword-font-family,);
+}
+
+.hl.lean .const {
+  color: var(--verso-code-const-color,);
+  font-weight: var(--verso-code-const-weight, normal);
+  font-style: var(--verso-code-const-style, normal);
+  font-family: var(--verso-code-const-font-family,);
+}
+
+.hl.lean .var {
+  color: var(--verso-code-var-color,);
+  font-weight: var(--verso-code-var-weight, normal);
+  font-style: var(--verso-code-var-style, italic);
+  font-family: var(--verso-code-var-font-family,);
+
+  position: relative;
+}
+
+.hl.lean .literal, .hl.lean .unknown {
+  color: var(--verso-code-color,);
+  font-weight: normal;
+  font-style: normal;
+  font-family: var(--verso-code-font-family,);
+}
+
+.hover-container {
+  width: 0;
+  height: 0;
+  position: relative;
+  display: inline;
+}
+
+.hl.lean a {
+  color: inherit;
+  text-decoration: currentcolor underline dotted;
+}
+
+.hl.lean a:hover {
+  text-decoration: currentcolor underline solid;
+}
+
+.hl.lean .hover-info {
+  white-space: normal;
+}
+
+.hl.lean .token .hover-info {
+  display: none;
+  position: absolute;
+  background-color: #e5e5e5;
+  border: 1px solid black;
+  padding: 0.5rem;
+  z-index: 300;
+}
+
+.hl.lean .hover-info.messages {
+  max-height: 10rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  padding: 0 0.5rem 0 0;
+  display: block;
+}
+
+.hl.lean .hover-info code {
+  white-space: pre-wrap;
+  background: none;
+  color: black;
+}
+
+.hl.lean .hover-info.messages > code {
+  padding: 0.5rem;
+  display: block;
+  width: fit-content;
+}
+
+.hl.lean .hover-info.messages > code:only-child {
+  margin: 0;
+}
+
+.hl.lean .hover-info.messages > code {
+  margin: 0.1rem;
+}
+
+.hl.lean .hover-info.messages > code:not(:first-child) {
+  margin-top: 0rem;
+}
+
+.hl.lean {
+}
+
+.hl.lean.block {
+  display: block;
+}
+
+.hl.lean.inline {
+  display: inline;
+  white-space: pre-wrap;
+}
+
+.hl.lean * {
+}
+
+.hl.lean .token {
+  transition: all 0.25s; /* Slight fade for highlights */
+}
+
+@media (hover: hover) {
+  .hl.lean .token.binding-hl, .hl.lean .literal.string:hover, .hl.lean .token.typed:hover {
+    background-color: #eee;
+    border-radius: 2px;
+    transition: none;
+  }
+}
+
+
+.hl.lean .has-info .token:not(.tactic-state):not(.tactic-state *), .hl.lean .has-info .inter-text:not(.tactic-state):not(.tactic-state *) {
+  text-decoration-style: wavy;
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.hl.lean .has-info .hover-info {
+  display: none;
+  position: absolute;
+  transform: translate(0.25rem, 0.3rem);
+  border: 1px solid black;
+  padding: 0.5rem;
+  z-index: 400;
+  text-align: left;
+}
+
+.hl.lean .has-info.error :not(.tactic-state):not(.tactic-state *){
+  text-decoration-color: red;
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.error:hover {
+    background-color: #ffb3b3;
+  }
+}
+
+.hl.lean .hover-info.messages > code.error {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid #ffb3b3;
+}
+
+.tippy-box[data-theme~='error'] .hl.lean .hover-info.messages > code.error {
+  background: none;
+  border: none;
+}
+
+.error .verso-message, .error .verso-message .token, .error .verso-message label {
+  color: var(--verso-error-color);
+}
+
+.error .verso-message .case-label:has(input[type="checkbox"])::before {
+  background-color: var(--verso-error-color) !important;
+}
+
+.hl.lean .has-info.warning :not(.tactic-state):not(.tactic-state *) {
+  text-decoration-color: var(--verso-warning-indicator-color);
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.warning:hover {
+    background-color:var(--verso-warning-color);
+  }
+}
+
+.hl.lean .hover-info.messages > code.warning {
+  background-color: var(--verso-warning-color);
+}
+
+.lean-output {
+  border-left: 0.2em solid transparent;
+  padding: 0 0 0 0.5em;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.lean-output.error {
+  border-color: var(--verso-error-indicator-color);
+}
+
+.lean-output.information {
+  border-color: var(--verso-info-indicator-color);
+}
+
+.lean-output.warning {
+  border-color: var(--verso-warning-indicator-color);
+}
+
+.hl.lean .hover-info.messages > code.error {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid var(--verso-warning-color);
+}
+
+.tippy-box[data-theme~='warning'] .hl.lean .hover-info.messages > code.warning {
+  background: none;
+  border: none;
+}
+
+
+.hl.lean .has-info.information :not(.tactic-state):not(.tactic-state *) {
+  text-decoration-color: var(--verso-info-indicator-color, blue);
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.information:hover {
+    background-color: #4777ff;
+  }
+}
+
+
+.hl.lean .hover-info.messages > code.information {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid #4777ff;
+}
+
+.tippy-box[data-theme~='info'] .hl.lean .hover-info.messages > code.information {
+  background: none;
+  border: none;
+}
+
+.hl.lean div.docstring {
+  font-family: var(--verso-text-font-family, sans-serif);
+  white-space: normal;
+  max-width: calc(min(40rem, 90vw));
+  width: max-content;
+}
+
+.hl.lean div.docstring > :last-child {
+  margin-bottom: 0;
+}
+
+.hl.lean div.docstring > :first-child {
+  margin-top: 0;
+}
+
+.hl.lean .hover-info .sep {
+  display: block;
+  width: auto;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0;
+  height: 1px;
+  border-top: 1px solid #ccc;
+}
+
+.hl.lean code {
+  font-family: var(--verso-code-font-family);
+}
+
+.hl.lean .tactic-state {
+  display: none;
+  position: relative;
+  width: fit-content;
+  border: 1px solid #888888;
+  border-radius: 0.1rem;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  background-color: #ffffff;
+}
+
+.hl.lean.popup .tactic-state {
+  position: static;
+  display: block;
+  width: auto;
+  border: none;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  background-color: #ffffff;
+}
+
+
+.hl.lean .tactic {
+  position: relative;
+  display: inline;
+  vertical-align: top;
+  /* Without these, mobile Safari will start making font sizes inconsistent when its text size adjustment feature is triggered.*/
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+.hl.lean .tactic:has(.tactic-toggle:checked) {
+  display: inline-grid;
+  grid-template-columns: 1fr;
+}
+
+.hl.lean .tactic-toggle:checked ~ .tactic-state {
+  display: inline-block;
+  vertical-align: top;
+  grid-row: 2;
+  justify-self: start;
+}
+
+.hl.lean .tactic > label {
+  position: relative;
+  grid-row: 1;
+  display: inline;
+}
+
+@media (hover: hover) {
+  .hl.lean .tactic:has(.tactic-toggle:not(:checked)) > label:hover {
+    background-color: #eeeeee;
+  }
+}
+
+.hl.lean .tactic-toggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  z-index: -10;
+}
+
+.hl.lean .tactic > label::after {
+  content: "";
+  border: 1px solid #bbbbbb;
+  /* These need to be em, not rem, to scale with the font */
+  border-radius: 1em;
+  height: 0.25em;
+  vertical-align: middle;
+  width: 0.6em;
+  margin-left: 0.1em;
+  margin-right: 0.1em;
+  display: inline-block;
+  transition: all 0.5s;
+}
+
+/*
+@media (hover: hover) {
+  .hl.lean .tactic > label:hover::after {
+    border: 1px solid #aaaaaa;
+    background-color: #aaaaaa;
+    transition: all 0.5s;
+  }
+}
+*/
+
+.hl.lean .tactic > label:has(+ .tactic-toggle:checked)::after {
+  border: 1px solid #999999;
+  background-color: #999999;
+  transition: all 0.5s;
+}
+
+.hl.lean .tactic-state .goal + .goal {
+  margin-top: 1.5em;
+}
+
+/*
+Some CSS frameworks customize details/summary in ways not compatible with Verso's output.
+*/
+
+.hl.lean details {
+  display: block !important;
+  margin: 0;
+}
+
+.hl.lean details summary {
+  display: list-item !important;
+  margin: 0;
+}
+
+.hl.lean details summary:focus {
+  outline: none;
+  outline-offset: none;
+  color: inherit;
+}
+
+.hl.lean ul > li {
+  margin-bottom: 0;
+}
+
+.hl.lean details summary::marker {
+  display: inline !important;
+}
+
+.hl.lean details > summary:first-of-type {
+  list-style-type: disclosure-closed;
+  list-style-position: inside;
+}
+
+.hl.lean details[open] > summary:first-of-type {
+  list-style-type: disclosure-open;
+}
+
+.hl.lean details summary::before, .hl.lean details summary::after {
+  content: "" !important;
+  background: none;
+  display: none;
+}
+
+.hl.lean .tactic-state summary {
+  /* These need to be em, not rem, to scale with the font */
+  margin-left: -0.5em;
+}
+
+.hl.lean .tactic-state details {
+  /* These need to be em, not rem, to scale with the font */
+  padding-left: 0.5em;
+}
+
+.hl.lean .case-label {
+  display: block;
+  position: relative;
+}
+
+.hl.lean .case-label input[type="checkbox"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  z-index: -10;
+}
+
+.hl.lean .case-label:has(input[type="checkbox"])::before {
+  display: inline-block;
+  background-color: black;
+  content: ' ';
+  transition: ease 0.2s;
+  margin-right: 0.7em;
+  clip-path: polygon(100% 0, 0 0, 50% 100%);
+  width: 0.6em;
+  height: 0.6em;
+  vertical-align: middle;
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]:not(:checked))::before {
+  transform: rotate(-90deg);
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]) {
+
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]:checked) {
+
+}
+
+
+.hl.lean .labeled-case > :not(:first-child) {
+  max-height: 0px;
+  display: block;
+  overflow: hidden;
+  transition: max-height 0.1s ease-in;
+  /* These need to be em, not rem, to scale with the font */
+  margin-left: 0.5em;
+  margin-top: 0.1em;
+}
+
+.hl.lean .labeled-case:has(.case-label input[type="checkbox"]:checked) > :not(:first-child) {
+  max-height: 100%;
+}
+
+
+.hl.lean .goal-name::before {
+  font-style: normal;
+  content: "case ";
+}
+
+.hl.lean .goal-name {
+  font-style: italic;
+  font-family: var(--verso-code-font-family);
+  color: inherit;
+}
+
+.hl.lean .hypotheses {
+  display: table;
+}
+
+.hl.lean .hypothesis {
+  display: table-row;
+}
+
+.hl.lean .hypothesis > * {
+  display: table-cell;
+}
+
+
+.hl.lean .hypotheses .colon {
+  text-align: center;
+  /* This needs to be em, not rem, to scale with the font */
+  min-width: 1em;
+}
+
+.hl.lean .hypotheses .name {
+  text-align: right;
+}
+
+.hl.lean .hypotheses .name,
+.hl.lean .hypotheses .type,
+.hl.lean .conclusion .type {
+  font-family: var(--verso-code-font-family);
+}
+
+.tippy-box {
+  /* Without these, mobile Safari will start making font sizes inconsistent when its text size adjustment feature is triggered.*/
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+
+}
+
+.tippy-box[data-theme~='lean'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 1px solid black;
+}
+.tippy-box[data-theme~='lean'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #e5e5e5;
+}
+
+.tippy-box[data-theme~='message'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #e5e5e5;
+  border-width: 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='top'] > .tippy-arrow::after {
+  bottom: -11px;
+  border-width: 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-width: 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='bottom'] > .tippy-arrow::after {
+  top: -11px;
+  border-width: 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #e5e5e5;
+  border-width: 11px 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='left'] > .tippy-arrow::after {
+  right: -11px;
+  border-width: 11px 0 11px 11px;
+}
+
+.tippy-box[data-theme~='message'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #e5e5e5;
+  border-width: 11px 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='right'] > .tippy-arrow::after {
+  left: -11px;
+  border-width: 11px 11px 11px 0;
+}
+
+
+
+.tippy-box[data-theme~='warning'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid var(--verso-warning-color);
+}
+
+.tippy-box[data-theme~='error'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid #f7a7af;
+}
+
+.tippy-box[data-theme~='info'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid #99b3c2;
+}
+
+.tippy-box[data-theme~='tactic'] {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: white;
+}
+
+.extra-doc-links {
+  list-style-type: none;
+  margin-left: 0;
+  padding: 0;
+}
+
+.extra-doc-links > li {
+  display: inline-block;
+}
+
+.extra-doc-links > li:not(:last-child)::after {
+  content: '|';
+  display: inline-block;
+  margin: 0 0.25em;
+}
+
+.verso-message .trace {
+  display: block;
+}
+
+.verso-message .trace > summary::marker {
+  color: var(--verso-text-color);
+}
+
+.verso-message .trace-children {
+  margin: 0;
+  padding: 0;
+}
+
+.verso-message .trace-children > li {
+  list-style-type: none;
+  margin-left: 1.5em;
+}
+
+.verso-message .trace-children > li:not(:has(.trace)) {
+  margin-left: 0;
+}
+
+.verso-message .trace-class {
+  color: color-mix(in srgb, currentColor 70%, transparent);
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.verso-message .text {
+  white-space: pre-wrap;
+}
+
+</style><script>
+      
+window.onload = () => {
+
+    // Don't show hovers inside of closed tactic states
+    function blockedByTactic(elem) {
+      let parent = elem.parentNode;
+      while (parent && "classList" in parent) {
+        if (parent.classList.contains("tactic")) {
+          const toggle = parent.querySelector("input.tactic-toggle");
+          if (toggle) {
+            return !toggle.checked;
+          }
+        }
+        parent = parent.parentNode;
+      }
+      return false;
+    }
+
+    function blockedByTippy(elem) {
+      // Don't show a new hover until the old ones are all closed.
+      // Scoped to the nearest "top-level block" to avoid being O(n) in the size of the document.
+      var block = elem;
+      const topLevel = new Set(["section", "body", "html", "nav", "header"]);
+      while (block.parentNode && !topLevel.has(block.parentNode.nodeName.toLowerCase())) {
+        block = block.parentNode;
+      }
+      for (const child of block.querySelectorAll(".token, .has-info")) {
+        if (child._tippy && child._tippy.state.isVisible) { return true };
+      }
+      return false;
+    }
+
+    for (const c of document.querySelectorAll(".hl.lean .token")) {
+        if (c.dataset.binding != "") {
+            c.addEventListener("mouseover", (event) => {
+                if (blockedByTactic(c)) {return;}
+                const context = c.closest(".hl.lean").dataset.leanContext;
+                for (const example of document.querySelectorAll(".hl.lean")) {
+                    if (example.dataset.leanContext == context) {
+                        for (const tok of example.querySelectorAll(".token")) {
+                            if (c.dataset.binding == tok.dataset.binding) {
+                                tok.classList.add("binding-hl");
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        c.addEventListener("mouseout", (event) => {
+            for (const tok of document.querySelectorAll(".hl.lean .token")) {
+                tok.classList.remove("binding-hl");
+            }
+        });
+    }
+    /* Render docstrings */
+    if ('undefined' !== typeof marked) {
+        for (const d of document.querySelectorAll("code.docstring, pre.docstring")) {
+            const str = d.innerText;
+            const html = marked.parse(str);
+            const rendered = document.createElement("div");
+            rendered.classList.add("docstring");
+            rendered.innerHTML = html;
+            d.parentNode.replaceChild(rendered, d);
+        }
+    }
+    // Add hovers
+    let docsJson = "-verso-docs.json";
+    fetch(docsJson).then((resp) => resp.json()).then((versoDocData) => {
+
+      function hideParentTooltips(element) {
+        let parent = element.parentElement;
+        while (parent) {
+          const tippyInstance = parent._tippy;
+          if (tippyInstance) {
+            tippyInstance.hide();
+          }
+          parent = parent.parentElement;
+        }
+      }
+
+
+
+      const defaultTippyProps = {
+        /* DEBUG -- remove the space: * /
+        onHide(any) { return false; },
+        trigger: "click",
+        // */
+        /* theme: "lean", */
+        maxWidth: "none",
+        appendTo: () => document.body,
+        interactive: true,
+        delay: [100, null],
+        /* ignoreAttributes: true, */
+        followCursor: 'initial',
+        onShow(inst) {
+          if (inst.reference.className == 'tactic') {
+
+            const toggle = inst.reference.querySelector("input.tactic-toggle");
+            if (toggle && toggle.checked) {
+              return false;
+            }
+            hideParentTooltips(inst.reference);
+            //if (blockedByTippy(inst.reference)) { return false; }
+
+          } else if (inst.reference.querySelector(".hover-info") || "versoHover" in inst.reference.dataset) {
+            if (blockedByTactic(inst.reference)) { return false };
+            if (blockedByTippy(inst.reference)) { return false; }
+          } else { // Nothing to show here!
+            return false;
+          }
+        },
+        content (tgt) {
+          const content = document.createElement("span");
+          if (tgt.className == 'tactic') {
+            const state = tgt.querySelector(".tactic-state").cloneNode(true);
+            state.style.display = "block";
+            content.appendChild(state);
+            content.style.display = "block";
+            content.className = "hl lean popup";
+          } else {
+            content.className = "hl lean";
+            content.style.display = "block";
+            content.style.maxHeight = "300px";
+            content.style.overflowY = "auto";
+            content.style.overflowX = "hidden";
+            const hoverId = tgt.dataset.versoHover;
+            const hoverInfo = tgt.querySelector(".hover-info");
+            if (hoverId) { // Docstrings from the table
+              // TODO stop doing an implicit conversion from string to number here
+              let data = versoDocData[hoverId];
+              if (data) {
+                const info = document.createElement("span");
+                info.className = "hover-info";
+                info.style.display = "block";
+                info.innerHTML = data;
+                content.appendChild(info);
+                /* Render docstrings - TODO server-side */
+                if ('undefined' !== typeof marked) {
+                    for (const d of content.querySelectorAll("code.docstring, pre.docstring")) {
+                        const str = d.innerText;
+                        const html = marked.parse(str);
+                        const rendered = document.createElement("div");
+                        rendered.classList.add("docstring");
+                        rendered.innerHTML = html;
+                        d.parentNode.replaceChild(rendered, d);
+                    }
+                }
+              } else {
+                content.innerHTML = "Failed to load doc ID: " + hoverId;
+              }
+            } else if (hoverInfo) { // The inline info, still used for compiler messages
+              content.appendChild(hoverInfo.cloneNode(true));
+            }
+            const extraLinks = tgt.parentElement.dataset['versoLinks'];
+            if (extraLinks) {
+              try {
+                const extras = JSON.parse(extraLinks);
+                const links = document.createElement('ul');
+                links.className = 'extra-doc-links';
+                extras.forEach((l) => {
+                  const li = document.createElement('li');
+                  li.innerHTML = "<a href=\"" + l['href'] + "\" title=\"" + l.long + "\">" + l.short + "</a>";
+                  links.appendChild(li);
+                });
+                content.appendChild(links);
+              } catch (error) {
+                console.error(error);
+              }
+            }
+          }
+          return content;
+        }
+      };
+
+
+      document.querySelectorAll('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'lean');
+      });
+      document.querySelectorAll('.hl.lean .has-info.warning').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'warning message');
+      });
+      document.querySelectorAll('.hl.lean .has-info.information').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'info message');
+      });
+      document.querySelectorAll('.hl.lean .has-info.error').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'error message');
+      });
+      document.querySelectorAll('.hl.lean .tactic').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'tactic');
+      });
+      let insts = tippy('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .has-info, .hl.lean .tactic, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort', defaultTippyProps);
+  });
+}
+</script>
+    <script defer="defer" data-domain="lean-lang.org" src="https://plausible.io/js/script.outbound-links.js"></script>
+    <script src="-verso-search/search-highlight.js" defer="defer"></script>
+    </head>
+  <body>
+    <header>
+      <div class="header-logo-wrapper">
+        <a href="" id="logo"><img src="static/lean_logo.svg"></a></div>
+      <div class="header-title-wrapper">
+        <a href="" class="header-title"><h1>
+            Lean 函数式编程</h1>
+          </a></div>
+      </header>
+    <label for="toggle-toc" id="toggle-toc-click"><span class="line line1"></span><span class="line line2"></span><span class="line line3"></span></label><div class="with-toc">
+      <div class="toc-backdrop" onclick="document.getElementById('toggle-toc-click')?.click()"></div>
+      <nav id="toc">
+        <input type="checkbox" id="toggle-toc"><div class="first">
+          <a href="" class="toc-title"><h1>
+              Lean 函数式编程</h1>
+            </a><div class="split-tocs">
+            <div class="split-toc book">
+              <div class="title">
+                <label for="--verso-manual-toc-----bookRoot" class="toggle-split-toc"><input type="checkbox" class="toggle-split-toc" id="--verso-manual-toc-----bookRoot"></label><span class="">Table of Contents</span></div>
+              <table><tr class="unnumbered"><td class="num"><td><a href="_u7b80__u4ecb_/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u7b80__u4ecb_">简介</a></td></tr><tr class="unnumbered"><td class="num"><td><a href="_u81f4__u8c22_/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u81f4__u8c22_">致谢</a></td></tr><tr class="numbered"><td class="num">1.</td><td><a href="_u4e86__u89e3_-Lean/#getting-to-know">了解 Lean</a></td></tr><tr class="current numbered"><td class="num">2.</td><td><a href="Hello_u2c_-World_u21_/#hello-world">Hello, World!</a></td></tr><tr class="unnumbered"><td class="num"><td><a href="_u63d2__u66f2__uff1a__u547d__u9898__u3001__u8bc1__u660e__u4e0e__u7d22__u5f15_/#props-proofs-indexing">插曲：命题、证明与索引</a></td></tr><tr class="numbered"><td class="num">3.</td><td><a href="_u91cd__u8f7d__u4e0e__u7c7b__u578b__u7c7b_/#type-classes">重载与类型类</a></td></tr><tr class="numbered"><td class="num">4.</td><td><a href="_u5355__u5b50_/#monads">单子</a></td></tr><tr class="numbered"><td class="num">5.</td><td><a href="_u51fd__u5b50__u3001__u5e94__u7528__u51fd__u5b50__u548c__u5355__u5b50_/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u51fd__u5b50__u3001__u5e94__u7528__u51fd__u5b50__u548c__u5355__u5b50_">函子、应用函子和单子</a></td></tr><tr class="numbered"><td class="num">6.</td><td><a href="_u5355__u5b50__u8f6c__u6362__u5668_/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u5355__u5b50__u8f6c__u6362__u5668_">单子转换器</a></td></tr><tr class="numbered"><td class="num">7.</td><td><a href="_u4f7f__u7528__u4f9d__u503c__u7c7b__u578b__u7f16__u7a0b_/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u4f7f__u7528__u4f9d__u503c__u7c7b__u578b__u7f16__u7a0b_">使用依值类型编程</a></td></tr><tr class="unnumbered"><td class="num"><td><a href="_u63d2__u66f2__uff1a__u7b56__u7565__u3001__u5f52__u7eb3__u4e0e__u8bc1__u660e_/#tactics-induction-proofs">插曲：策略、归纳与证明</a></td></tr><tr class="numbered"><td class="num">8.</td><td><a href="_u7f16__u7a0b__u3001__u8bc1__u660e__u4e0e__u6027__u80fd_/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u7f16__u7a0b__u3001__u8bc1__u660e__u4e0e__u6027__u80fd_">编程、证明与性能</a></td></tr><tr class="numbered"><td class="num">9.</td><td><a href="_u7ee7__u7eed__u5b66__u4e60_/#next-steps">继续学习</a></td></tr></table></div>
+            <div class="split-toc">
+              <div class="title">
+                <label for="--verso-manual-toc-hello-world" class="toggle-split-toc"><input type="checkbox" class="toggle-split-toc" id="--verso-manual-toc-hello-world" checked="checked"></label><span class="number">2.</span> <span class=""><a href="Hello_u2c_-World_u21_/#hello-world">Hello, World!</a></span></div>
+              <table><tr class="numbered"><td class="num">2.1.</td><td><a href="Hello_u2c_-World_u21_/_u8fd0__u884c__u7a0b__u5e8f_/#running-a-program">运行程序</a></td></tr><tr class="numbered"><td class="num">2.2.</td><td><a href="Hello_u2c_-World_u21_/_u9010__u6b65__u6267__u884c_/#step-by-step">逐步执行</a></td></tr><tr class="numbered"><td class="num">2.3.</td><td><a href="Hello_u2c_-World_u21_/_u521b__u5efa__u9879__u76ee_/#starting-a-project">创建项目</a></td></tr><tr class="current numbered"><td class="num">2.4.</td><td><a href="Hello_u2c_-World_u21_/_u5b9e__u4f8b__uff1a_-cat/#example-cat">实例：<code>cat</code></a></td></tr><tr class="numbered"><td class="num">2.5.</td><td><a href="Hello_u2c_-World_u21_/_u989d__u5916__u7684__u4fbf__u5229__u529f__u80fd_/#hello-world-conveniences">额外的便利功能</a></td></tr><tr class="numbered"><td class="num">2.6.</td><td><a href="Hello_u2c_-World_u21_/_u603b__u7ed3_/#hello-world-summary">总结</a></td></tr></table></div>
+            <div class="split-toc">
+              <div class="title">
+                <label for="--verso-manual-toc-example-cat" class="toggle-split-toc"><input type="checkbox" class="toggle-split-toc" id="--verso-manual-toc-example-cat" checked="checked"></label><span class="number">2.4.</span> <span class="current"><a href="Hello_u2c_-World_u21_/_u5b9e__u4f8b__uff1a_-cat/#example-cat">实例：<code>cat</code></a></span></div>
+              <table><tr class="numbered"><td class="num">2.4.1.</td><td><a href="Hello_u2c_-World_u21_/_u5b9e__u4f8b__uff1a_-cat/#example-cat-start">开始</a></td></tr><tr class="numbered"><td class="num">2.4.2.</td><td><a href="Hello_u2c_-World_u21_/_u5b9e__u4f8b__uff1a_-cat/#example-cat-streams">连接流</a></td></tr><tr class="numbered"><td class="num">2.4.3.</td><td><a href="Hello_u2c_-World_u21_/_u5b9e__u4f8b__uff1a_-cat/#example-cat-running">喵！</a></td></tr><tr class="numbered"><td class="num">2.4.4.</td><td><a href="Hello_u2c_-World_u21_/_u5b9e__u4f8b__uff1a_-cat/#example-cat-exercise">练习</a></td></tr></table></div>
+            </div>
+          </div>
+        <div class="last">
+          <ul id="meta-links">
+            <li>
+              <a href="https://github.com/MiemieMethod/fp-lean">Source Code</a></li>
+            <li>
+              <a href="https://github.com/MiemieMethod/fp-lean/issues">Report Issues</a></li>
+            </ul>
+          </div>
+        </nav>
+      <main><div class="content-wrapper">
+          <nav class="prev-next-buttons">
+            <a class="local-button active" href="Hello_u2c_-World_u21_/_u521b__u5efa__u9879__u76ee_/#starting-a-project" rel="prev" title="2.3. 创建项目"><span class="arrow">←</span><span class="where">2.3. 创建项目</span></a><a class="local-button active" href="Hello_u2c_-World_u21_/_u989d__u5916__u7684__u4fbf__u5229__u529f__u80fd_/#hello-world-conveniences" rel="next" title="2.5. 额外的便利功能"><span class="where">2.5. 额外的便利功能</span><span class="arrow">→</span></a></nav>
+          <section>
+            <h1>
+              2.4. 实例：<code>cat</code><span class="permalink-widget inline"><a href="find/?domain=Verso.Genre.Manual.section&amp;name=example-cat" title="Permalink">🔗</a></span></h1>
+            <p>
+              标准的 Unix 实用程序 <code>cat</code> 接受多个命令行选项，后跟零个或多个输入文件。
+如果没有提供文件，或者其中一个是横线（<code>-</code>），那么它将标准输入作为相应的输入，而不是读取文件。
+输入的内容会一个接一个地写入标准输出。
+如果指定的输入文件不存在，这会在标准错误上注明，但 <code>cat</code> 会继续连接剩余的输入。
+如果任何输入文件不存在，则返回非零退出代码。</p>
+            <p>
+              本节描述了 <code>cat</code> 的简化版本，称为 <code>feline</code>。
+与常用的 <code>cat</code> 版本不同，<code>feline</code> 没有用于编号行、指示非打印字符或显示帮助文本等功能的命令行选项。
+此外，它无法从与终端设备关联的标准输入中读取多次。</p>
+            <p>
+              要充分学习本节内容，请自己动手操作。复制粘贴代码示例是可以的，但最好手动输入它们。这使得学习输入代码、从错误中恢复以及解释编译器反馈的机械过程变得更加容易。</p>
+            <section>
+              <h2 id="example-cat-start">
+                2.4.1. 开始<span class="permalink-widget inline"><a href="find/?domain=Verso.Genre.Manual.section&amp;name=example-cat-start" title="Permalink">🔗</a></span></h2>
+              <p>
+                实现 <code>feline</code> 的第一步是创建一个包并决定如何组织代码。
+在这种情况下，因为程序非常简单，所有代码都将放在 <code>Main.lean</code> 中。
+第一步是运行 <code>lake new feline</code>。
+编辑 Lakefile 以删除库，并删除生成的库代码和从 <code>Main.lean</code> 中对它的引用。
+完成这些后，<code>lakefile.toml</code> 应该包含：</p>
+              <div class="example-file">
+                File: <code>lakefile.toml</code><code class="line">name = "feline"</code><code class="line">version = "0.1.0"</code><code class="line">defaultTargets = ["feline"]</code><code class="line"></code><code class="line">[[lean_exe]]</code><code class="line">name = "feline"</code><code class="line">root = "Main"</code></div>
+              <p>
+                <code>Main.lean</code> 应该包含类似的内容：</p>
+              <div class="example-file">
+                File: <code>Main.lean</code><code class="line">def main : IO Unit :=</code><code class="line">  IO.println s!"Hello, cats!"</code></div>
+              <p>
+                或者，运行 <code>lake new feline exe</code> 指示 <code>lake</code> 使用不包含库部分的模板，使得无需编辑文件。</p>
+              <p>
+                通过运行 <span class="shell-command inline"><code class="command">lake build</code></span> 确保可以构建代码。</p>
+              </section>
+            <section>
+              <h2 id="example-cat-streams">
+                2.4.2. 连接流<span class="permalink-widget inline"><a href="find/?domain=Verso.Genre.Manual.section&amp;name=example-cat-streams" title="Permalink">🔗</a></span></h2>
+              <p>
+                现在已经构建了程序的基本骨架，是时候实际输入代码了。
+<code>cat</code> 的正确实现可以用于无限的 IO 流，例如 <code>/dev/random</code>，这意味着它不能在输出之前将其输入读入内存。
+此外，它不应一次处理一个字符，因为这会导致性能变差。相反，最好一次读取连续的数据块，一次将数据定向到标准输出。</p>
+              <p>
+                第一步是决定要读取多大的块。
+为了简单起见，这个实现使用保守的 20 KB 块。
+<code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Fixed-Precision-Integers/#USize___ofBitVec" title="Documentation for USize in Lean Language Reference"><span class="const token" data-binding="const-USize" data-verso-hover="316">USize</span></a></code> 类似于 C 中的 <code>size_t</code>——它是一个无符号整数类型，足够大以表示所有有效的数组大小。</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-19">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-bufsize" data-verso-hover="317" id="bufsize">bufsize</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Fixed-Precision-Integers/#USize___ofBitVec" title="Documentation for USize in Lean Language Reference"><span class="const token" data-binding="const-USize" data-verso-hover="316">USize</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="318">20</span><span class="inter-text"> </span><span class="unknown token" data-binding="">*</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="318">1024</span></code><section>
+                <h3 id="streams">
+                  2.4.2.1. 流<span class="permalink-widget inline"><a href="find/?domain=Verso.Genre.Manual.section&amp;name=streams" title="Permalink">🔗</a></span></h3>
+                <p>
+                  <code>feline</code> 的主要工作由 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-dump" data-verso-hover="319">dump</span></code> 完成，它一次读取一个块的输入，将结果转储到标准输出，直到抵达输入的末尾。
+输入的结束由 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___FS___Stream___mk" title="Documentation for IO.FS.Stream.read in Lean Language Reference"><span class="const token" data-binding="const-IO.FS.Stream.read" data-verso-hover="320">read</span></a></code> 返回空字节数组表示：</p>
+                <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.partial-92">partial</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-100">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-dump" data-verso-hover="319">dump</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.108" data-verso-hover="279">stream</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___FS___Stream___mk" title="Documentation for IO.FS.Stream in Lean Language Reference"><span class="const token" data-binding="const-IO.FS.Stream" data-verso-hover="288">IO.FS.Stream</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#IO" title="Documentation for IO in Lean Language Reference"><span class="const token" data-binding="const-IO" data-verso-hover="2">IO</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/The-Unit-Type/#Unit" title="Documentation for Unit in Lean Language Reference"><span class="const token" data-binding="const-Unit" data-verso-hover="194">Unit</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/Syntax/#Lean___Parser___Term___do" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.do-146">do</span></a><span class="inter-text">
+  </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.doLetArrow-151">let</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.170" data-verso-hover="321">buf</span><span class="inter-text"> </span><span class="unknown token" data-binding="">←</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.108" data-verso-hover="279">stream</span><span class="unknown token" data-binding="">.</span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___FS___Stream___mk" title="Documentation for IO.FS.Stream.read in Lean Language Reference"><span class="const token" data-binding="const-IO.FS.Stream.read" data-verso-hover="320">read</span></a><span class="inter-text"> </span><a href="Hello_u2c_-World_u21_/_u5b9e__u4f8b__uff1a_-cat/#bufsize" title="Definition of example"><span class="const token" data-binding="const-bufsize" data-verso-hover="317">bufsize</span></a><span class="inter-text">
+  </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.doIf-185">if</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.170" data-verso-hover="321">buf</span><span class="unknown token" data-binding="">.</span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Byte-Arrays/#ByteArray___isEmpty" title="Documentation for ByteArray.isEmpty in Lean Language Reference"><span class="const token" data-binding="const-ByteArray.isEmpty" data-verso-hover="322">isEmpty</span></a><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.doIf-185">then</span><span class="inter-text">
+    </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Pure___mk" title="Documentation for Pure.pure in Lean Language Reference"><span class="const token" data-binding="const-Pure.pure" data-verso-hover="301">pure</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><span class="keyword token" data-binding="kw-occ-null-219">else</span><span class="inter-text">
+    </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.doLetArrow-254">let</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.363" data-verso-hover="279">stdout</span><span class="inter-text"> </span><span class="unknown token" data-binding="">←</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___getStdout" title="Documentation for IO.getStdout in Lean Language Reference"><span class="const token" data-binding="const-IO.getStdout" data-verso-hover="281">IO.getStdout</span></a><span class="inter-text">
+    </span><span class="var token" data-binding="var-_uniq.363" data-verso-hover="279">stdout</span><span class="unknown token" data-binding="">.</span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___FS___Stream___mk" title="Documentation for IO.FS.Stream.write in Lean Language Reference"><span class="const token" data-binding="const-IO.FS.Stream.write" data-verso-hover="323">write</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.170" data-verso-hover="321">buf</span><span class="inter-text">
+    </span><span class="const token" data-binding="const-dump" data-verso-hover="319">dump</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.108" data-verso-hover="279">stream</span></code><p>
+                  <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-dump" data-verso-hover="319">dump</span></code> 函数被声明为偏函数 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.partial-92">partial</span></code>，因为它在不是立即小于参数的输入上递归调用自身。
+当函数被声明为偏函数时，Lean 不要求证明它终止。
+另一方面，偏函数也远不如正确性证明那样易于处理，因为在 Lean 的逻辑中允许无限循环会使其不健全。
+然而，没有办法证明 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-dump" data-verso-hover="319">dump</span></code> 终止，因为无限输入（例如来自 <code>/dev/random</code>）意味着它实际上不会终止。
+在这种情况下，没有其他选择只能将函数声明为 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.partial-92">partial</span></code>。</p>
+                <p>
+                  类型 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___FS___Stream___mk" title="Documentation for IO.FS.Stream in Lean Language Reference"><span class="const token" data-binding="const-IO.FS.Stream" data-verso-hover="288">IO.FS.Stream</span></a></code> 表示 POSIX 流。
+在幕后，它表示为一个结构体，该结构为每个 POSIX 流操作都有一个字段。
+每个操作都表示为提供相应操作的 IO 活动：</p>
+                <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.structureTk-57">structure</span><span class="inter-text"> </span><span class="const token" data-binding="const-Str.Stream" data-verso-hover="324" id="Str_u2e_Stream">Stream</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-null-74">where</span><span class="inter-text">
+  </span><span class="const token" data-binding="const-Str.Stream.flush" data-verso-hover="325" id="Str_u2e_Stream_u2e_flush">flush</span><span class="inter-text">   </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#IO" title="Documentation for IO in Lean Language Reference"><span class="const token" data-binding="const-IO" data-verso-hover="2">IO</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/The-Unit-Type/#Unit" title="Documentation for Unit in Lean Language Reference"><span class="const token" data-binding="const-Unit" data-verso-hover="194">Unit</span></a><span class="inter-text">
+  </span><span class="const token" data-binding="const-Str.Stream.read" data-verso-hover="326" id="Str_u2e_Stream_u2e_read">read</span><span class="inter-text">    </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Fixed-Precision-Integers/#USize___ofBitVec" title="Documentation for USize in Lean Language Reference"><span class="const token" data-binding="const-USize" data-verso-hover="316">USize</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#IO" title="Documentation for IO in Lean Language Reference"><span class="const token" data-binding="const-IO" data-verso-hover="2">IO</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Byte-Arrays/#ByteArray___mk" title="Documentation for ByteArray in Lean Language Reference"><span class="const token" data-binding="const-ByteArray" data-verso-hover="327">ByteArray</span></a><span class="inter-text">
+  </span><span class="const token" data-binding="const-Str.Stream.write" data-verso-hover="328" id="Str_u2e_Stream_u2e_write">write</span><span class="inter-text">   </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Byte-Arrays/#ByteArray___mk" title="Documentation for ByteArray in Lean Language Reference"><span class="const token" data-binding="const-ByteArray" data-verso-hover="327">ByteArray</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#IO" title="Documentation for IO in Lean Language Reference"><span class="const token" data-binding="const-IO" data-verso-hover="2">IO</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/The-Unit-Type/#Unit" title="Documentation for Unit in Lean Language Reference"><span class="const token" data-binding="const-Unit" data-verso-hover="194">Unit</span></a><span class="inter-text">
+  </span><span class="const token" data-binding="const-Str.Stream.getLine" data-verso-hover="329" id="Str_u2e_Stream_u2e_getLine">getLine</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#IO" title="Documentation for IO in Lean Language Reference"><span class="const token" data-binding="const-IO" data-verso-hover="2">IO</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a><span class="inter-text">
+  </span><span class="const token" data-binding="const-Str.Stream.putStr" data-verso-hover="330" id="Str_u2e_Stream_u2e_putStr">putStr</span><span class="inter-text">  </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#IO" title="Documentation for IO in Lean Language Reference"><span class="const token" data-binding="const-IO" data-verso-hover="2">IO</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/The-Unit-Type/#Unit" title="Documentation for Unit in Lean Language Reference"><span class="const token" data-binding="const-Unit" data-verso-hover="194">Unit</span></a><span class="inter-text">
+  </span><span class="const token" data-binding="const-Str.Stream.isTty" data-verso-hover="331" id="Str_u2e_Stream_u2e_isTty">isTty</span><span class="inter-text">   </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#BaseIO" title="Documentation for BaseIO in Lean Language Reference"><span class="const token" data-binding="const-BaseIO" data-verso-hover="332">BaseIO</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Booleans/#Bool___false" title="Documentation for Bool in Lean Language Reference"><span class="const token" data-binding="const-Bool" data-verso-hover="47">Bool</span></a></code><p>
+                  类型 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#BaseIO" title="Documentation for BaseIO in Lean Language Reference"><span class="const token" data-binding="const-BaseIO" data-verso-hover="332">BaseIO</span></a></code> 是 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#IO" title="Documentation for IO in Lean Language Reference"><span class="const token" data-binding="const-IO" data-verso-hover="2">IO</span></a></code> 的变体，排除了运行时错误。
+Lean 编译器包含 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#IO" title="Documentation for IO in Lean Language Reference"><span class="const token" data-binding="const-IO" data-verso-hover="2">IO</span></a></code> 活动（例如在 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-dump" data-verso-hover="319">dump</span></code> 中调用的 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___getStdout" title="Documentation for IO.getStdout in Lean Language Reference"><span class="const token" data-binding="const-IO.getStdout" data-verso-hover="281">IO.getStdout</span></a></code>）来获取表示标准输入、标准输出和标准错误的流。
+这些是 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#IO" title="Documentation for IO in Lean Language Reference"><span class="const token" data-binding="const-IO" data-verso-hover="2">IO</span></a></code> 活动而不是普通定义，因为 Lean 允许在进程中替换这些标准 POSIX 流，这使得通过编写自定义的 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___FS___Stream___mk" title="Documentation for IO.FS.Stream in Lean Language Reference"><span class="const token" data-binding="const-IO.FS.Stream" data-verso-hover="288">IO.FS.Stream</span></a></code> 来捕获程序输出到字符串等操作变得更容易。</p>
+                <p>
+                  <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-dump" data-verso-hover="319">dump</span></code> 中的控制流本质上是一个 <code>while</code> 循环。
+当调用 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-dump" data-verso-hover="319">dump</span></code> 时，如果流已到达文件末尾，<code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Pure___mk" title="Documentation for Pure.pure in Lean Language Reference"><span class="const token" data-binding="const-Pure.pure" data-verso-hover="301">pure</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="unknown token" data-binding="">)</span></code> 通过返回 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/The-Unit-Type/#Unit" title="Documentation for Unit in Lean Language Reference"><span class="const token" data-binding="const-Unit" data-verso-hover="194">Unit</span></a></code> 的构造函数来终止函数。
+如果流尚未到达文件末尾，则读取一个块，其内容被写入 <code class="hl lean inline" data-lean-context="examples"><span class="var token" data-binding="var-_uniq.363" data-verso-hover="279">stdout</span></code>，之后 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-dump" data-verso-hover="319">dump</span></code> 直接调用自身。
+递归调用继续，直到 <code class="hl lean inline" data-lean-context="examples"><span class="var token" data-binding="var-_uniq.108" data-verso-hover="279">stream</span><span class="unknown token" data-binding="">.</span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___FS___Stream___mk" title="Documentation for IO.FS.Stream.read in Lean Language Reference"><span class="const token" data-binding="const-IO.FS.Stream.read" data-verso-hover="320">read</span></a></code> 返回空字节数组，这表示文件结束。</p>
+                <p>
+                  当 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">if</span></code> 表达式作为 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">do</span></code> 中的语句出现时，如在 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-dump" data-verso-hover="319">dump</span></code> 中，<code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">if</span></code> 的每个分支都被隐式提供一个 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">do</span></code>。
+换句话说，<code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">else</span></code> 后面的步骤序列被视为要执行的 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#IO" title="Documentation for IO in Lean Language Reference"><span class="const token" data-binding="const-IO" data-verso-hover="2">IO</span></a></code> 活动序列，就像它们在开头有一个 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">do</span></code> 一样。
+在 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">if</span></code> 分支中用 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">let</span></code> 引入的名称只在其自己的分支中可见，在 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">if</span></code> 外部不在作用域内。</p>
+                <p>
+                  调用 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-dump" data-verso-hover="319">dump</span></code> 时不会有耗尽堆栈空间的危险，因为递归调用作为函数的最后一步发生，其结果直接返回而不是被操作或计算。
+这种递归被称为<strong>尾递归</strong>，在 <a href="_u7f16__u7a0b__u3001__u8bc1__u660e__u4e0e__u6027__u80fd_/_u5c3e__u9012__u5f52_/#tail-recursion">本书后面</a> 有更详细的描述。
+由于编译的代码不需要保留任何状态，Lean 编译器可以将递归调用编译为跳转。</p>
+                <p>
+                  如果 <code>feline</code> 只是将标准输入重定向到标准输出，那么 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-dump" data-verso-hover="319">dump</span></code> 就足够了。
+但是，它还需要能够打开作为命令行参数提供的文件并输出其内容。
+当其参数是存在的文件名时，<code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-fileStream" data-verso-hover="333">fileStream</span></code> 返回读取文件内容的流。
+当参数不是文件时，<code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-fileStream" data-verso-hover="333">fileStream</span></code> 发出错误并返回 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Optional-Values/#Option___none" title="Documentation for Option.none in Lean Language Reference"><span class="const token" data-binding="const-Option.none" data-verso-hover="155">none</span></a></code>。</p>
+                <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-392">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-fileStream" data-verso-hover="333">fileStream</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.1064" data-verso-hover="334">filename</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#System___FilePath___mk" title="Documentation for System.FilePath in Lean Language Reference"><span class="const token" data-binding="const-System.FilePath" data-verso-hover="335">System.FilePath</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#IO" title="Documentation for IO in Lean Language Reference"><span class="const token" data-binding="const-IO" data-verso-hover="2">IO</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Optional-Values/#Option___none" title="Documentation for Option in Lean Language Reference"><span class="const token" data-binding="const-Option" data-verso-hover="152">Option</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___FS___Stream___mk" title="Documentation for IO.FS.Stream in Lean Language Reference"><span class="const token" data-binding="const-IO.FS.Stream" data-verso-hover="288">IO.FS.Stream</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/Syntax/#Lean___Parser___Term___do" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.do-466">do</span></a><span class="inter-text">
+  </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.doLetArrow-499">let</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1168" data-verso-hover="336">fileExists</span><span class="inter-text"> </span><span class="unknown token" data-binding="">←</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1064" data-verso-hover="334">filename</span><span class="unknown token" data-binding="">.</span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#System___FilePath___pathExists" title="Documentation for System.FilePath.pathExists in Lean Language Reference"><span class="const token" data-binding="const-System.FilePath.pathExists" data-verso-hover="337">pathExists</span></a><span class="inter-text">
+  </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.doIf-540">if</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Booleans/#Bool___not" title="Documentation for Bool.not in Lean Language Reference"><span class="const token" data-binding="const-Bool.not" data-verso-hover="114">not</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1168" data-verso-hover="336">fileExists</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.doIf-540">then</span><span class="inter-text">
+    </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.doLetArrow-599">let</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1280" data-verso-hover="279">stderr</span><span class="inter-text"> </span><span class="unknown token" data-binding="">←</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___getStderr" title="Documentation for IO.getStderr in Lean Language Reference"><span class="const token" data-binding="const-IO.getStderr" data-verso-hover="338">IO.getStderr</span></a><span class="inter-text">
+    </span><span class="var token" data-binding="var-_uniq.1280" data-verso-hover="279">stderr</span><span class="unknown token" data-binding="">.</span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___FS___Stream___putStrLn" title="Documentation for IO.FS.Stream.putStrLn in Lean Language Reference"><span class="const token" data-binding="const-IO.FS.Stream.putStrLn" data-verso-hover="282">putStrLn</span></a><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-termS!_-647">s!</span><span class="unknown token" data-binding="">"File not found: {</span><span class="var token" data-binding="var-_uniq.1064" data-verso-hover="334">filename</span><span class="unknown token" data-binding="">}"</span><span class="inter-text">
+    </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Pure___mk" title="Documentation for Pure.pure in Lean Language Reference"><span class="const token" data-binding="const-Pure.pure" data-verso-hover="301">pure</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Optional-Values/#Option___none" title="Documentation for Option.none in Lean Language Reference"><span class="const token" data-binding="const-Option.none" data-verso-hover="155">none</span></a><span class="inter-text">
+  </span><span class="keyword token" data-binding="kw-occ-null-694">else</span><span class="inter-text">
+    </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.doLetArrow-703">let</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1467" data-verso-hover="339">handle</span><span class="inter-text"> </span><span class="unknown token" data-binding="">←</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___FS___Handle___mk" title="Documentation for IO.FS.Handle.mk in Lean Language Reference"><span class="const token" data-binding="const-IO.FS.Handle.mk" data-verso-hover="340">IO.FS.Handle.mk</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1064" data-verso-hover="334">filename</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___FS___Mode___read" title="Documentation for IO.FS.Mode.read in Lean Language Reference"><span class="const token" data-binding="const-IO.FS.Mode.read" data-verso-hover="341">IO.FS.Mode.read</span></a><span class="inter-text">
+    </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Pure___mk" title="Documentation for Pure.pure in Lean Language Reference"><span class="const token" data-binding="const-Pure.pure" data-verso-hover="301">pure</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Optional-Values/#Option___none" title="Documentation for Option.some in Lean Language Reference"><span class="const token" data-binding="const-Option.some" data-verso-hover="156">some</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___FS___Stream___ofHandle" title="Documentation for IO.FS.Stream.ofHandle in Lean Language Reference"><span class="const token" data-binding="const-IO.FS.Stream.ofHandle" data-verso-hover="342">IO.FS.Stream.ofHandle</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1467" data-verso-hover="339">handle</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span></code><p>
+                  将文件作为流打开需要两个步骤。
+首先，通过在读取模式下打开文件来创建文件句柄。
+Lean 文件句柄跟踪底层文件描述符。
+当没有对文件句柄值的引用时，终结器会关闭文件描述符。
+其次，使用 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___FS___Stream___ofHandle" title="Documentation for IO.FS.Stream.ofHandle in Lean Language Reference"><span class="const token" data-binding="const-IO.FS.Stream.ofHandle" data-verso-hover="342">IO.FS.Stream.ofHandle</span></a></code> 给文件句柄提供与 POSIX 流相同的接口，它用在文件句柄上工作的相应 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#IO" title="Documentation for IO in Lean Language Reference"><span class="const token" data-binding="const-IO" data-verso-hover="2">IO</span></a></code> 活动填充 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___FS___Stream___mk" title="Documentation for IO.FS.Stream in Lean Language Reference"><span class="const token" data-binding="const-IO.FS.Stream" data-verso-hover="288">Stream</span></a></code> 结构的每个字段。</p>
+                </section>
+              <section>
+                <h3 id="handling-input">
+                  2.4.2.2. 处理输入<span class="permalink-widget inline"><a href="find/?domain=Verso.Genre.Manual.section&amp;name=handling-input" title="Permalink">🔗</a></span></h3>
+                <p>
+                  <code>feline</code> 的主循环是另一个尾递归函数，称为 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-process" data-verso-hover="343">process</span></code>。
+为了在任何输入无法读取时返回非零退出代码，<code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-process" data-verso-hover="343">process</span></code> 接受一个参数 <code class="hl lean inline" data-lean-context="examples"><span class="var token" data-binding="var-_uniq.2779" data-verso-hover="344">exitCode</span></code>，它表示整个程序的当前退出代码。
+此外，它还接受要处理的输入文件列表。</p>
+                <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-1153">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-process" data-verso-hover="343">process</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.2779" data-verso-hover="344">exitCode</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Fixed-Precision-Integers/#UInt32___ofBitVec" title="Documentation for UInt32 in Lean Language Reference"><span class="const token" data-binding="const-UInt32" data-verso-hover="345">UInt32</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.2782" data-verso-hover="346">args</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Linked-Lists/#List___nil" title="Documentation for List in Lean Language Reference"><span class="const token" data-binding="const-List" data-verso-hover="38">List</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#IO" title="Documentation for IO in Lean Language Reference"><span class="const token" data-binding="const-IO" data-verso-hover="2">IO</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Fixed-Precision-Integers/#UInt32___ofBitVec" title="Documentation for UInt32 in Lean Language Reference"><span class="const token" data-binding="const-UInt32" data-verso-hover="345">UInt32</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/Syntax/#Lean___Parser___Term___do" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.do-1221">do</span></a><span class="inter-text">
+  </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.doMatch-1226">match</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.2782" data-verso-hover="346">args</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.doMatch-1226">with</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Pure___mk" title="Documentation for Pure.pure in Lean Language Reference"><span class="const token" data-binding="const-Pure.pure" data-verso-hover="301">pure</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.2779" data-verso-hover="344">exitCode</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="literal string token" data-binding="" data-verso-hover="347">"-"</span><span class="inter-text"> </span><span class="unknown token" data-binding="">::</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.2884" data-verso-hover="346">args</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text">
+    </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.doLetArrow-1289">let</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.2970" data-verso-hover="279">stdin</span><span class="inter-text"> </span><span class="unknown token" data-binding="">←</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#IO___getStdin" title="Documentation for IO.getStdin in Lean Language Reference"><span class="const token" data-binding="const-IO.getStdin" data-verso-hover="280">IO.getStdin</span></a><span class="inter-text">
+    </span><span class="const token" data-binding="const-dump" data-verso-hover="319">dump</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.2970" data-verso-hover="279">stdin</span><span class="inter-text">
+    </span><span class="const token" data-binding="const-process" data-verso-hover="343">process</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.2779" data-verso-hover="344">exitCode</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.2884" data-verso-hover="346">args</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.3050" data-verso-hover="46">filename</span><span class="inter-text"> </span><span class="unknown token" data-binding="">::</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.3051" data-verso-hover="346">args</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text">
+    </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.doLetArrow-1384">let</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.3098" data-verso-hover="348">stream</span><span class="inter-text"> </span><span class="unknown token" data-binding="">←</span><span class="inter-text"> </span><span class="const token" data-binding="const-fileStream" data-verso-hover="333">fileStream</span><span class="inter-text"> </span><span class="unknown token" data-binding="const-System.FilePath.mk" data-verso-hover="349">⟨</span><span class="var token" data-binding="var-_uniq.3050" data-verso-hover="46">filename</span><span class="unknown token" data-binding="const-System.FilePath.mk" data-verso-hover="349">⟩</span><span class="inter-text">
+    </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.doMatch-1429">match</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.3098" data-verso-hover="348">stream</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.doMatch-1429">with</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Optional-Values/#Option___none" title="Documentation for Option.none in Lean Language Reference"><span class="const token" data-binding="const-Option.none" data-verso-hover="155">none</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text">
+      </span><span class="const token" data-binding="const-process" data-verso-hover="343">process</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="344">1</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.3051" data-verso-hover="346">args</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Optional-Values/#Option___none" title="Documentation for Option.some in Lean Language Reference"><span class="const token" data-binding="const-Option.some" data-verso-hover="156">some</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.3130" data-verso-hover="279">stream</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text">
+      </span><span class="const token" data-binding="const-dump" data-verso-hover="319">dump</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.3130" data-verso-hover="279">stream</span><span class="inter-text">
+      </span><span class="const token" data-binding="const-process" data-verso-hover="343">process</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.2779" data-verso-hover="344">exitCode</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.3051" data-verso-hover="346">args</span></code><p>
+                  就像 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">if</span></code> 一样，用作 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">do</span></code> 中语句的 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">match</span></code> 的每个分支都被隐式提供其自己的 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">do</span></code>。</p>
+                <p>
+                  有三种可能性。
+一种是没有更多文件需要处理，在这种情况下 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-process" data-verso-hover="343">process</span></code> 返回错误代码不变。
+另一种是指定的文件名是 <code class="hl lean inline" data-lean-context="examples"><span class="literal string token" data-binding="" data-verso-hover="347">"-"</span></code>，在这种情况下 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-process" data-verso-hover="343">process</span></code> 转储标准输入的内容，然后处理剩余的文件名。
+最后一种可能性是指定了实际的文件名。
+在这种情况下，使用 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-fileStream" data-verso-hover="333">fileStream</span></code> 尝试将文件作为 POSIX 流打开。
+其参数被封装在 <code>⟨ ... ⟩</code> 中，因为 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Files___-File-Handles___-and-Streams/#System___FilePath___mk" title="Documentation for System.FilePath in Lean Language Reference"><span class="const token" data-binding="const-System.FilePath" data-verso-hover="335">FilePath</span></a></code> 是包含字符串的单字段结构。
+如果文件无法打开，它会被跳过，对 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-process" data-verso-hover="343">process</span></code> 的递归调用将退出代码设置为 <code class="hl lean inline" data-lean-context="examples"><span class="typed token" data-binding="" data-verso-hover="344">1</span></code>。
+如果可以，则转储它，对 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-process" data-verso-hover="343">process</span></code> 的递归调用保持退出代码不变。</p>
+                <p>
+                  <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-process" data-verso-hover="343">process</span></code> 不需要标记为 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">partial</span></code>，因为它是结构递归的。
+每个递归调用都提供输入列表的尾部，所有 Lean 列表都是有限的。
+因此，<code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-process" data-verso-hover="343">process</span></code> 不会引入任何非终止性。</p>
+                </section>
+              <section>
+                <h3 id="example-cat-main">
+                  2.4.2.3. main 函数<span class="permalink-widget inline"><a href="find/?domain=Verso.Genre.Manual.section&amp;name=example-cat-main" title="Permalink">🔗</a></span></h3>
+                <p>
+                  最后一步是编写 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-main" data-verso-hover="350">main</span></code> 活动。
+与先前的示例不同，<code>feline</code> 中的 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-main" data-verso-hover="350">main</span></code> 是一个函数。
+在 Lean 中，<code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-main" data-verso-hover="350">main</span></code> 可以有三种类型之一：</p>
+                <ul>
+                  <li>
+                    <p>
+                      <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Main1.main" data-verso-hover="276" id="Main1_u2e_main">main</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#IO" title="Documentation for IO in Lean Language Reference"><span class="const token" data-binding="const-IO" data-verso-hover="2">IO</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/The-Unit-Type/#Unit" title="Documentation for Unit in Lean Language Reference"><span class="const token" data-binding="const-Unit" data-verso-hover="194">Unit</span></a></code> 对应于无法读取命令行参数且始终以退出代码 <code class="hl lean inline" data-lean-context="examples"><span class="typed token" data-binding="" data-verso-hover="344">0</span></code> 表示成功的程序，</p>
+                    </li>
+                  <li>
+                    <p>
+                      <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Main2.main" data-verso-hover="351" id="Main2_u2e_main">main</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#IO" title="Documentation for IO in Lean Language Reference"><span class="const token" data-binding="const-IO" data-verso-hover="2">IO</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Fixed-Precision-Integers/#UInt32___ofBitVec" title="Documentation for UInt32 in Lean Language Reference"><span class="const token" data-binding="const-UInt32" data-verso-hover="345">UInt32</span></a></code> 对应于 C 中的 <code>int main(void)</code>，用于没有参数但返回退出代码的程序，以及</p>
+                    </li>
+                  <li>
+                    <p>
+                      <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Main3.main" data-verso-hover="352" id="Main3_u2e_main">main</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Linked-Lists/#List___nil" title="Documentation for List in Lean Language Reference"><span class="const token" data-binding="const-List" data-verso-hover="38">List</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#IO" title="Documentation for IO in Lean Language Reference"><span class="const token" data-binding="const-IO" data-verso-hover="2">IO</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Fixed-Precision-Integers/#UInt32___ofBitVec" title="Documentation for UInt32 in Lean Language Reference"><span class="const token" data-binding="const-UInt32" data-verso-hover="345">UInt32</span></a></code> 对应于 C 中的 <code>int main(int argc, char **argv)</code>，用于接受参数并发出成功或失败信号的程序。</p>
+                    </li>
+                  </ul>
+                <p>
+                  如果没有提供参数，<code>feline</code> 应该从标准输入读取，就像使用单个 <code class="hl lean inline" data-lean-context="examples"><span class="literal string token" data-binding="" data-verso-hover="347">"-"</span></code> 参数调用一样。
+否则，参数应该一个接一个地处理。</p>
+                <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-1589">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-main" data-verso-hover="350">main</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.4408" data-verso-hover="346">args</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Linked-Lists/#List___nil" title="Documentation for List in Lean Language Reference"><span class="const token" data-binding="const-List" data-verso-hover="38">List</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/IO/Logical-Model/#IO" title="Documentation for IO in Lean Language Reference"><span class="const token" data-binding="const-IO" data-verso-hover="2">IO</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Fixed-Precision-Integers/#UInt32___ofBitVec" title="Documentation for UInt32 in Lean Language Reference"><span class="const token" data-binding="const-UInt32" data-verso-hover="345">UInt32</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+  </span><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Pattern-Matching/#Lean___Parser___Term___match" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.match-1636" data-verso-hover="109">match</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.4408" data-verso-hover="346">args</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Pattern-Matching/#Lean___Parser___Term___match" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.match-1636" data-verso-hover="109">with</span></a><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><span class="const token" data-binding="const-process" data-verso-hover="343">process</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="344">0</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><span class="literal string token" data-binding="" data-verso-hover="347">"-"</span><span class="unknown token" data-binding="">]</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="unknown token" data-binding="">_</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text">  </span><span class="const token" data-binding="const-process" data-verso-hover="343">process</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="344">0</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.4408" data-verso-hover="346">args</span></code></section>
+              </section>
+            <section>
+              <h2 id="example-cat-running">
+                2.4.3. 喵！<span class="permalink-widget inline"><a href="find/?domain=Verso.Genre.Manual.section&amp;name=example-cat-running" title="Permalink">🔗</a></span></h2>
+              <div class="paragraph">
+                <p>
+                  要检查 <code>feline</code> 是否工作，第一步是使用 <span class="shell-command inline"><code class="command">lake build</code></span> 构建它。
+首先，当不带参数调用时，它应该输出从标准输入接收的内容。
+检查</p>
+                <div class="shell-command block">
+                  <code class="command"><code class="prompt">$ </code>echo "It works!" | lake exe feline
+</code></div>
+                <p>
+                  输出 <code>It works!</code>。</p>
+                </div>
+              <div class="paragraph">
+                <p>
+                  其次，当使用文件作为参数调用时，它应该打印它们。
+如果文件 <code>test1.txt</code> 包含</p>
+                <div class="example-file">
+                  File: <code>test1.txt</code><code class="line">It's time to find a warm spot</code></div>
+                <p>
+                  <code>test2.txt</code> 包含</p>
+                <div class="example-file">
+                  File: <code>test2.txt</code><code class="line">and curl up!</code></div>
+                <p>
+                  那么命令</p>
+                <div class="shell-command block">
+                  <code class="command"><code class="prompt">$ </code>lake exe feline test1.txt test2.txt</code></div>
+                <p>
+                  应该输出</p>
+                <pre>It's time to find a warm spot
+and curl up!
+</pre></div>
+              <p>
+                最后，<code>-</code> 参数应该被适当处理。</p>
+              <div class="shell-command block">
+                <code class="command"><code class="prompt">$ </code>echo "and purr" | lake exe feline test1.txt - test2.txt
+</code></div>
+              <p>
+                应该产生</p>
+              <pre>It's time to find a warm spot
+and purr
+and curl up!
+</pre></section>
+            <section>
+              <h2 id="example-cat-exercise">
+                2.4.4. 练习<span class="permalink-widget inline"><a href="find/?domain=Verso.Genre.Manual.section&amp;name=example-cat-exercise" title="Permalink">🔗</a></span></h2>
+              <p>
+                扩展 <code>feline</code> 使其支持用法信息。扩展版本应接受命令行参数 <code>--help</code>，产生关于可用命令行选项的文档并写入到标准输出。
+</p>
+              </section>
+            </section>
+          <nav class="prev-next-buttons">
+            <a class="local-button active" href="Hello_u2c_-World_u21_/_u521b__u5efa__u9879__u76ee_/#starting-a-project" rel="prev" title="2.3. 创建项目"><span class="arrow">←</span><span class="where">2.3. 创建项目</span></a><a class="local-button active" href="Hello_u2c_-World_u21_/_u989d__u5916__u7684__u4fbf__u5229__u529f__u80fd_/#hello-world-conveniences" rel="next" title="2.5. 额外的便利功能"><span class="where">2.5. 额外的便利功能</span><span class="arrow">→</span></a></nav>
+          </div>
+        </main></div>
+    </body>
+  </html>
+

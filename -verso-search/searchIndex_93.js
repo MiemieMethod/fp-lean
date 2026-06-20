@@ -1,0 +1,1 @@
+window.docContents[93].resolve({"/_u51fd__u5b50__u3001__u5e94__u7528__u51fd__u5b50__u548c__u5355__u5b50_/_u9009__u62e9__u5b50_/#Alternative-exercises":{"contents":"\n\n","context":"Lean 函数式编程\u0009函子、应用函子和单子\u0009选择子","header":"5.4.3. 练习","id":"/_u51fd__u5b50__u3001__u5e94__u7528__u51fd__u5b50__u548c__u5355__u5b50_/_u9009__u62e9__u5b50_/#Alternative-exercises"}});

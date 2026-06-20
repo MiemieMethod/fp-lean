@@ -1,0 +1,1 @@
+window.docContents[52].resolve({"/_u51fd__u5b50__u3001__u5e94__u7528__u51fd__u5b50__u548c__u5355__u5b50_/_u603b__u7ed3_/#structure-applicative-monad-summary":{"contents":"\n\n\n\n\n\n\n\n","context":"Lean 函数式编程\u0009函子、应用函子和单子","header":"5.7. 总结","id":"/_u51fd__u5b50__u3001__u5e94__u7528__u51fd__u5b50__u548c__u5355__u5b50_/_u603b__u7ed3_/#structure-applicative-monad-summary"}});

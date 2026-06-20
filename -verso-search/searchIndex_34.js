@@ -1,0 +1,1 @@
+window.docContents[34].resolve({"/_u5355__u5b50_/Monad_u7c7b__u578b__u7c7b_/#monad-class-exercises":{"contents":"\n\n\n\n","context":"Lean 函数式编程\u0009单子\u0009Monad类型类","header":"4.2.4. 练习","id":"/_u5355__u5b50_/Monad_u7c7b__u578b__u7c7b_/#monad-class-exercises"}});
