@@ -10,7 +10,7 @@
  "992": "<code>ReaderExcept (ε ρ α : Type) : Type</code>",
  "991": "<code>ReaderOption (ρ α : Type) : Type</code>",
  "990": "<code>Int → Int → Int</code>",
- "99": "<code>Hamster.name (self : Hamster) : String</code>",
+ "99": "<code>Book : Type</code>",
  "989": "<code>Env</code>",
  "988":
  "<code>applyPrimReader (op : String) (x y : Int) : Reader Env Int</code>",
@@ -24,7 +24,7 @@
  "982": "<code>Env : Type</code>",
  "981": "<code>α✝ → Reader ρ β✝</code>",
  "980": "<code>Reader ρ α✝</code>",
- "98": "<code>Book : Type</code>",
+ "98": "<code>Hamster : Type</code>",
  "979":
  "<code>{α β : Type} → Reader ρ α → (α → Reader ρ β) → ρ → β</code><span class=\"sep\"></span><code class=\"docstring\">Sequences two computations, allowing the second to depend on the value computed by the first.\n\nIf `x : m α` and `f : α → m β`, then `x &gt;&gt;= f : m β` represents the result of executing `x` to get\na value of type `α` and then passing it to `f`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&gt;&gt;=` in identifiers is `bind`.</code>",
  "978":
@@ -39,7 +39,7 @@
  "971":
  "<code>Reader.bind {ρ α β : Type} (result : ρ → α) (next : α → ρ → β) : ρ → β</code>",
  "970": "<code>Reader.pure {α ρ : Type} (x : α) : Reader ρ α</code>",
- "97": "<code>Hamster : Type</code>",
+ "97": "<code>Segment : Type</code>",
  "969": "<code>ρ</code>",
  "968": "<code>_root_.read {ρ : Type} : Reader ρ ρ</code>",
  "967": "<code>Reader (ρ α : Type) : Type</code>",
@@ -51,7 +51,7 @@
  "<code>printList.{u_1} {α : Type u_1} [ToString α] : List α → IO Unit</code>",
  "961": "<code>List Nat</code>",
  "960": "<code>addsTo (goal : Nat) : List Nat → Many (List Nat)</code>",
- "96": "<code>Segment : Type</code>",
+ "96": "<code>volume : RectangularPrism → Float</code>",
  "959":
  "<code>{α β : Type} → Many α → (α → Many β) → Many β</code><span class=\"sep\"></span><code class=\"docstring\">Sequences two computations, allowing the second to depend on the value computed by the first.\n\nIf `x : m α` and `f : α → m β`, then `x &gt;&gt;= f : m β` represents the result of executing `x` to get\na value of type `α` and then passing it to `f`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&gt;&gt;=` in identifiers is `bind`.</code>",
  "958":
@@ -64,7 +64,7 @@
  "952": "<code>Many.takeAll {α : Type} : Many α → List α</code>",
  "951": "<code>Many.take {α : Type} : Nat → Many α → List α</code>",
  "950": "<code>Many.fromList {α : Type} : List α → Many α</code>",
- "95": "<code>volume : RectangularPrism → Float</code>",
+ "95": "<code>RectangularPrism : Type</code>",
  "949": "<code>Unit → Many α</code>",
  "948": "<code>Many α</code>",
  "947": "<code>Many.union {α : Type} : Many α → Many α → Many α</code>",
@@ -77,7 +77,8 @@
  "941":
  "<code class=\"docstring\">Empty match/ex falso. `nomatch e` is of arbitrary type `α : Sort u` if\nLean can show that an empty set of patterns is exhaustive given `e`'s type,\ne.g. because it has no constructors.\n</code>",
  "940": "<code>Empty</code>",
- "94": "<code>RectangularPrism : Type</code>",
+ "94":
+ "<code>Float.floor : Float → Float</code><span class=\"sep\"></span><code class=\"docstring\">Computes the floor of a floating-point number, which is the largest integer that's no larger\nthan the given number.\n\nThis function does not reduce in the kernel. It is implemented in compiled code by the C function\n`floor`.\n\nExamples:\n * `Float.floor 1.5 = 1`\n * `Float.floor (-1.5) = (-2)`\n</code>",
  "939": "<code>Expr (Prim special)</code>",
  "938": "<code>Prim special</code>",
  "937": "<code>special</code>",
@@ -90,8 +91,7 @@
  "<code>evaluateM.{u_1} {m : Type → Type u_1} {special : Type} [Monad m] (applySpecial : special → Int → Int → m Int) :\n  Expr (Prim special) → m Int</code>",
  "931": "<code>CanFail.div : CanFail</code>",
  "930": "<code>CanFail : Type</code>",
- "93":
- "<code>Float.floor : Float → Float</code><span class=\"sep\"></span><code class=\"docstring\">Computes the floor of a floating-point number, which is the largest integer that's no larger\nthan the given number.\n\nThis function does not reduce in the kernel. It is implemented in compiled code by the C function\n`floor`.\n\nExamples:\n * `Float.floor 1.5 = 1`\n * `Float.floor (-1.5) = (-2)`\n</code>",
+ "93": "<code>Float → Float</code>",
  "929": "<code>Prim.other {special : Type} : special → Prim special</code>",
  "928": "<code>Prim.times {special : Type} : Prim special</code>",
  "927": "<code>Prim.minus {special : Type} : Prim special</code>",
@@ -104,7 +104,7 @@
  "<code>applyPrim.{u_1} {m : Type → Type u_1} [Monad m] (applyDiv : Int → Int → m Int) : Arith → Int → Int → m Int</code>",
  "921": "<code>applyDivExcept (x y : Int) : Except String Int</code>",
  "920": "<code>applyDivOption (x y : Int) : Option Int</code>",
- "92": "<code>Float → Float</code>",
+ "92": "<code>Point.modifyBoth (f : Float → Float) (p : Point) : Point</code>",
  "919":
  "<code>evaluateM.{u_1} {m : Type → Type u_1} [Monad m] (applyPrim : Arith → Int → Int → m Int) : Expr Arith → m Int</code>",
  "918": "<code>applyPrimExcept : Arith → Int → Int → Except String Int</code>",
@@ -116,7 +116,8 @@
  "912": "<code>Expr Arith</code>",
  "911": "<code>Arith</code>",
  "910": "<code>evaluateOption : Expr Arith → Option Int</code>",
- "91": "<code>Point.modifyBoth (f : Float → Float) (p : Point) : Point</code>",
+ "91":
+ "<code><span class=\"literal string\">\"one string and another\"</span> : String</code>",
  "909": "<code>fourteenDivided : Expr Arith</code>",
  "908": "<code>twoPlusThree : Expr Arith</code>",
  "907": "<code>Arith.div : Arith</code>",
@@ -128,7 +129,7 @@
  "901": "<code>Expr.const {op : Type} : Int → Expr op</code>",
  "900": "<code>Expr (op : Type) : Type</code>",
  "90":
- "<code><span class=\"literal string\">\"one string and another\"</span> : String</code>",
+ "<code><span class=\"literal string\">\" and another\"</span> : String</code>",
  "9":
  "<code>String : Type</code><span class=\"sep\"></span><code class=\"docstring\">A string is a sequence of Unicode scalar values.\n\nAt runtime, strings are represented by [dynamic arrays](https://en.wikipedia.org/wiki/Dynamic_array)\nof bytes using the UTF-8 encoding. Both the size in bytes (`String.utf8ByteSize`) and in characters\n(`String.length`) are cached and take constant time. Many operations on strings perform in-place\nmodifications when the reference to the string is unique.\n</code>",
  "899": "<code>Type → Type u_1</code>",
@@ -147,7 +148,7 @@
  "<code>Id.{u} («type» : Type u) : Type u</code><span class=\"sep\"></span><code class=\"docstring\">The identity function on types, used primarily for its `Monad` instance.\n\nThe identity monad is useful together with monad transformers to construct monads for particular\npurposes. Additionally, it can be used with `do`-notation in order to use control structures such as\nlocal mutability, `for`-loops, and early returns in code that does not otherwise use monads.\n\nExamples:\n```lean example\ndef containsFive (xs : List Nat) : Bool := Id.run do\n  for x in xs do\n    if x == 5 then return true\n  return false\n```\n\n```lean example\n#eval containsFive [1, 3, 5, 7]\n```\n```output\ntrue\n```\n</code>",
  "890": "<code>α✝ → Id β✝</code>",
  "89":
- "<code><span class=\"literal string\">\" and another\"</span> : String</code>",
+ "<code><span class=\"literal string\">\"one string\"</span> : String</code>",
  "889": "<code>Id α✝</code>",
  "888":
  "<code>{α β : Type} → Id α → (α → Id β) → Id β</code><span class=\"sep\"></span><code class=\"docstring\">Sequences two computations, allowing the second to depend on the value computed by the first.\n\nIf `x : m α` and `f : α → m β`, then `x &gt;&gt;= f : m β` represents the result of executing `x` to get\na value of type `α` and then passing it to `f`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&gt;&gt;=` in identifiers is `bind`.</code>",
@@ -161,8 +162,7 @@
  "881": "<code>WithLog logged α✝</code>",
  "880":
  "<code>{α β : Type} → WithLog logged α → (α → WithLog logged β) → WithLog logged β</code><span class=\"sep\"></span><code class=\"docstring\">Sequences two computations, allowing the second to depend on the value computed by the first.\n\nIf `x : m α` and `f : α → m β`, then `x &gt;&gt;= f : m β` represents the result of executing `x` to get\na value of type `α` and then passing it to `f`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&gt;&gt;=` in identifiers is `bind`.</code>",
- "88":
- "<code><span class=\"literal string\">\"one string\"</span> : String</code>",
+ "88": "<code>Point.point (x y : Float) : Point</code>",
  "879": "<code>α✝</code>",
  "878": "<code>List logged</code>",
  "877":
@@ -177,7 +177,7 @@
  "871": "<code>α → m β</code>",
  "870":
  "<code>mapM {α β : Type} {m : Type → Type} [Monad m] (f : α → m β) : List α → m (List β)</code>",
- "87": "<code>Point.point (x y : Float) : Point</code>",
+ "87": "<code>fourAndThree : Point</code>",
  "869":
  "<code>getOrExcept.{u_1} {α : Type u_1} (xs : List α) (i : Nat) : Except String α</code>",
  "868":
@@ -196,7 +196,7 @@
  "861":
  "<code><span class=\"literal string\">\"Peregrine falcon\"</span> : String</code>",
  "860": "<code>fastBirds : List String</code>",
- "86": "<code>fourAndThree : Point</code>",
+ "86": "<code>zeroX (p : Point) : Point</code>",
  "859":
  "<code><span class=\"literal string\">\"Slow loris\"</span> : String</code>",
  "858":
@@ -212,7 +212,7 @@
  "851":
  "<code>{α : Type u_2} → α → Except ε α</code><span class=\"sep\"></span><code class=\"docstring\">Given `a : α`, then `pure a : f α` represents an action that does nothing and returns `a`.\n\nExamples:\n* `(pure \"hello\" : Option String) = some \"hello\"`\n* `(pure \"hello\" : Except (Array String) String) = Except.ok \"hello\"`\n* `(pure \"hello\" : StateM Nat String).run 105 = (\"hello\", 105)`\n</code>",
  "850": "<code>α✝ → Option β✝</code>",
- "85": "<code>zeroX (p : Point) : Point</code>",
+ "85": "<code>Point.mk (x y : Float) : Point</code>",
  "849": "<code>Option α✝</code>",
  "848":
  "<code>{α β : Type u_1} → Option α → (α → Option β) → Option β</code><span class=\"sep\"></span><code class=\"docstring\">Sequences two computations, allowing the second to depend on the value computed by the first.\n\nIf `x : m α` and `f : α → m β`, then `x &gt;&gt;= f : m β` represents the result of executing `x` to get\na value of type `α` and then passing it to `f`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&gt;&gt;=` in identifiers is `bind`.</code>",
@@ -229,7 +229,7 @@
  "<code>Monadicish.number {α : Type} (t : BinTree α) : BinTree (Nat × α)</code>",
  "841": "<code>α → State σ β</code>",
  "840": "<code>State σ α</code>",
- "84": "<code>Point.mk (x y : Float) : Point</code>",
+ "84": "<code>origin3D : Point3D</code>",
  "839": "<code>set {σ : Type} (s : σ) : State σ Unit</code>",
  "838": "<code>get {σ : Type} : State σ σ</code>",
  "837": "<code>σ</code>",
@@ -242,7 +242,7 @@
  "<code>number.helper {α : Type} (n : Nat) : BinTree α → Nat × BinTree (Nat × α)</code>",
  "831": "<code>number {α : Type} (t : BinTree α) : BinTree (Nat × α)</code>",
  "830": "<code><span class=\"literal string\">\"e\"</span> : String</code>",
- "83": "<code>origin3D : Point3D</code>",
+ "83": "<code>Point3D.z (self : Point3D) : Float</code>",
  "829": "<code><span class=\"literal string\">\"d\"</span> : String</code>",
  "828": "<code><span class=\"literal string\">\"c\"</span> : String</code>",
  "827": "<code><span class=\"literal string\">\"b\"</span> : String</code>",
@@ -253,7 +253,7 @@
  "822": "<code>WithAndThen.inorderSum : BinTree Int → WithLog Int Int</code>",
  "821": "<code>WithAndThen.sumAndFindEvens : List Int → WithLog Int Int</code>",
  "820": "<code>Unit</code>",
- "82": "<code>Point3D.z (self : Point3D) : Float</code>",
+ "82": "<code>Point3D : Type</code>",
  "819": "<code>save {α : Type} (data : α) : WithLog α Unit</code>",
  "818": "<code>ok {β α : Type} (x : β) : WithLog α β</code>",
  "817": "<code>γ</code>",
@@ -267,7 +267,7 @@
  "<code>WithLog.val {logged α : Type} (self : WithLog logged α) : α</code>",
  "810":
  "<code>WithLog.log {logged α : Type} (self : WithLog logged α) : List logged</code>",
- "81": "<code>Point3D : Type</code>",
+ "81": "<code>Point3D.y (self : Point3D) : Float</code>",
  "809": "<code>WithLog (logged α : Type) : Type</code>",
  "808": "<code>MoreMonadic.sumAndFindEvens : List Int → List Int × Int</code>",
  "807": "<code>BinTree Int</code>",
@@ -281,7 +281,7 @@
  "<code>WithInfix.firstThird.{u_1} {α : Type u_1} (xs : List α) : Except String (α × α)</code>",
  "800":
  "<code>Eff.get.{u_1} {α : Type u_1} (xs : List α) (i : Nat) : Except String α</code>",
- "80": "<code>Point3D.y (self : Point3D) : Float</code>",
+ "80": "<code>Point3D.x (self : Point3D) : Float</code>",
  "8": "<code><span class=\"literal string\">\"seven\"</span> : String</code>",
  "799": "<code>ε</code>",
  "798":
@@ -297,7 +297,8 @@
  "791": "<code>Except e α</code>",
  "790":
  "<code>andThen.{u_1, u_2, u_3} {e : Type u_1} {α : Type u_2} {β : Type u_3} (attempt : Except e α) (next : α → Except e β) :\n  Except e β</code>",
- "79": "<code>Point3D.x (self : Point3D) : Float</code>",
+ "79":
+ "<code>Float.sqrt : Float → Float</code><span class=\"sep\"></span><code class=\"docstring\">Computes the square root of a floating-point number.\n\nThis function does not reduce in the kernel. It is implemented in compiled code by the C function\n`sqrt`.\n</code>",
  "789":
  "<code>firstThirdFifthSeventh.{u_1} {α : Type u_1} (xs : List α) : Except String (α × α × α × α)</code>",
  "788":
@@ -317,8 +318,7 @@
  "781": "<code>ediblePlants : List String</code>",
  "780":
  "<code>Except.ok.{u, v} {ε : Type u} {α : Type v} : α → Except ε α</code><span class=\"sep\"></span><code class=\"docstring\">A success value of type `α` </code>",
- "78":
- "<code>Float.sqrt : Float → Float</code><span class=\"sep\"></span><code class=\"docstring\">Computes the square root of a floating-point number.\n\nThis function does not reduce in the kernel. It is implemented in compiled code by the C function\n`sqrt`.\n</code>",
+ "78": "<code>distance (p1 p2 : Point) : Float</code>",
  "779":
  "<code>Except.error.{u, v} {ε : Type u} {α : Type v} : ε → Except ε α</code><span class=\"sep\"></span><code class=\"docstring\">A failure value of type `ε` </code>",
  "778":
@@ -339,7 +339,7 @@
  "<code><span class=\"literal string\">\" ~~&gt; \"</span> : String</code>",
  "770":
  "<code class=\"docstring\">`infixl:prec \"op\" =&gt; f` is equivalent to `notation:prec x:prec \"op\" y:prec1 =&gt; f x y`, where `prec1 := prec + 1`.\n</code>",
- "77": "<code>distance (p1 p2 : Point) : Float</code>",
+ "77": "<code>Point</code>",
  "769": "<code>M.Fixity.z : Nat</code>",
  "768": "<code>M.Fixity.y : Nat</code>",
  "767": "<code>M.Fixity.x : Nat</code>",
@@ -353,7 +353,7 @@
  "<code>M.andThen.{u_1} {α : Type} {β : Type u_1} (opt : Option α) (next : α → Option β) : Option β</code>",
  "760":
  "<code>firstThirdFifthSeventh {α : Type} (xs : List α) : Option (α × α × α × α)</code>",
- "76": "<code>Point</code>",
+ "76": "<code>addPoints (p1 p2 : Point) : Point</code>",
  "759":
  "<code>firstThirdFifth {α : Type} (xs : List α) : Option (α × α × α)</code>",
  "758": "<code>firstThird {α : Type} (xs : List α) : Option (α × α)</code>",
@@ -369,7 +369,7 @@
  "751": "<code><span class=\"literal string\">\"Duck\"</span> : String</code>",
  "750":
  "<code><span class=\"literal string\">\"Sparrow\"</span> : String</code>",
- "75": "<code>addPoints (p1 p2 : Point) : Point</code>",
+ "75": "<code>Float</code>",
  "749": "<code>Tree</code>",
  "748": "<code>Tree → String</code>",
  "747":
@@ -386,7 +386,7 @@
  "<code><span class=\"literal string\">\"warty birch\"</span> : String</code>",
  "740":
  "<code><span class=\"literal string\">\"silver birch\"</span> : String</code>",
- "74": "<code>Float</code>",
+ "74": "<code>origin : Point</code>",
  "739":
  "<code><span class=\"literal string\">\"Betula pendula\"</span> : String</code>",
  "738": "<code>birch : Tree</code>",
@@ -402,7 +402,7 @@
  "732": "<code>Tree.commonNames (self : Tree) : List String</code>",
  "731": "<code>Tree.latinName (self : Tree) : String</code>",
  "730": "<code>Tree : Type</code>",
- "73": "<code>origin : Point</code>",
+ "73": "<code>Point : Type</code>",
  "729":
  "<code>List.getLast?.{u} {α : Type u} : List α → Option α</code><span class=\"sep\"></span><code class=\"docstring\">Returns the last element in the list, or `none` if the list is empty.\n\nAlternatives include `List.getLastD`, which takes a fallback value for empty lists, and\n`List.getLast!`, which panics on empty lists.\n\nExamples:\n * `[\"circle\", \"rectangle\"].getLast? = some \"rectangle\"`\n * `[\"circle\"].getLast? = some \"circle\"`\n * `([] : List String).getLast? = none`\n</code>",
  "728": "<code>lastSpider : Option String</code>",
@@ -416,7 +416,7 @@
  "721":
  "<code><span class=\"literal string\">\"\\\": \"</span> : String</code>",
  "720": "<code>String × JSON</code>",
- "72": "<code>Point : Type</code>",
+ "72": "<code>Point.y (self : Point) : Float</code>",
  "719": "<code>String × JSON → String</code>",
  "718": "<code>List (String × JSON)</code>",
  "717": "<code><span class=\"literal string\">\"\\\"\"</span> : String</code>",
@@ -429,7 +429,7 @@
  "<code>Lean.Json.escape (s : String) (acc : String := \"\") : String</code>",
  "710":
  "<code><span class=\"literal string\">\"\\\"Hello!\\\"\"</span> : String</code>",
- "71": "<code>Point.y (self : Point) : Float</code>",
+ "71": "<code>Point.x (self : Point) : Float</code>",
  "709":
  "<code>String.intercalate (s : String) : List String → String</code><span class=\"sep\"></span><code class=\"docstring\">Appends the strings in a list of strings, placing the separator `s` between each pair.\n\nExamples:\n* `\", \".intercalate [\"red\", \"green\", \"blue\"] = \"red, green, blue\"`\n* `\" and \".intercalate [\"tea\", \"coffee\"] = \"tea and coffee\"`\n* `\" | \".intercalate [\"M\", \"\", \"N\"] = \"M |  | N\"`\n</code>",
  "708":
@@ -449,7 +449,7 @@
  "<code><span class=\"literal string\">\"Programming is fun!\"</span> : String</code>",
  "700":
  "<code><span class=\"literal string\">\"Functional Programming in Lean\"</span> : String</code>",
- "70": "<code>Point.x (self : Point) : Float</code>",
+ "70": "<code>Float</code>",
  "7":
  "<code class=\"docstring\">`#eval e` evaluates the expression `e` by compiling and evaluating it.\n\n* The command attempts to use `ToExpr`, `Repr`, or `ToString` instances to print the result.\n* If `e` is a monadic value of type `m ty`, then the command tries to adapt the monad `m`\n  to one of the monads that `#eval` supports, which include `IO`, `CoreM`, `MetaM`, `TermElabM`, and `CommandElabM`.\n  Users can define `MonadEval` instances to extend the list of supported monads.\n\nThe `#eval` command gracefully degrades in capability depending on what is imported.\nImporting the `Lean.Elab.Command` module provides full capabilities.\n\nDue to unsoundness, `#eval` refuses to evaluate expressions that depend on `sorry`, even indirectly,\nsince the presence of `sorry` can lead to runtime instability and crashes.\nThis check can be overridden with the `#eval! e` command.\n\nOptions:\n* If `eval.pp` is true (default: true) then tries to use `ToExpr` instances to make use of the\n  usual pretty printer. Otherwise, only tries using `Repr` and `ToString` instances.\n* If `eval.type` is true (default: false) then pretty prints the type of the evaluated value.\n* If `eval.derive.repr` is true (default: true) then attempts to auto-derive a `Repr` instance\n  when there is no other way to print the result.\n\nSee also: `#reduce e` for evaluation by term reduction.\n</code>",
  "699":
@@ -467,7 +467,8 @@
  "691": "<code>Str : Serializer</code>",
  "690":
  "<code>Serializer.serialize (self : Serializer) : self.Contents → JSON</code>",
- "69": "<code>Float</code>",
+ "69":
+ "<code>Neg.neg.{u} {α : Type u} [self : Neg α] : α → α</code><span class=\"sep\"></span><code class=\"docstring\">`-a` computes the negative or opposite of `a`.\nThe meaning of this notation is type-dependent. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `-` in identifiers is `neg` (when used as a unary operator).</code>",
  "689": "<code>Serializer.Contents (self : Serializer) : Type</code>",
  "688": "<code>Serializer : Type 1</code>",
  "687": "<code>JSON.array : List JSON → JSON</code>",
@@ -479,7 +480,7 @@
  "681": "<code>JSON.true : JSON</code>",
  "680": "<code>JSON : Type</code>",
  "68":
- "<code>Neg.neg.{u} {α : Type u} [self : Neg α] : α → α</code><span class=\"sep\"></span><code class=\"docstring\">`-a` computes the negative or opposite of `a`.\nThe meaning of this notation is type-dependent. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `-` in identifiers is `neg` (when used as a unary operator).</code>",
+ "<code>Float : Type</code><span class=\"sep\"></span><code class=\"docstring\">64-bit floating-point numbers.\n\n`Float` corresponds to the IEEE 754 *binary64* format (`double` in C or `f64` in Rust).\nFloating-point numbers are a finite representation of a subset of the real numbers, extended with\nextra “sentinel” values that represent undefined and infinite results as well as separate positive\nand negative zeroes. Arithmetic on floating-point numbers approximates the corresponding operations\non the real numbers by rounding the results to numbers that are representable, propagating error and\ninfinite values.\n\nFloating-point numbers include [subnormal numbers](https://en.wikipedia.org/wiki/Subnormal_number).\nTheir special values are:\n * `NaN`, which denotes a class of “not a number” values that result from operations such as\n   dividing zero by zero, and\n * `Inf` and `-Inf`, which represent positive and infinities that result from dividing non-zero\n   values by zero.\n</code>",
  "679": "<code>Adder</code>",
  "678":
  "<code>Adder → Nat → Nat</code><span class=\"sep\"></span><code class=\"docstring\">Coerces a value `f : α` to type `γ f`, which should be either be a\nfunction type or another `CoeFun` type, in order to resolve a mistyped\napplication `f x`. </code>",
@@ -494,8 +495,7 @@
  "671": "<code>outParam (α → Type)</code>",
  "670":
  "<code>CoeFun (α : Type) (makeFunctionType : outParam (α → Type)) : Type</code>",
- "67":
- "<code>Float : Type</code><span class=\"sep\"></span><code class=\"docstring\">64-bit floating-point numbers.\n\n`Float` corresponds to the IEEE 754 *binary64* format (`double` in C or `f64` in Rust).\nFloating-point numbers are a finite representation of a subset of the real numbers, extended with\nextra “sentinel” values that represent undefined and infinite results as well as separate positive\nand negative zeroes. Arithmetic on floating-point numbers approximates the corresponding operations\non the real numbers by rounding the results to numbers that are representable, propagating error and\ninfinite values.\n\nFloating-point numbers include [subnormal numbers](https://en.wikipedia.org/wiki/Subnormal_number).\nTheir special values are:\n * `NaN`, which denotes a class of “not a number” values that result from operations such as\n   dividing zero by zero, and\n * `Inf` and `-Inf`, which represent positive and infinities that result from dividing non-zero\n   values by zero.\n</code>",
+ "67": "<code>N</code>",
  "669":
  "<code>Bool → Prop</code><span class=\"sep\"></span><code class=\"docstring\">Coerces a value of type `α` to `β`, which must be a universe. </code>",
  "668":
@@ -512,7 +512,7 @@
  "661":
  "<code>List.append.{u_1} {α : Type u_1} (xs ys : List α) : List α</code><span class=\"sep\"></span><code class=\"docstring\">Appends two lists. Normally used via the `++` operator.\n\nAppending lists takes time proportional to the length of the first list: `O(|xs|)`.\n\nExamples:\n* `[1, 2, 3] ++ [4, 5] = [1, 2, 3, 4, 5]`.\n* `[] ++ [4, 5] = [4, 5]`.\n* `[1, 2, 3] ++ [] = [1, 2, 3]`.\n</code>",
  "660": "<code>List α → List α → List α</code>",
- "66": "<code>N</code>",
+ "66": "<code>thirtyNine : N</code>",
  "659": "<code>listMonoid (α : Type) : Monoid</code>",
  "658": "<code>String → String → String</code>",
  "657": "<code>stringMonoid : Monoid</code>",
@@ -525,7 +525,7 @@
  "651": "<code>Monoid : Type 1</code>",
  "650":
  "<code>NonEmptyList α</code><span class=\"sep\"></span><code class=\"docstring\">The resulting value of type `β`. The input `x : α` is a parameter to\nthe type class, so the value of type `β` may possibly depend on additional\ntypeclasses on `x`. </code>",
- "65": "<code>thirtyNine : N</code>",
+ "65": "<code>N : Type</code>",
  "649":
  "<code>CoeDep.{u, v} (α : Sort u) : α → (β : Sort v) → Sort (max 1 v)</code><span class=\"sep\"></span><code class=\"docstring\">`CoeDep α (x : α) β` is a typeclass for dependent coercions, that is, the type `β`\ncan depend on `x` (or rather, the value of `x` is available to typeclass search\nso an instance that relates `β` to `x` is allowed).\n\nDependent coercions do not participate in the transitive chaining process of\nregular coercions: they must exactly match the type mismatch on both sides.\n</code>",
  "648":
@@ -540,7 +540,7 @@
  "641":
  "<code><span class=\"literal string\">\"Please don't tell me\"</span> : String</code>",
  "640": "<code>perhapsPerhapsPerhaps : Option (Option (Option String))</code>",
- "64": "<code>N : Type</code>",
+ "64": "<code>NaturalNumber</code>",
  "639": "<code>List.last?.{u_1} {α : Type u_1} : List α → Option α</code>",
  "638": "<code>coercedToB : B</code>",
  "637":
@@ -554,7 +554,8 @@
  "632": "<code>B : Type</code>",
  "631": "<code>A : Type</code>",
  "630": "<code>oneInt : Int</code>",
- "63": "<code>NaturalNumber</code>",
+ "63":
+ "<code>OfNat.{u} (α : Type u) : Nat → Type u</code><span class=\"sep\"></span><code class=\"docstring\">The class `OfNat α n` powers the numeric literal parser. If you write\n`37 : α`, Lean will attempt to synthesize `OfNat α 37`, and will generate\nthe term `(OfNat.ofNat 37 : α)`.\n\nThere is a bit of infinite regress here since the desugaring apparently\nstill contains a literal `37` in it. The type of expressions contains a\nprimitive constructor for \"raw natural number literals\", which you can directly\naccess using the macro `nat_lit 37`. Raw number literals are always of type `Nat`.\nSo it would be more correct to say that Lean looks for an instance of\n`OfNat α (nat_lit 37)`, and it generates the term `(OfNat.ofNat (nat_lit 37) : α)`.\n</code>",
  "629":
  "<code>Pos → Nat</code><span class=\"sep\"></span><code class=\"docstring\">Coerces a value of type `α` to type `β`. Accessible by the notation `↑x`,\nor by double type ascription `((x : α) : β)`. </code>",
  "628": "<code>Coe.coe {α β : Type} [self : Coe α β] : α → β</code>",
@@ -572,8 +573,7 @@
  "621": "<code>fileDumper : IO Unit</code>",
  "620":
  "<code>IO.FS.readFile (fname : System.FilePath) : IO String</code><span class=\"sep\"></span><code class=\"docstring\">Reads the entire contents of the UTF-8-encoded file at the given path as a `String`.\n\nAn exception is thrown if the contents of the file are not valid UTF-8. This is in addition to\nexceptions that may always be thrown as a result of failing to read files.\n</code>",
- "62":
- "<code>OfNat.{u} (α : Type u) : Nat → Type u</code><span class=\"sep\"></span><code class=\"docstring\">The class `OfNat α n` powers the numeric literal parser. If you write\n`37 : α`, Lean will attempt to synthesize `OfNat α 37`, and will generate\nthe term `(OfNat.ofNat 37 : α)`.\n\nThere is a bit of infinite regress here since the desugaring apparently\nstill contains a literal `37` in it. The type of expressions contains a\nprimitive constructor for \"raw natural number literals\", which you can directly\naccess using the macro `nat_lit 37`. Raw number literals are always of type `Nat`.\nSo it would be more correct to say that Lean looks for an instance of\n`OfNat α (nat_lit 37)`, and it generates the term `(OfNat.ofNat (nat_lit 37) : α)`.\n</code>",
+ "62": "<code>thirtyEight : NaturalNumber</code>",
  "619": "<code>g : α → β</code>",
  "618": "<code>f : β → γ</code>",
  "617": "<code>β → γ</code>",
@@ -586,7 +586,7 @@
  "611": "<code>Type → Type</code>",
  "610":
  "<code>Functor.mapConst {f : Type → Type} [self : Functor f] {α β : Type} (x : α) (coll : f β) : f α</code>",
- "61": "<code>thirtyEight : NaturalNumber</code>",
+ "61": "<code>NaturalNumber : Type</code>",
  "609":
  "<code>concat.catList {α : Type} [Append α] (start : α) : List α → α</code>",
  "608": "<code>concat {α : Type} [Append α] (xs : NonEmptyList α) : α</code>",
@@ -601,7 +601,8 @@
  "<code>{α β : Type} → (α → β) → NonEmptyList α → NonEmptyList β</code><span class=\"sep\"></span><code class=\"docstring\">Applies a function inside a functor. This is used to overload the `&lt;$&gt;` operator.\n\nWhen mapping a constant function, use `Functor.mapConst` instead, because it may be more\nefficient.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&lt;$&gt;` in identifiers is `map`.</code>",
  "600":
  "<code>Functor.{u, v} (f : Type u → Type v) : Type (max (u + 1) v)</code><span class=\"sep\"></span><code class=\"docstring\">A functor in the sense used in functional programming, which means a function `f : Type u → Type v`\nhas a way of mapping a function over its contents. This `map` operator is written `&lt;$&gt;`, and\noverloaded via `Functor` instances.\n\nThis `map` function should respect identity and function composition. In other words, for all terms\n`v : f α`, it should be the case that:\n\n * `id &lt;$&gt; v = v`\n\n * For all functions `h : β → γ` and `g : α → β`, `(h ∘ g) &lt;$&gt; v = h &lt;$&gt; g &lt;$&gt; v`\n\nWhile all `Functor` instances should live up to these requirements, they are not required to _prove_\nthat they do. Proofs may be required or provided via the `LawfulFunctor` class.\n\nAssuming that instances are lawful, this definition corresponds to the category-theoretic notion of\n[functor](https://en.wikipedia.org/wiki/Functor) in the special case where the category is the\ncategory of types and functions between them.\n</code>",
- "60": "<code>NaturalNumber : Type</code>",
+ "60":
+ "<code><span class=\"literal string\">\"This is a string.\"</span> : String</code>",
  "6":
  "<code>Nat : Type</code><span class=\"sep\"></span><code class=\"docstring\">The natural numbers, starting at zero.\n\nThis type is special-cased by both the kernel and the compiler, and overridden with an efficient\nimplementation. Both use a fast arbitrary-precision arithmetic library (usually\n[GMP](https://gmplib.org/)); at runtime, `Nat` values that are sufficiently small are unboxed.\n</code>",
  "599":
@@ -621,8 +622,7 @@
  "<code>HAppend.{u, v, w} (α : Type u) (β : Type v) (γ : outParam (Type w)) : Type (max (max u v) w)</code><span class=\"sep\"></span><code class=\"docstring\">The notation typeclass for heterogeneous append.\nThis enables the notation `a ++ b : γ` where `a : α`, `b : β`.\n</code>",
  "590":
  "<code>NonEmptyList α → NonEmptyList α → NonEmptyList α</code><span class=\"sep\"></span><code class=\"docstring\">`a ++ b` is the result of concatenation of `a` and `b`. See `HAppend`. </code>",
- "59":
- "<code><span class=\"literal string\">\"This is a string.\"</span> : String</code>",
+ "59": "<code>aStr : Str</code>",
  "589":
  "<code>Append.{u} (α : Type u) : Type u</code><span class=\"sep\"></span><code class=\"docstring\">The homogeneous version of `HAppend`: `a ++ b : α` where `a b : α`. </code>",
  "588":
@@ -639,7 +639,8 @@
  "581":
  "<code>BinTree.branch {α : Type} : BinTree α → α → BinTree α → BinTree α</code>",
  "580": "<code>BinTree.leaf {α : Type} : BinTree α</code>",
- "58": "<code>aStr : Str</code>",
+ "58":
+ "<code class=\"docstring\">A type universe. `Type ≡ Type 0`, `Type u ≡ Sort (u + 1)`. </code>",
  "579": "<code>BinTree (α : Type) : Type</code>",
  "578":
  "<code>NonEmptyList α → UInt64</code><span class=\"sep\"></span><code class=\"docstring\">Hashes a value into a `UInt64`. </code>",
@@ -656,8 +657,7 @@
  "571":
  "<code>Hashable.hash {α : Type} [self : Hashable α] : α → UInt64</code>",
  "570": "<code>Hashable (α : Type) : Type</code>",
- "57":
- "<code class=\"docstring\">A type universe. `Type ≡ Type 0`, `Type u ≡ Sort (u + 1)`. </code>",
+ "57": "<code>Str : Type</code>",
  "569":
  "<code>Ord.compare.{u} {α : Type u} [self : Ord α] : α → α → Ordering</code><span class=\"sep\"></span><code class=\"docstring\">Compare two elements in `α` using the comparator contained in an `[Ord α]` instance. </code>",
  "568":
@@ -675,7 +675,7 @@
  "<code>Ord.{u} (α : Type u) : Type u</code><span class=\"sep\"></span><code class=\"docstring\">`Ord α` provides a computable total order on `α`, in terms of the\n`compare : α → α → Ordering` function.\n\nTypically instances will be transitive, reflexive, and antisymmetric,\nbut this is not enforced by the typeclass.\n\nThere is a derive handler, so appending `deriving Ord` to an inductive type or structure\nwill attempt to create an `Ord` instance.\n</code>",
  "561": "<code>Ordering.gt : Ordering</code>",
  "560": "<code>Ordering.eq : Ordering</code>",
- "56": "<code>Str : Type</code>",
+ "56": "<code>volume : Nat → Nat → Nat → Nat</code>",
  "559": "<code>Ordering.lt : Ordering</code>",
  "558": "<code>Ordering : Type</code>",
  "557":
@@ -693,7 +693,7 @@
  "551":
  "<code>BEq.beq.{u} {α : Type u} [self : BEq α] : α → α → Bool</code><span class=\"sep\"></span><code class=\"docstring\">Boolean equality, notated as `a == b`. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `==` in identifiers is `beq`.</code>",
  "550": "<code><span class=\"literal string\">\"podes\"</span> : String</code>",
- "55": "<code>volume : Nat → Nat → Nat → Nat</code>",
+ "55": "<code><span class=\"literal string\">\": \"</span> : String</code>",
  "549": "<code><span class=\"literal string\">\"Octo\"</span> : String</code>",
  "548":
  "<code><span class=\"literal string\">\"Octopodes\"</span> : String</code>",
@@ -713,7 +713,8 @@
  "<code>HShiftLeft.hShiftLeft.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HShiftLeft α β γ] : α → β → γ</code><span class=\"sep\"></span><code class=\"docstring\">`a &lt;&lt;&lt; b` computes `a` shifted to the left by `b` places.\nThe meaning of this notation is type-dependent.\n* On `Nat`, this is equivalent to `a * 2 ^ b`.\n* On `UInt8` and other fixed width unsigned types, this is the same but\n  truncated to the bit width. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&lt;&lt;&lt;` in identifiers is `shiftLeft`.</code>",
  "540":
  "<code>HShiftRight.{u, v, w} (α : Type u) (β : Type v) (γ : outParam (Type w)) : Type (max (max u v) w)</code><span class=\"sep\"></span><code class=\"docstring\">The typeclass behind the notation `a &gt;&gt;&gt; b : γ` where `a : α`, `b : β`. </code>",
- "54": "<code><span class=\"literal string\">\": \"</span> : String</code>",
+ "54":
+ "<code><span class=\"literal string\">\"one, and another\"</span> : String</code>",
  "539":
  "<code>HShiftRight.hShiftRight.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HShiftRight α β γ] :\n  α → β → γ</code><span class=\"sep\"></span><code class=\"docstring\">`a &gt;&gt;&gt; b` computes `a` shifted to the right by `b` places.\nThe meaning of this notation is type-dependent.\n* On `Nat` and fixed width unsigned types like `UInt8`,\n  this is equivalent to `a / 2 ^ b`. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&gt;&gt;&gt;` in identifiers is `shiftRight`.</code>",
  "538":
@@ -735,7 +736,7 @@
  "530":
  "<code>UInt64 : Type</code><span class=\"sep\"></span><code class=\"docstring\">Unsigned 64-bit integers.\n\nThis type has special support in the compiler so it can be represented by an unboxed 64-bit value\nrather than wrapping a `BitVec 64`.\n</code>",
  "53":
- "<code><span class=\"literal string\">\"one, and another\"</span> : String</code>",
+ "<code><span class=\"literal string\">\"and another\"</span> : String</code>",
  "529":
  "<code>UInt16 : Type</code><span class=\"sep\"></span><code class=\"docstring\">Unsigned 16-bit integers.\n\nThis type has special support in the compiler so it can be represented by an unboxed 16-bit value\nrather than wrapping a `BitVec 16`.\n</code>",
  "528":
@@ -756,8 +757,7 @@
  "<code>HDiv.hDiv.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HDiv α β γ] : α → β → γ</code><span class=\"sep\"></span><code class=\"docstring\">`a / b` computes the result of dividing `a` by `b`.\nThe meaning of this notation is type-dependent.\n* For most types like `Nat`, `Int`, `Rat`, `Real`, `a / 0` is defined to be `0`.\n* For `Nat`, `a / b` rounds downwards.\n* For `Int`, `a / b` rounds downwards if `b` is positive or upwards if `b` is negative.\n  It is implemented as `Int.ediv`, the unique function satisfying\n  `a % b + b * (a / b) = a` and `0 ≤ a % b &lt; natAbs b` for `b ≠ 0`.\n  Other rounding conventions are available using the functions\n  `Int.fdiv` (floor rounding) and `Int.tdiv` (truncation rounding).\n* For `Float`, `a / 0` follows the IEEE 754 semantics for division,\n  usually resulting in `inf` or `nan`. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `/` in identifiers is `div`.</code>",
  "520":
  "<code>HSub.{u, v, w} (α : Type u) (β : Type v) (γ : outParam (Type w)) : Type (max (max u v) w)</code><span class=\"sep\"></span><code class=\"docstring\">The notation typeclass for heterogeneous subtraction.\nThis enables the notation `a - b : γ` where `a : α`, `b : β`.\n</code>",
- "52":
- "<code><span class=\"literal string\">\"and another\"</span> : String</code>",
+ "52": "<code><span class=\"literal string\">\"one\"</span> : String</code>",
  "519":
  "<code>PPoint α → Bool → True → α</code><span class=\"sep\"></span><code class=\"docstring\">The syntax `arr[i]` gets the `i`'th element of the collection `arr`. If there\nare proof side conditions to the application, they will be automatically\ninferred by the `get_elem_tactic` tactic.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `xs[i]` in identifiers is `getElem`.\n\n * The recommended spelling of `xs[i]'h` in identifiers is `getElem`.</code>",
  "518": "<code>xs.length &gt; i.toNat</code>",
@@ -774,7 +774,7 @@
  "<code>GetElem.getElem {coll idx : Type} {item : outParam Type} {inBounds : outParam (coll → idx → Prop)}\n  [self : GetElem coll idx item inBounds] (c : coll) (i : idx) : inBounds c i → item</code>",
  "510":
  "<code>GetElem (coll idx : Type) (item : outParam Type) (inBounds : outParam (coll → idx → Prop)) : Type</code>",
- "51": "<code><span class=\"literal string\">\"one\"</span> : String</code>",
+ "51": "<code><span class=\"literal string\">\", \"</span> : String</code>",
  "509": "<code>xs.inBounds i</code>",
  "508":
  "<code>NonEmptyList.get {α : Type} (xs : NonEmptyList α) (i : Nat) (ok : xs.inBounds i) : α</code>",
@@ -790,7 +790,7 @@
  "<code><span class=\"literal string\">\"Cat-faced Spider\"</span> : String</code>",
  "500":
  "<code><span class=\"literal string\">\"Hobo Spider\"</span> : String</code>",
- "50": "<code><span class=\"literal string\">\", \"</span> : String</code>",
+ "50": "<code>joinStringsWith (sep x y : String) : String</code>",
  "5": "<code>Nat</code>",
  "499":
  "<code><span class=\"literal string\">\"Wolf Spider\"</span> : String</code>",
@@ -807,7 +807,7 @@
  "491": "<code>NonEmptyList (α : Type) : Type</code>",
  "490":
  "<code>Array.size.{u} {α : Type u} (a : Array α) : Nat</code><span class=\"sep\"></span><code class=\"docstring\">Gets the number of elements stored in an array.\n\nThis is a cached value, so it is `O(1)` to access. The space allocated for an array, referred to as\nits _capacity_, is at least as large as its size, but may be larger. The capacity of an array is an\ninternal detail that's not observable by Lean code.\n</code>",
- "49": "<code>joinStringsWith (sep x y : String) : String</code>",
+ "49": "<code><span class=\"literal string\">\"Hello \"</span> : String</code>",
  "489": "<code><span class=\"literal string\">\"oak\"</span> : String</code>",
  "488": "<code><span class=\"literal string\">\"elm\"</span> : String</code>",
  "487": "<code><span class=\"literal string\">\"birch\"</span> : String</code>",
@@ -820,7 +820,8 @@
  "<code>HPlus.hPlus {α β : Type} {γ : outParam Type} [self : HPlus α β γ] : α → β → γ</code>",
  "481": "<code>outParam Type</code>",
  "480": "<code>HPlus (α β : Type) (γ : outParam Type) : Type</code>",
- "48": "<code><span class=\"literal string\">\"Hello \"</span> : String</code>",
+ "48":
+ "<code>Bool : Type</code><span class=\"sep\"></span><code class=\"docstring\">The Boolean values, `true` and `false`.\n\nLogically speaking, this is equivalent to `Prop` (the type of propositions). The distinction is\npublic important for programming: both propositions and their proofs are erased in the code generator,\nwhile `Bool` corresponds to the Boolean type in most programming languages and carries precisely one\nbit of run-time information.\n</code>",
  "479":
  "<code>outParam.{u} (α : Sort u) : Sort u</code><span class=\"sep\"></span><code class=\"docstring\">Gadget for marking output parameters in type classes.\n\nFor example, the `Membership` class is defined as:\n```\nclass Membership (α : outParam (Type u)) (γ : Type v)\n```\nThis means that whenever a typeclass goal of the form `Membership ?α ?γ` comes\nup, Lean will wait to solve it until `?γ` is known, but then it will run\ntypeclass inference, and take the first solution it finds, for any value of `?α`,\nwhich thereby determines what `?α` should be.\n\nThis expresses that in a term like `a ∈ s`, `s` might be a `Set α` or\n`List α` or some other type with a membership operation, and in each case\nthe \"member\" type `α` is determined by looking at the container type.\n</code>",
  "478": "<code>Pos → Nat → Pos</code>",
@@ -836,8 +837,7 @@
  "471": "<code>addNatPos : Nat → Pos → Pos</code>",
  "470":
  "<code>Add.add.{u} {α : Type u} [self : Add α] : α → α → α</code><span class=\"sep\"></span><code class=\"docstring\">`a + b` computes the sum of `a` and `b`. See `HAdd`. </code>",
- "47":
- "<code>Bool : Type</code><span class=\"sep\"></span><code class=\"docstring\">The Boolean values, `true` and `false`.\n\nLogically speaking, this is equivalent to `Prop` (the type of propositions). The distinction is\npublic important for programming: both propositions and their proofs are erased in the code generator,\nwhile `Bool` corresponds to the Boolean type in most programming languages and carries precisely one\nbit of run-time information.\n</code>",
+ "47": "<code>String</code>",
  "469":
  "<code>OfNat.ofNat.{u} {α : Type u} (x✝ : Nat) [self : OfNat α x✝] : α</code><span class=\"sep\"></span><code class=\"docstring\">The `OfNat.ofNat` function is automatically inserted by the parser when\nthe user writes a numeric literal like `1 : α`. Implementations of this\ntypeclass can therefore customize the behavior of `n : α` based on `n` and\n`α`. </code>",
  "468":
@@ -853,7 +853,7 @@
  "462": "<code>Pos.pred (self : Pos) : Nat</code>",
  "461": "<code>Pos.succ (pred : Nat) : Pos</code>",
  "460": "<code>zero : Pos</code>",
- "46": "<code>String</code>",
+ "46": "<code>spaceBetween (before after : String) : String</code>",
  "459": "<code>eight : Pos</code>",
  "458": "<code>instOfNatPosHAddNatOfNat.natPlusOne : Nat → Pos</code>",
  "457":
@@ -866,7 +866,7 @@
  "452": "<code>LT4.one : LT4</code>",
  "451": "<code>LT4.zero : LT4</code>",
  "450": "<code>LT4 : Type</code>",
- "45": "<code>spaceBetween (before after : String) : String</code>",
+ "45": "<code>maximum (n k : Nat) : Nat</code>",
  "449":
  "<code>OfNat.ofNat {α : Type} (x✝ : Nat) [self : OfNat α x✝] : α</code>",
  "448":
@@ -882,7 +882,8 @@
  "441": "<code>Zero (α : Type) : Type</code>",
  "440":
  "<code>Pos → Pos → Pos</code><span class=\"sep\"></span><code class=\"docstring\">`a * b` computes the product of `a` and `b`. See `HMul`. </code>",
- "44": "<code>maximum (n k : Nat) : Nat</code>",
+ "44":
+ "<code><span class=\"literal string\">\"Hello Lean\"</span> : String</code>",
  "439": "<code>Pos.mul : Pos → Pos → Pos</code>",
  "438":
  "<code>Mul.{u} (α : Type u) : Type u</code><span class=\"sep\"></span><code class=\"docstring\">The homogeneous version of `HMul`: `a * b : α` where `a b : α`. </code>",
@@ -899,8 +900,7 @@
  "<code><span class=\"literal string\">\"Pos.one\"</span> : String</code>",
  "431": "<code><span class=\"literal string\">\")\"</span> : String</code>",
  "430": "<code><span class=\"literal string\">\"(\"</span> : String</code>",
- "43":
- "<code><span class=\"literal string\">\"Hello Lean\"</span> : String</code>",
+ "43": "<code><span class=\"literal string\">\"Lean\"</span> : String</code>",
  "429": "<code>String → String</code>",
  "428": "<code>posToString (atTop : Bool) (p : Pos) : String</code>",
  "427":
@@ -913,7 +913,7 @@
  "421":
  "<code>HMul.{u, v, w} (α : Type u) (β : Type v) (γ : outParam (Type w)) : Type (max (max u v) w)</code><span class=\"sep\"></span><code class=\"docstring\">The notation typeclass for heterogeneous multiplication.\nThis enables the notation `a * b : γ` where `a : α`, `b : β`.\n</code>",
  "420": "<code>fortyNine : Pos</code>",
- "42": "<code><span class=\"literal string\">\"Lean\"</span> : String</code>",
+ "42": "<code>lean : String</code>",
  "419":
  "<code>HAdd.{u, v, w} (α : Type u) (β : Type v) (γ : outParam (Type w)) : Type (max (max u v) w)</code><span class=\"sep\"></span><code class=\"docstring\">The notation typeclass for heterogeneous addition.\nThis enables the notation `a + b : γ` where `a : α`, `b : β`.\n</code>",
  "418": "<code>fourteen : Pos</code>",
@@ -927,7 +927,7 @@
  "411":
  "<code><span class=\"literal string\">\"Hello, world\"</span> : String</code>",
  "410": "<code>Type ?u.17461</code>",
- "41": "<code>lean : String</code>",
+ "41": "<code><span class=\"literal string\">\"Hello\"</span> : String</code>",
  "409":
  "<code>Inhabited.{u} (α : Sort u) : Sort (max 1 u)</code><span class=\"sep\"></span><code class=\"docstring\">`Inhabited α` is a typeclass that says that `α` has a designated element,\ncalled `(default : α)`. This is sometimes referred to as a \"pointed type\".\n\nThis class is used by functions that need to return a value of the type\nwhen called \"out of domain\". For example, `Array.get! arr i : α` returns\na value of type `α` when `arr : Array α`, but if `i` is not in range of\nthe array, it reports a panic message, but this does not halt the program,\nso it must still return a value of type `α` (and in fact this is required\nfor logical consistency), so in this case it returns `default`.\n</code>",
  "408": "<code>unsafeThird.{u_1} {α : Type u_1} (xs : List α) : α</code>",
@@ -943,7 +943,7 @@
  "401":
  "<code>GT.gt.{u} {α : Type u} [LT α] (a b : α) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">`a &gt; b` is an abbreviation for `b &lt; a`. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&gt;` in identifiers is `gt`.</code>",
  "400": "<code>xs.length &gt; 2</code>",
- "40": "<code><span class=\"literal string\">\"Hello\"</span> : String</code>",
+ "40": "<code>hello : String</code>",
  "4": "<code>add1 (n : Nat) : Nat</code>",
  "399":
  "<code>third.{u_1} {α : Type u_1} (xs : List α) (ok : xs.length &gt; 2) : α</code>",
@@ -957,7 +957,8 @@
  "391":
  "<code>Or (a b : Prop) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">`Or a b`, or `a ∨ b`, is the disjunction of propositions. There are two\nconstructors for `Or`, called `Or.inl : a → a ∨ b` and `Or.inr : b → a ∨ b`,\nand you can use `match` or `cases` to destruct an `Or` assumption into the\ntwo cases.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `∨` in identifiers is `or`.\n\n * The recommended spelling of `\\/` in identifiers is `or` (prefer `∨` over `\\/`).</code>",
  "390": "<code>onePlusOneOrLessThan : 1 + 1 = 2 ∨ 3 &lt; 5</code>",
- "39": "<code>hello : String</code>",
+ "39":
+ "<code>List.{u} (α : Type u) : Type u</code><span class=\"sep\"></span><code class=\"docstring\">Linked lists: ordered lists, in which each element has a reference to the next element.\n\nMost operations on linked lists take time proportional to the length of the list, because each\nelement must be traversed to find the next element.\n\n`List α` is isomorphic to `Array α`, but they are useful for different things:\n* `List α` is easier for reasoning, and `Array α` is modeled as a wrapper around `List α`.\n* `List α` works well as a persistent data structure, when many copies of the tail are shared. When\n  the value is not shared, `Array α` will have better performance because it can do destructive\n  updates.\n</code>",
  "389":
  "<code>False : Prop</code><span class=\"sep\"></span><code class=\"docstring\">`False` is the empty proposition. Thus, it has no introduction rules.\nIt represents a contradiction. `False` elimination rule, `False.rec`,\nexpresses the fact that anything follows from a contradiction.\nThis rule is sometimes called ex falso (short for ex falso sequitur quodlibet),\nor the principle of explosion.\nFor more information: [Propositional Logic](https://lean-lang.org/theorem_proving_in_lean4/propositions_and_proofs.html#propositional-logic)\n</code>",
  "388":
@@ -974,8 +975,7 @@
  "<code>Or.inl {a b : Prop} (h : a) : a ∨ b</code><span class=\"sep\"></span><code class=\"docstring\">`Or.inl` is \"left injection\" into an `Or`. If `h : a` then `Or.inl h : a ∨ b`. </code>",
  "380":
  "<code>And (a b : Prop) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">`And a b`, or `a ∧ b`, is the conjunction of propositions. It can be\nconstructed and destructed like a pair: if `ha : a` and `hb : b` then\n`⟨ha, hb⟩ : a ∧ b`, and if `h : a ∧ b` then `h.left : a` and `h.right : b`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `∧` in identifiers is `and`.\n\n * The recommended spelling of `/\\` in identifiers is `and` (prefer `∧` over `/\\`).</code>",
- "38":
- "<code>List.{u} (α : Type u) : Type u</code><span class=\"sep\"></span><code class=\"docstring\">Linked lists: ordered lists, in which each element has a reference to the next element.\n\nMost operations on linked lists take time proportional to the length of the list, because each\nelement must be traversed to find the next element.\n\n`List α` is isomorphic to `Array α`, but they are useful for different things:\n* `List α` is easier for reasoning, and `Array α` is modeled as a wrapper around `List α`.\n* `List α` works well as a persistent data structure, when many copies of the tail are shared. When\n  the value is not shared, `Array α` will have better performance because it can do destructive\n  updates.\n</code>",
+ "38": "<code><span class=\"literal string\">\" \"</span> : String</code>",
  "379":
  "<code>addAndAppend : 1 + 1 = 2 ∧ \"Str\".append \"ing\" = \"String\"</code>",
  "378":
@@ -992,7 +992,7 @@
  "371":
  "<code class=\"docstring\">`by tac` constructs a term of the expected type by running the tactic(s) `tac`. </code>",
  "370": "<code>onePlusOneIsTwo : OnePlusOneIsTwo</code>",
- "37": "<code><span class=\"literal string\">\" \"</span> : String</code>",
+ "37": "<code><span class=\"literal string\">\"hello\"</span> : String</code>",
  "369": "<code>OnePlusOneIsTwo : Prop</code>",
  "368":
  "<code>Eq.{u_1} {α : Sort u_1} : α → α → Prop</code><span class=\"sep\"></span><code class=\"docstring\">The equality relation. It has one introduction rule, `Eq.refl`.\nWe use `a = b` as notation for `Eq a b`.\nA fundamental property of equality is that it is an equivalence relation.\n```\nvariable (α : Type) (a b c d : α)\nvariable (hab : a = b) (hcb : c = b) (hcd : c = d)\n\nexample : a = d :=\n  Eq.trans (Eq.trans hab (Eq.symm hcb)) hcd\n```\nEquality is much more than an equivalence relation, however. It has the important property that every assertion\nrespects the equivalence, in the sense that we can substitute equal expressions without changing the truth value.\nThat is, given `h1 : a = b` and `h2 : p a`, we can construct a proof for `p b` using substitution: `Eq.subst h1 h2`.\nExample:\n```\nexample (α : Type) (a b : α) (p : α → Prop)\n        (h1 : a = b) (h2 : p a) : p b :=\n  Eq.subst h1 h2\n\nexample (α : Type) (a b : α) (p : α → Prop)\n    (h1 : a = b) (h2 : p a) : p b :=\n  h1 ▸ h2\n```\nThe triangle in the second presentation is a macro built on top of `Eq.subst` and `Eq.symm`, and you can enter it by typing `\\t`.\nFor more information: [Equality](https://lean-lang.org/theorem_proving_in_lean4/quantifiers_and_equality.html#equality)\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `=` in identifiers is `eq`.</code>",
@@ -1005,7 +1005,8 @@
  "362": "<code>deer : String</code>",
  "361": "<code>hedgehog : String</code>",
  "360": "<code><span class=\"literal string\">\"snail\"</span> : String</code>",
- "36": "<code><span class=\"literal string\">\"hello\"</span> : String</code>",
+ "36":
+ "<code>List.cons.{u} {α : Type u} (head : α) (tail : List α) : List α</code><span class=\"sep\"></span><code class=\"docstring\">The list whose first element is `head`, where `tail` is the rest of the list.\nUsually written `head :: tail`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `::` in identifiers is `cons`.\n\n * The recommended spelling of `[a]` in identifiers is `singleton`.</code>",
  "359": "<code><span class=\"literal string\">\"deer\"</span> : String</code>",
  "358":
  "<code><span class=\"literal string\">\"hedgehog\"</span> : String</code>",
@@ -1018,8 +1019,7 @@
  "352": "<code>main : List String → IO UInt32</code>",
  "351": "<code>main : IO UInt32</code>",
  "350": "<code>main (args : List String) : IO UInt32</code>",
- "35":
- "<code>List.cons.{u} {α : Type u} (head : α) (tail : List α) : List α</code><span class=\"sep\"></span><code class=\"docstring\">The list whose first element is `head`, where `tail` is the rest of the list.\nUsually written `head :: tail`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `::` in identifiers is `cons`.\n\n * The recommended spelling of `[a]` in identifiers is `singleton`.</code>",
+ "35": "<code><span class=\"literal string\">\"world\"</span> : String</code>",
  "349": "<code>System.FilePath.mk (toString : String) : System.FilePath</code>",
  "348": "<code>Option IO.FS.Stream</code>",
  "347": "<code><span class=\"literal string\">\"-\"</span> : String</code>",
@@ -1035,7 +1035,8 @@
  "<code>IO.FS.Mode.read : IO.FS.Mode</code><span class=\"sep\"></span><code class=\"docstring\">The file should be opened for reading.\n\nThe read/write cursor is positioned at the beginning of the file. It is an error if the file does\nnot exist.\n\n* `open` flags: `O_RDONLY`\n* `fdopen` mode: `r`\n</code>",
  "340":
  "<code>IO.FS.Handle.mk (fn : System.FilePath) (mode : IO.FS.Mode) : IO IO.FS.Handle</code><span class=\"sep\"></span><code class=\"docstring\">Opens the file at `fn` with the given `mode`.\n\nAn exception is thrown if the file cannot be opened.\n</code>",
- "34": "<code><span class=\"literal string\">\"world\"</span> : String</code>",
+ "34":
+ "<code>HSub.hSub.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HSub α β γ] : α → β → γ</code><span class=\"sep\"></span><code class=\"docstring\">`a - b` computes the difference of `a` and `b`.\nThe meaning of this notation is type-dependent.\n* For natural numbers, this operator saturates at 0: `a - b = 0` when `a ≤ b`. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `-` in identifiers is `sub` (when used as a binary operator).</code>",
  "339": "<code>IO.FS.Handle</code>",
  "338":
  "<code>IO.getStderr : BaseIO IO.FS.Stream</code><span class=\"sep\"></span><code class=\"docstring\">Returns the current thread's standard error stream.\n\nUse `IO.setStderr` to replace the current thread's standard error stream.\n</code>",
@@ -1052,7 +1053,7 @@
  "331": "<code>Stream.isTty (self : Stream) : BaseIO Bool</code>",
  "330": "<code>Stream.putStr (self : Stream) : String → IO Unit</code>",
  "33":
- "<code>HSub.hSub.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HSub α β γ] : α → β → γ</code><span class=\"sep\"></span><code class=\"docstring\">`a - b` computes the difference of `a` and `b`.\nThe meaning of this notation is type-dependent.\n* For natural numbers, this operator saturates at 0: `a - b = 0` when `a ≤ b`. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `-` in identifiers is `sub` (when used as a binary operator).</code>",
+ "<code>Int : Type</code><span class=\"sep\"></span><code class=\"docstring\">The integers.\n\nThis type is special-cased by the compiler and overridden with an efficient implementation. The\nruntime has a special representation for `Int` that stores “small” signed numbers directly, while\nlarger numbers use a fast arbitrary-precision arithmetic library (usually\n[GMP](https://gmplib.org/)). A “small number” is an integer that can be encoded with one fewer bits\nthan the platform's pointer size (i.e. 63 bits on 64-bit architectures and 31 bits on 32-bit\narchitectures).\n</code>",
  "329": "<code>Stream.getLine (self : Stream) : IO String</code>",
  "328": "<code>Stream.write (self : Stream) : ByteArray → IO Unit</code>",
  "327":
@@ -1067,8 +1068,7 @@
  "321": "<code>ByteArray</code>",
  "320":
  "<code>IO.FS.Stream.read (self : IO.FS.Stream) : USize → IO ByteArray</code><span class=\"sep\"></span><code class=\"docstring\">Reads up to the given number of bytes from the stream.\n\nIf the returned array is empty, an end-of-file marker (EOF) has been reached. An EOF does not\nactually close a stream, so further reads may block and return more data.\n</code>",
- "32":
- "<code>Int : Type</code><span class=\"sep\"></span><code class=\"docstring\">The integers.\n\nThis type is special-cased by the compiler and overridden with an efficient implementation. The\nruntime has a special representation for `Int` that stores “small” signed numbers directly, while\nlarger numbers use a fast arbitrary-precision arithmetic library (usually\n[GMP](https://gmplib.org/)). A “small number” is an integer that can be encoded with one fewer bits\nthan the platform's pointer size (i.e. 63 bits on 64-bit architectures and 31 bits on 32-bit\narchitectures).\n</code>",
+ "32": "<code>Int</code>",
  "319": "<code>dump (stream : IO.FS.Stream) : IO Unit</code>",
  "318": "<code>USize</code>",
  "317": "<code>bufsize : USize</code>",
@@ -1083,7 +1083,8 @@
  "<code><span class=\"literal string\">\"Hello!\"</span> : String</code>",
  "311": "<code><span class=\"literal string\">\"1\"</span> : String</code>",
  "310": "<code><span class=\"literal string\">\"2\"</span> : String</code>",
- "31": "<code>Int</code>",
+ "31":
+ "<code>Nat.zero : Nat</code><span class=\"sep\"></span><code class=\"docstring\">Zero, the smallest natural number.\n\nUsing `Nat.zero` explicitly should usually be avoided in favor of the literal `0`, which is the\n[simp normal form](https://lean-lang.org/doc/reference/4.26.0/find/?domain=Verso.Genre.Manual.section&name=simp-normal-forms).\n</code>",
  "309": "<code><span class=\"literal string\">\"3\"</span> : String</code>",
  "308": "<code><span class=\"literal string\">\"4\"</span> : String</code>",
  "307": "<code><span class=\"literal string\">\"5\"</span> : String</code>",
@@ -1097,7 +1098,7 @@
  "<code>Pure.pure.{u, v} {f : Type u → Type v} [self : Pure f] {α : Type u} : α → f α</code><span class=\"sep\"></span><code class=\"docstring\">Given `a : α`, then `pure a : f α` represents an action that does nothing and returns `a`.\n\nExamples:\n* `(pure \"hello\" : Option String) = some \"hello\"`\n* `(pure \"hello\" : Except (Array String) String) = Except.ok \"hello\"`\n* `(pure \"hello\" : StateM Nat String).run 105 = (\"hello\", 105)`\n</code>",
  "300": "<code>nTimes (action : IO Unit) : Nat → IO Unit</code>",
  "30":
- "<code>Nat.zero : Nat</code><span class=\"sep\"></span><code class=\"docstring\">Zero, the smallest natural number.\n\nUsing `Nat.zero` explicitly should usually be avoided in favor of the literal `0`, which is the\n[simp normal form](https://lean-lang.org/doc/reference/4.26.0/find/?domain=Verso.Genre.Manual.section&name=simp-normal-forms).\n</code>",
+ "<code><span class=\"literal string\">\"not equal\"</span> : String</code>",
  "3":
  "<code class=\"docstring\">The universe of propositions. `Prop ≡ Sort 0`.\n\nEvery proposition is propositionally equal to either `True` or `False`. </code>",
  "299": "<code><span class=\"literal string\">\"shy\"</span> : String</code>",
@@ -1115,8 +1116,7 @@
  "<code><span class=\"literal string\">\"Hello...   \"</span> : String</code>",
  "290":
  "<code>String.Slice.dropEndWhile {ρ : Type} [String.Slice.Pattern.BackwardPattern ρ] (s : String.Slice) (pat : ρ) :\n  String.Slice</code><span class=\"sep\"></span><code class=\"docstring\">Creates a new slice that contains the longest suffix of `s` for which `pat` matched\n\\(potentially repeatedly\\)\\.\n\nExamples:\n\n* `\"red green blue\".toSlice.dropEndWhile Char.isLower == \"red green \".toSlice`\n\n* `\"red green blue\".toSlice.dropEndWhile 'e' == \"red green blu\".toSlice`\n\n* `\"red green blue\".toSlice.dropEndWhile (fun (_ : Char) =&gt; true) == \"\".toSlice`\n  </code>",
- "29":
- "<code><span class=\"literal string\">\"not equal\"</span> : String</code>",
+ "29": "<code><span class=\"literal string\">\"equal\"</span> : String</code>",
  "289":
  "<code><span class=\"literal string\">\"Hello!!!\"</span> : String</code>",
  "288":
@@ -1137,110 +1137,109 @@
  "<code>IO.getStdout : BaseIO IO.FS.Stream</code><span class=\"sep\"></span><code class=\"docstring\">Returns the current thread's standard output stream.\n\nUse `IO.setStdout` to replace the current thread's standard output stream.\n</code>",
  "280":
  "<code>IO.getStdin : BaseIO IO.FS.Stream</code><span class=\"sep\"></span><code class=\"docstring\">Returns the current thread's standard input stream.\n\nUse `IO.setStdin` to replace the current thread's standard input stream.\n</code>",
- "28": "<code><span class=\"literal string\">\"equal\"</span> : String</code>",
+ "28": "<code><span class=\"literal string\">\"C\"</span> : String</code>",
  "279": "<code>IO.FS.Stream</code>",
  "278":
- "<code><span class=\"literal string\">\"Hello, world!\"</span> : String</code>",
- "277":
  "<code>IO.println.{u_1} {α : Type u_1} [ToString α] (s : α) : IO Unit</code><span class=\"sep\"></span><code class=\"docstring\">Converts `s` to a string using its `ToString α` instance, and prints it with a trailing newline to\nthe current standard output (as determined by `IO.getStdout`).\n</code>",
- "276": "<code>main : IO Unit</code>",
- "275":
+ "277": "<code>main : IO Unit</code>",
+ "276":
  "<code>ToString.{u} (α : Type u) : Type u</code><span class=\"sep\"></span><code class=\"docstring\">Types that can be converted into a string for display.\n\nThere is no expectation that the resulting string can be parsed back to the original data (see\n`Repr` for a similar class with this expectation).\n</code>",
- "274":
+ "275":
  "<code>HAppend.hAppend.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HAppend α β γ] : α → β → γ</code><span class=\"sep\"></span><code class=\"docstring\">`a ++ b` is the result of concatenation of `a` and `b`, usually read \"append\".\nThe meaning of this notation is type-dependent. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `++` in identifiers is `append`.</code>",
- "273":
+ "274":
  "<code><span class=\"literal string\">\"three fives is \"</span> : String</code>",
- "272":
+ "273":
  "<code>ToString.toString.{u} {α : Type u} [self : ToString α] : α → String</code><span class=\"sep\"></span><code class=\"docstring\">Converts a value into a string. </code>",
- "271":
+ "272":
  "<code><span class=\"literal string\">\"three fives is 15\"</span> : String</code>",
- "270":
+ "271":
  "<code class=\"docstring\">`if let pat := d then t else e` is a shorthand syntax for:\n```\nmatch d with\n| pat =&gt; t\n| _ =&gt; e\n```\nIt matches `d` against the pattern `pat` and the bindings are available in `t`.\nIf the pattern does not match, it returns `e` instead.\n</code>",
- "27": "<code><span class=\"literal string\">\"C\"</span> : String</code>",
- "269": "<code>Inline</code>",
- "268": "<code>Inline.string? (inline : Inline) : Option String</code>",
- "267": "<code>Inline.strong : Inline → Inline</code>",
- "266": "<code>Inline.emph : Inline → Inline</code>",
- "265": "<code>Inline.string : String → Inline</code>",
- "264": "<code>Inline.lineBreak : Inline</code>",
- "263": "<code>Inline : Type</code>",
- "262":
+ "270": "<code>Inline</code>",
+ "27": "<code><span class=\"literal string\">\"B\"</span> : String</code>",
+ "269": "<code>Inline.string? (inline : Inline) : Option String</code>",
+ "268": "<code>Inline.strong : Inline → Inline</code>",
+ "267": "<code>Inline.emph : Inline → Inline</code>",
+ "266": "<code>Inline.string : String → Inline</code>",
+ "265": "<code>Inline.lineBreak : Inline</code>",
+ "264": "<code>Inline : Type</code>",
+ "263":
  "<code class=\"docstring\">Makes names from other namespaces visible without writing the namespace prefix.\n\nNames that are made available with `open` are visible within the current `section` or `namespace`\nblock. This makes referring to (type) definitions and theorems easier, but note that it can also\nmake [scoped instances], notations, and attributes from a different namespace available.\n\nThe `open` command can be used in a few different ways:\n\n* `open Some.Namespace.Path1 Some.Namespace.Path2` makes all non-protected names in\n  `Some.Namespace.Path1` and `Some.Namespace.Path2` available without the prefix, so that\n  `Some.Namespace.Path1.x` and `Some.Namespace.Path2.y` can be referred to by writing only `x` and\n  `y`.\n\n* `open Some.Namespace.Path hiding def1 def2` opens all non-protected names in `Some.Namespace.Path`\n  except `def1` and `def2`.\n\n* `open Some.Namespace.Path (def1 def2)` only makes `Some.Namespace.Path.def1` and\n  `Some.Namespace.Path.def2` available without the full prefix, so `Some.Namespace.Path.def3` would\n  be unaffected.\n\n  This works even if `def1` and `def2` are `protected`.\n\n* `open Some.Namespace.Path renaming def1 → def1', def2 → def2'` same as `open Some.Namespace.Path\n  (def1 def2)` but `def1`/`def2`'s names are changed to `def1'`/`def2'`.\n\n  This works even if `def1` and `def2` are `protected`.\n\n* `open scoped Some.Namespace.Path1 Some.Namespace.Path2` **only** opens [scoped instances],\n  notations, and attributes from `Namespace1` and `Namespace2`; it does **not** make any other name\n  available.\n\n* `open &lt;any of the open shapes above&gt; in` makes the names `open`-ed visible only in the next\n  command or expression.\n\n[scoped instance]: https://lean-lang.org/theorem_proving_in_lean4/type_classes.html#scoped-instances\n(Scoped instances in Theorem Proving in Lean)\n\n\n## Examples\n\n```lean\n/-- SKI combinators https://en.wikipedia.org/wiki/SKI_combinator_calculus -/\nnamespace Combinator.Calculus\n  def I (a : α) : α := a\n  def K (a : α) : β → α := fun _ =&gt; a\n  def S (x : α → β → γ) (y : α → β) (z : α) : γ := x z (y z)\nend Combinator.Calculus\n\nsection\n  -- open everything under `Combinator.Calculus`, *i.e.* `I`, `K` and `S`,\n  -- until the section ends\n  open Combinator.Calculus\n\n  theorem SKx_eq_K : S K x = I := rfl\nend\n\n-- open everything under `Combinator.Calculus` only for the next command (the next `theorem`, here)\nopen Combinator.Calculus in\ntheorem SKx_eq_K' : S K x = I := rfl\n\nsection\n  -- open only `S` and `K` under `Combinator.Calculus`\n  open Combinator.Calculus (S K)\n\n  theorem SKxy_eq_y : S K x y = y := rfl\n\n  -- `I` is not in scope, we have to use its full path\n  theorem SKxy_eq_Iy : S K x y = Combinator.Calculus.I y := rfl\nend\n\nsection\n  open Combinator.Calculus\n    renaming\n      I → identity,\n      K → konstant\n\n  #check identity\n  #check konstant\nend\n\nsection\n  open Combinator.Calculus\n    hiding S\n\n  #check I\n  #check K\nend\n\nsection\n  namespace Demo\n    inductive MyType\n    | val\n\n    namespace N1\n      scoped infix:68 \" ≋ \" =&gt; BEq.beq\n\n      scoped instance : BEq MyType where\n        beq _ _ := true\n\n      def Alias := MyType\n    end N1\n  end Demo\n\n  -- bring `≋` and the instance in scope, but not `Alias`\n  open scoped Demo.N1\n\n  #check Demo.MyType.val == Demo.MyType.val\n  #check Demo.MyType.val ≋ Demo.MyType.val\n  -- #check Alias -- unknown identifier 'Alias'\nend\n```\n</code>",
- "261":
+ "262":
  "<code class=\"docstring\">`open Foo in e` is like `open Foo` but scoped to a single term.\nIt makes the given namespaces available in the term `e`.\n</code>",
- "260": "<code>timesTwelve (x : Nat) : Nat</code>",
- "26": "<code><span class=\"literal string\">\"B\"</span> : String</code>",
- "259":
+ "261": "<code>timesTwelve (x : Nat) : Nat</code>",
+ "260":
  "<code class=\"docstring\">`end` closes a `section` or `namespace` scope. If the scope is named `&lt;id&gt;`, it has to be closed\nwith `end &lt;id&gt;`. The `end` command is optional at the end of a file.\n</code>",
- "258":
+ "26": "<code><span class=\"literal string\">\"A\"</span> : String</code>",
+ "259":
  "<code class=\"docstring\">`namespace &lt;id&gt;` opens a section with label `&lt;id&gt;` that influences naming and name resolution inside\nthe section:\n* Declarations names are prefixed: `def seventeen : ℕ := 17` inside a namespace `Nat` is given the\n  full name `Nat.seventeen`.\n* Names introduced by `export` declarations are also prefixed by the identifier.\n* All names starting with `&lt;id&gt;.` become available in the namespace without the prefix. These names\n  are preferred over names introduced by outer namespaces or `open`.\n* Within a namespace, declarations can be `protected`, which excludes them from the effects of\n  opening the namespace.\n\nAs with `section`, namespaces can be nested and the scope of a namespace is terminated by a\ncorresponding `end &lt;id&gt;` or the end of the file.\n\n`namespace` also acts like `section` in delimiting the scope of `variable`, `open`, and other scoped commands.\n</code>",
- "257": "<code>NewNamespace.quadruple (x : Nat) : Nat</code>",
- "256": "<code>NewNamespace.triple (x : Nat) : Nat</code>",
- "255": "<code>Nat.double (x : Nat) : Nat</code>",
- "254":
+ "258": "<code>NewNamespace.quadruple (x : Nat) : Nat</code>",
+ "257": "<code>NewNamespace.triple (x : Nat) : Nat</code>",
+ "256": "<code>Nat.double (x : Nat) : Nat</code>",
+ "255":
  "<code>Array.map.{u, v} {α : Type u} {β : Type v} (f : α → β) (as : Array α) : Array β</code><span class=\"sep\"></span><code class=\"docstring\">Applies a function to each element of the array, returning the resulting array of values.\n\nExamples:\n* `#[a, b, c].map f = #[f a, f b, f c]`\n* `#[].map Nat.succ = #[]`\n* `#[\"one\", \"two\", \"three\"].map (·.length) = #[3, 3, 5]`\n* `#[\"one\", \"two\", \"three\"].map (·.reverse) = #[\"eno\", \"owt\", \"eerht\"]`\n</code>",
- "253":
+ "254":
  "<code>List.map.{u_1, u_2} {α : Type u_1} {β : Type u_2} (f : α → β) (l : List α) : List β</code><span class=\"sep\"></span><code class=\"docstring\">Applies a function to each element of the list, returning the resulting list of values.\n\n`O(|l|)`.\n\nExamples:\n* `[a, b, c].map f = [f a, f b, f c]`\n* `[].map Nat.succ = []`\n* `[\"one\", \"two\", \"three\"].map (·.length) = [3, 3, 5]`\n* `[\"one\", \"two\", \"three\"].map (·.reverse) = [\"eno\", \"owt\", \"eerht\"]`\n</code>",
- "252": "<code>double : Nat → Nat</code>",
- "251":
+ "253": "<code>double : Nat → Nat</code>",
+ "252":
  "<code>HAdd.hAdd.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HAdd α β γ] : α → β → γ</code><span class=\"sep\"></span><code class=\"docstring\">`a + b` computes the sum of `a` and `b`.\nThe meaning of this notation is type-dependent. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `+` in identifiers is `add`.</code>",
- "250":
+ "251":
  "<code>Nat.add : Nat → Nat → Nat</code><span class=\"sep\"></span><code class=\"docstring\">Addition of natural numbers, typically used via the `+` operator.\n\nThis function is overridden in both the kernel and the compiler to efficiently evaluate using the\narbitrary-precision arithmetic library. The definition provided here is the logical model.\n</code>",
- "25": "<code><span class=\"literal string\">\"A\"</span> : String</code>",
- "249": "<code>Oops.halve : Nat → Nat</code>",
- "248": "<code>halve : Nat → Nat</code>",
- "247": "<code>Explicit.halve : Nat → Nat</code>",
- "246": "<code>even : Nat → Bool</code>",
- "245": "<code>drop {α : Type} (n : Nat) (xs : List α) : List α</code>",
- "244": "<code>?m.4</code>",
- "243": "<code>id {α : Type} (x : α) : α</code>",
- "242": "<code>List ?m.23 × List ?m.24</code>",
- "241": "<code>?m.24</code>",
- "240": "<code>?m.23</code>",
- "24":
+ "250": "<code>Oops.halve : Nat → Nat</code>",
+ "25":
  "<code><span class=\"literal string\">\"it is no\"</span> : String</code>",
- "239": "<code>List (?m.23 × ?m.24)</code>",
- "238": "<code>List (?m.23 × ?m.24) → List ?m.23 × List ?m.24</code>",
- "237":
- "<code>unzip {α β : Type} (pairs : List (α × β)) : List α × List β</code>",
- "236": "<code>reverse.helper {α : Type} : List α → List α → List α</code>",
- "235": "<code>reverse {α : Type} (xs : List α) : List α</code>",
- "234": "<code>List α × List β</code>",
- "233":
- "<code class=\"docstring\">`let` is used to declare a local definition. Example:\n```\nlet x := 1\nlet y := x + 1\nx + y\n```\nSince functions are first class citizens in Lean, you can use `let` to declare\nlocal functions too.\n```\nlet double := fun x =&gt; 2*x\ndouble (double 3)\n```\nFor recursive definitions, you should use `let rec`.\nYou can also perform pattern matching using `let`. For example,\nassume `p` has type `Nat × Nat`, then you can write\n```\nlet (x, y) := p\nx + y\n```\n\nThe *anaphoric let* `let := v` defines a variable called `this`.\n</code>",
- "232":
- "<code>snd.{u, v} {α : Type u} {β : Type v} (self : α × β) : β</code><span class=\"sep\"></span><code class=\"docstring\">The second element of a pair. </code>",
- "231":
- "<code>fst.{u, v} {α : Type u} {β : Type v} (self : α × β) : α</code><span class=\"sep\"></span><code class=\"docstring\">The first element of a pair. </code>",
- "230": "<code>List (α × β)</code>",
- "23":
+ "249": "<code>halve : Nat → Nat</code>",
+ "248": "<code>Explicit.halve : Nat → Nat</code>",
+ "247": "<code>even : Nat → Bool</code>",
+ "246": "<code>drop {α : Type} (n : Nat) (xs : List α) : List α</code>",
+ "245": "<code>?m.4</code>",
+ "244": "<code>id {α : Type} (x : α) : α</code>",
+ "243": "<code>List ?m.23 × List ?m.24</code>",
+ "242": "<code>?m.24</code>",
+ "241": "<code>?m.23</code>",
+ "240": "<code>List (?m.23 × ?m.24)</code>",
+ "24":
  "<code>Bool.false : Bool</code><span class=\"sep\"></span><code class=\"docstring\">The Boolean value `false`, not to be confused with the proposition `False`. </code>",
- "229": "<code>unzip {α β : Type} : List (α × β) → List α × List β</code>",
- "228": "<code><span class=\"literal string\">\"\"</span> : String</code>",
- "227":
+ "239": "<code>List (?m.23 × ?m.24) → List ?m.23 × List ?m.24</code>",
+ "238":
+ "<code>unzip {α β : Type} (pairs : List (α × β)) : List α × List β</code>",
+ "237": "<code>reverse.helper {α : Type} : List α → List α → List α</code>",
+ "236": "<code>reverse {α : Type} (xs : List α) : List α</code>",
+ "235": "<code>List α × List β</code>",
+ "234":
+ "<code class=\"docstring\">`let` is used to declare a local definition. Example:\n```\nlet x := 1\nlet y := x + 1\nx + y\n```\nSince functions are first class citizens in Lean, you can use `let` to declare\nlocal functions too.\n```\nlet double := fun x =&gt; 2*x\ndouble (double 3)\n```\nFor recursive definitions, you should use `let rec`.\nYou can also perform pattern matching using `let`. For example,\nassume `p` has type `Nat × Nat`, then you can write\n```\nlet (x, y) := p\nx + y\n```\n\nThe *anaphoric let* `let := v` defines a variable called `this`.\n</code>",
+ "233":
+ "<code>snd.{u, v} {α : Type u} {β : Type v} (self : α × β) : β</code><span class=\"sep\"></span><code class=\"docstring\">The second element of a pair. </code>",
+ "232":
+ "<code>fst.{u, v} {α : Type u} {β : Type v} (self : α × β) : α</code><span class=\"sep\"></span><code class=\"docstring\">The first element of a pair. </code>",
+ "231": "<code>List (α × β)</code>",
+ "230": "<code>unzip {α β : Type} : List (α × β) → List α × List β</code>",
+ "23": "<code><span class=\"literal string\">\"no\"</span> : String</code>",
+ "229": "<code><span class=\"literal string\">\"\"</span> : String</code>",
+ "228":
  "<code><span class=\"literal string\">\"salmonberry\"</span> : String</code>",
- "226":
+ "227":
  "<code>getD.{u_1} {α : Type u_1} (opt : Option α) (dflt : α) : α</code><span class=\"sep\"></span><code class=\"docstring\">Gets an optional value, returning a given default on `none`.\n\nThis function is `@[macro_inline]`, so `dflt` will not be evaluated unless `opt` turns out to be\n`none`.\n\nExamples:\n * `(some \"hello\").getD \"goodbye\" = \"hello\"`\n * `none.getD \"goodbye\" = \"goodbye\"`\n</code>",
- "225": "<code>fromOption {α : Type} (default : α) : Option α → α</code>",
- "224": "<code>drop {α : Type} : Nat → List α → List α</code>",
- "223": "<code>length {α : Type} : List α → Nat</code>",
- "222":
+ "226": "<code>fromOption {α : Type} (default : α) : Option α → α</code>",
+ "225": "<code>drop {α : Type} : Nat → List α → List α</code>",
+ "224": "<code>length {α : Type} : List α → Nat</code>",
+ "223":
  "<code><span class=\"literal string\">\"oyster\"</span> : String</code>",
- "221":
+ "222":
  "<code><span class=\"literal string\">\"bolete\"</span> : String</code>",
- "220":
+ "221":
  "<code>take.{u_1} {α : Type u_1} (n : Nat) (xs : List α) : List α</code>",
- "22": "<code><span class=\"literal string\">\"no\"</span> : String</code>",
- "219":
+ "220":
  "<code>zip {α β : Type} (xs : List α) (ys : List β) : List (α × β)</code>",
- "218": "<code>α × β</code>",
- "217": "<code>Prod.switch {α β : Type} (pair : α × β) : β × α</code>",
- "216": "<code>α → Bool</code>",
- "215":
+ "22": "<code><span class=\"literal string\">\"yes\"</span> : String</code>",
+ "219": "<code>α × β</code>",
+ "218": "<code>Prod.switch {α β : Type} (pair : α × β) : β × α</code>",
+ "217": "<code>α → Bool</code>",
+ "216":
  "<code>List.findFirst? {α : Type} (xs : List α) (predicate : α → Bool) : Option α</code>",
- "214": "<code>allFirewood : List Firewood</code>",
- "213": "<code>Firewood.beech : Firewood</code>",
- "212": "<code>Firewood.pine : Firewood</code>",
+ "215": "<code>allFirewood : List Firewood</code>",
+ "214": "<code>Firewood.beech : Firewood</code>",
+ "213": "<code>Firewood.pine : Firewood</code>",
+ "212": "<code>Firewood.birch : Firewood</code>",
  "2118":
  "<code>ISize : Type</code><span class=\"sep\"></span><code class=\"docstring\">Signed integers that are the size of a word on the platform's architecture.\n\nOn a 32-bit architecture, `ISize` is equivalent to `Int32`. On a 64-bit machine, it is equivalent to\n`Int64`. This type has special support in the compiler so it can be represented by an unboxed value.\n</code>",
  "2117":
@@ -1259,7 +1258,7 @@
  "<code><span class=\"literal string\">\"--unique\"</span> : String</code>",
  "2110":
  "<code><span class=\"literal string\">\"--shared\"</span> : String</code>",
- "211": "<code>Firewood.birch : Firewood</code>",
+ "211": "<code>Firewood : Type</code>",
  "2109":
  "<code><span class=\"literal string\">\"--- Original data: ---\"</span> : String</code>",
  "2108":
@@ -1274,8 +1273,10 @@
  "2102": "<code>getLines : IO (Array String)</code>",
  "2101": "<code>Type ?u.48398</code>",
  "2100": "<code>compare arr[i'] arr[i' + 1] = Ordering.gt</code>",
- "210": "<code>Firewood : Type</code>",
- "21": "<code><span class=\"literal string\">\"yes\"</span> : String</code>",
+ "210":
+ "<code>Repr.{u} (α : Type u) : Type u</code><span class=\"sep\"></span><code class=\"docstring\">The standard way of turning values of some type into `Format`.\n\nWhen rendered this `Format` should be as close as possible to something that can be parsed as the\ninput value.\n</code>",
+ "21":
+ "<code class=\"docstring\">`if c then t else e` is notation for `ite c t e`, \"if-then-else\", which decides to\nreturn `t` or `e` depending on whether `c` is true or false. The explicit argument\n`c : Prop` does not have any actual computational content, but there is an additional\n`[Decidable c]` argument synthesized by typeclass inference which actually\ndetermines how to evaluate `c` to true or false. Write `if h : c then t else e`\ninstead for a \"dependent if-then-else\" `dite`, which allows `t`/`e` to use the fact\nthat `c` is true/false.\n</code>",
  "2099": "<code>compare arr[i'] arr[i' + 1] = Ordering.eq</code>",
  "2098": "<code>compare arr[i'] arr[i' + 1] = Ordering.lt</code>",
  "2097":
@@ -1290,8 +1291,7 @@
  "2091":
  "<code>insertSorted._proof_2.{u_1} {α : Type u_1} (arr : Array α) (i' : Nat) : i' + 1 &lt; arr.size → ¬i' &lt; arr.size → False</code>",
  "2090": "<code>¬i' &lt; arr.size</code>",
- "209":
- "<code>Repr.{u} (α : Type u) : Type u</code><span class=\"sep\"></span><code class=\"docstring\">The standard way of turning values of some type into `Format`.\n\nWhen rendered this `Format` should be as close as possible to something that can be parsed as the\ninput value.\n</code>",
+ "209": "<code>allTools : List WoodSplittingTool</code>",
  "2089":
  "<code>Decidable.byContradiction {p : Prop} [dec : Decidable p] (h : ¬p → False) : p</code>",
  "2088":
@@ -1310,7 +1310,7 @@
  "2081":
  "<code>insertionSort.{u_1} {α : Type u_1} [Ord α] (arr : Array α) : Array α</code>",
  "2080": "<code>Type ?u.349474</code>",
- "208": "<code>allTools : List WoodSplittingTool</code>",
+ "208": "<code>WoodSplittingTool.froe : WoodSplittingTool</code>",
  "2079":
  "<code>(insertSorted (arr✝.swap i'✝ (↑⟨i'✝.succ, isLt✝⟩) this✝ ⋯) ⟨i'✝, ⋯⟩).size =\n  (arr✝.swap i'✝ (↑⟨i'✝.succ, isLt✝⟩) this✝ ⋯).size</code>",
  "2078": "<code>compare arr✝[i'✝] arr✝[⟨i'✝.succ, isLt✝⟩] = Ordering.gt</code>",
@@ -1324,7 +1324,7 @@
  "2071":
  "<code>(insertSorted (arr.swap i (↑⟨i.succ, isLt⟩) this ⋯) ⟨i, ⋯⟩).size = (arr.swap i (↑⟨i.succ, isLt⟩) this ⋯).size</code>",
  "2070": "<code>compare arr[i] arr[⟨i.succ, isLt⟩] = Ordering.gt</code>",
- "207": "<code>WoodSplittingTool.froe : WoodSplittingTool</code>",
+ "207": "<code>WoodSplittingTool.maul : WoodSplittingTool</code>",
  "2069": "<code>compare arr[i] arr[⟨i.succ, isLt⟩] = Ordering.eq</code>",
  "2068": "<code>compare arr[i] arr[⟨i.succ, isLt✝⟩] = Ordering.lt</code>",
  "2067": "<code>i + 1 &lt; arr.size</code>",
@@ -1338,7 +1338,7 @@
  "2061": "<code>Ordering</code>",
  "2060":
  "<code class=\"docstring\">The `split` tactic is useful for breaking nested if-then-else and `match` expressions into separate cases.\nFor a `match` expression with `n` cases, the `split` tactic generates at most `n` subgoals.\n\nFor example, given `n : Nat`, and a target `if n = 0 then Q else R`, `split` will generate\none goal with hypothesis `n = 0` and target `Q`, and a second goal with hypothesis\n`¬n = 0` and target `R`.  Note that the introduced hypothesis is unnamed, and is commonly\nrenamed using the `case` or `next` tactics.\n\n- `split` will split the goal (target).\n- `split at h` will split the hypothesis `h`.\n</code>",
- "206": "<code>WoodSplittingTool.maul : WoodSplittingTool</code>",
+ "206": "<code>WoodSplittingTool.axe : WoodSplittingTool</code>",
  "2059":
  "<code>GetElem.getElem.{u, v, w} {coll : Type u} {idx : Type v} {elem : outParam (Type w)}\n  {valid : outParam (coll → idx → Prop)} [self : GetElem coll idx elem valid] (xs : coll) (i : idx) (h : valid xs i) :\n  elem</code><span class=\"sep\"></span><code class=\"docstring\">The syntax `arr[i]` gets the `i`'th element of the collection `arr`. If there\nare proof side conditions to the application, they will be automatically\ninferred by the `get_elem_tactic` tactic.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `xs[i]` in identifiers is `getElem`.\n\n * The recommended spelling of `xs[i]'h` in identifiers is `getElem`.</code>",
  "2058": "<code>j' + 1 &lt; arr.size</code>",
@@ -1354,7 +1354,7 @@
  "<code><span class=\"literal string\">\"sedimentary\"</span> : String</code>",
  "2050":
  "<code><span class=\"literal string\">\"metamorphic\"</span> : String</code>",
- "205": "<code>WoodSplittingTool.axe : WoodSplittingTool</code>",
+ "205": "<code>WoodSplittingTool : Type</code>",
  "2049":
  "<code><span class=\"literal string\">\"igneous\"</span> : String</code>",
  "2048":
@@ -1371,7 +1371,7 @@
  "<code>Array.swap.{u} {α : Type u} (xs : Array α) (i j : Nat) (hi : i &lt; xs.size := by get_elem_tactic)\n  (hj : j &lt; xs.size := by get_elem_tactic) : Array α</code><span class=\"sep\"></span><code class=\"docstring\">Swaps two elements of an array. The modification is performed in-place when the reference to the\narray is unique.\n\nExamples:\n* `#[\"red\", \"green\", \"blue\", \"brown\"].swap 0 3 = #[\"brown\", \"green\", \"blue\", \"red\"]`\n* `#[\"red\", \"green\", \"blue\", \"brown\"].swap 0 2 = #[\"blue\", \"green\", \"red\", \"brown\"]`\n* `#[\"red\", \"green\", \"blue\", \"brown\"].swap 1 2 = #[\"red\", \"blue\", \"green\", \"brown\"]`\n* `#[\"red\", \"green\", \"blue\", \"brown\"].swap 3 0 = #[\"brown\", \"green\", \"blue\", \"red\"]`\n</code>",
  "2041": "<code>i' + 1 &lt; arr.size</code>",
  "2040": "<code>Type ?u.64534</code>",
- "204": "<code>WoodSplittingTool : Type</code>",
+ "204": "<code>MyType.ctor {α : Type} : α → MyType α</code>",
  "2039": "<code>Fin arr.size</code>",
  "2038":
  "<code>insertSorted.{u_1} {α : Type u_1} [Ord α] (arr : Array α) (i : Fin arr.size) : Array α</code>",
@@ -1387,7 +1387,7 @@
  "2032": "<code>Fin 10</code>",
  "2031": "<code>Fin 8</code>",
  "2030": "<code>Fin.isLt {n : Nat} (self : Fin n) : self.val &lt; n</code>",
- "203": "<code>MyType.ctor {α : Type} : α → MyType α</code>",
+ "203": "<code>MyType (α : Type) : Type</code>",
  "2029": "<code>Fin.val {n : Nat} (self : Fin n) : Nat</code>",
  "2028":
  "<code>Subtype.{u} {α : Sort u} (p : α → Prop) : Sort (max 1 u)</code><span class=\"sep\"></span><code class=\"docstring\">All the elements of a type that satisfy a predicate.\n\n`Subtype p`, usually written `{ x : α // p x }` or `{ x // p x }`, contains all elements `x : α` for\nwhich `p x` is true. Its constructor is a pair of the value and the proof that it satisfies the\npredicate. In run-time code, `{ x : α // p x }` is represented identically to `α`.\n\nThere is a coercion from `{ x : α // p x }` to `α`, so elements of a subtype may be used where the\nunderlying type is expected.\n\nExamples:\n * `{ n : Nat // n % 2 = 0 }` is the type of even numbers.\n * `{ xs : Array String // xs.size = 5 }` is the type of arrays with five `String`s.\n * Given `xs : List α`, `List { x : α // x ∈ xs }` is the type of lists in which all elements are\n   contained in `xs`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `{ x // p x }` in identifiers is `subtype`.</code>",
@@ -1401,7 +1401,7 @@
  "2021":
  "<code><span class=\"literal string\">\"soapstone\"</span> : String</code>",
  "2020": "<code><span class=\"literal string\">\"mica\"</span> : String</code>",
- "202": "<code>MyType (α : Type) : Type</code>",
+ "202": "<code>Type → Type</code>",
  "2019":
  "<code><span class=\"literal string\">\"limestone\"</span> : String</code>",
  "2018":
@@ -1416,7 +1416,7 @@
  "2011":
  "<code class=\"docstring\">The `sorry` tactic is a temporary placeholder for an incomplete tactic proof,\nclosing the main goal using `exact sorry`.\n\nThis is intended for stubbing-out incomplete parts of a proof while still having a syntactically correct proof skeleton.\nLean will give a warning whenever a proof uses `sorry`, so you aren't likely to miss it,\nbut you can double check if a theorem depends on `sorry` by looking for `sorryAx` in the output\nof the `#print axioms my_thm` command, the axiom used by the implementation of `sorry`.\n</code>",
  "2010": "<code>Ord α</code>",
- "201": "<code>Type → Type</code>",
+ "201": "<code>β</code>",
  "2009": "<code>Type ?u.157191</code>",
  "2008":
  "<code class=\"docstring\">`have` is used to declare local hypotheses and opaque local definitions.\n\nIt has the same syntax as `let`, and it is equivalent to `let +nondep`,\ncreating a *nondependent* let expression.\n</code>",
@@ -1433,9 +1433,8 @@
  "2001":
  "<code>splitList_shorter_fst.{u_1} {α : Type u_1} (lst : List α) (h : lst.length ≥ 2) : (splitList lst).fst.length &lt; lst.length</code>",
  "2000": "<code>(x :: y :: xs).length ≥ 2</code>",
- "200": "<code>β</code>",
- "20":
- "<code class=\"docstring\">`if c then t else e` is notation for `ite c t e`, \"if-then-else\", which decides to\nreturn `t` or `e` depending on whether `c` is true or false. The explicit argument\n`c : Prop` does not have any actual computational content, but there is an additional\n`[Decidable c]` argument synthesized by typeclass inference which actually\ndetermines how to evaluate `c` to true or false. Write `if h : c then t else e`\ninstead for a \"dependent if-then-else\" `dite`, which allows `t`/`e` to use the fact\nthat `c` is true/false.\n</code>",
+ "200": "<code>List β</code>",
+ "20": "<code><span class=\"literal string\">\"it is \"</span> : String</code>",
  "2":
  "<code>IO : Type → Type</code><span class=\"sep\"></span><code class=\"docstring\">A monad that supports arbitrary side effects and throwing exceptions of type `IO.Error`.\n</code>",
  "1999":
@@ -1455,7 +1454,8 @@
  "<code>Golf.Nat.le_succ_of_le {n m : Nat} (h : n ≤ m) : n ≤ m + 1</code>",
  "1990":
  "<code class=\"docstring\">`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n</code>",
- "199": "<code>List β</code>",
+ "199":
+ "<code>sameLength {α β : Type} (xs : List α) (ys : List β) : Bool</code>",
  "1989": "<code>Apply.Nat.le_succ_of_le {n m : Nat} : n ≤ m → n ≤ m + 1</code>",
  "1988": "<code>n.le m✝</code>",
  "1987": "<code>n ≤ m✝ + 1</code>",
@@ -1466,8 +1466,7 @@
  "1982": "<code>And.right {a b : Prop} (self : And a b) : b</code>",
  "1981": "<code>And.left {a b : Prop} (self : And a b) : a</code>",
  "1980": "<code>And.intro {a b : Prop} (left : a) (right : b) : And a b</code>",
- "198":
- "<code>sameLength {α β : Type} (xs : List α) (ys : List β) : Bool</code>",
+ "198": "<code>Type</code>",
  "1979": "<code>And (a b : Prop) : Prop</code>",
  "1978":
  "<code>(splitList xs).fst.length ≤ xs.length ∧ (splitList xs).snd.length ≤ xs.length</code>",
@@ -1484,7 +1483,8 @@
  "<code>mergeSort.{u_1} {α : Type u_1} [Ord α] (xs : List α) : List α</code>",
  "1970":
  "<code>splitList.{u_1} {α : Type u_1} (lst : List α) : List α × List α</code>",
- "197": "<code>Type</code>",
+ "197":
+ "<code>Unit.unit : Unit</code><span class=\"sep\"></span><code class=\"docstring\">The only element of the unit type.\n\nIt can be written as an empty tuple: `()`.\n</code>",
  "1969":
  "<code>merge.{u_1} {α : Type u_1} [Ord α] (xs ys : List α) : List α</code>",
  "1968": "<code>Type u_2 → Type u_3</code>",
@@ -1501,7 +1501,7 @@
  "<code>Array.push.{u} {α : Type u} (a : Array α) (v : α) : Array α</code><span class=\"sep\"></span><code class=\"docstring\">Adds an element to the end of an array. The resulting array's size is one greater than the input\narray. If there are no other references to the array, then it is modified in-place.\n\nThis takes amortized `O(1)` time because `Array α` is represented by a dynamic array.\n\nExamples:\n* `#[].push \"apple\" = #[\"apple\"]`\n* `#[\"apple\"].push \"orange\" = #[\"apple\", \"orange\"]`\n</code>",
  "1960": "<code>Array β</code>",
  "196":
- "<code>Unit.unit : Unit</code><span class=\"sep\"></span><code class=\"docstring\">The only element of the unit type.\n\nIt can be written as an empty tuple: `()`.\n</code>",
+ "<code>Empty : Type</code><span class=\"sep\"></span><code class=\"docstring\">The empty type. It has no constructors.\n\nUse `Empty.elim` in contexts where a value of type `Empty` is in scope.\n</code>",
  "1959":
  "<code>Array.empty.{u} {α : Type u} : Array α</code><span class=\"sep\"></span><code class=\"docstring\">Constructs a new empty array with initial capacity `0`.\n\nUse `Array.emptyWithCapacity` to create an array with a greater initial capacity.\n</code>",
  "1958":
@@ -1518,11 +1518,11 @@
  "<code>Nat.le.step {n m : Nat} : n.le m → n.le m.succ</code><span class=\"sep\"></span><code class=\"docstring\">If `n ≤ m`, then `n ≤ m + 1`. </code>",
  "1951": "<code>four_le_seven : 4 ≤ 7</code>",
  "1950":
- "<code>Nat.le.refl {n : Nat} : Nat.le n n</code><span class=\"sep\"></span><code class=\"docstring\">Non-strict inequality is reflexive: `n ≤ n` </code>",
- "195":
- "<code>Empty : Type</code><span class=\"sep\"></span><code class=\"docstring\">The empty type. It has no constructors.\n\nUse `Empty.elim` in contexts where a value of type `Empty` is in scope.\n</code>",
- "1949":
  "<code>Nat.le.step {n m : Nat} : Nat.le n m → Nat.le n (m + 1)</code><span class=\"sep\"></span><code class=\"docstring\">If `n ≤ m`, then `n ≤ m + 1`. </code>",
+ "195":
+ "<code>Unit : Type</code><span class=\"sep\"></span><code class=\"docstring\">The canonical type with one element. This element is written `()`.\n\n`Unit` has a number of uses:\n* It can be used to model control flow that returns from a function call without providing other\n  information.\n* Monadic actions that return `Unit` have side effects without computing values.\n* In polymorphic types, it can be used to indicate that no data is to be stored in a particular\n  field.\n</code>",
+ "1949":
+ "<code>Nat.le.refl {n : Nat} : Nat.le n n</code><span class=\"sep\"></span><code class=\"docstring\">Non-strict inequality is reflexive: `n ≤ n` </code>",
  "1948":
  "<code>Nat.le.step {n m : Nat} : le n m → le n (m + 1)</code><span class=\"sep\"></span><code class=\"docstring\">If `n ≤ m`, then `n ≤ m + 1`. </code>",
  "1947":
@@ -1536,8 +1536,7 @@
  "<code>three_plus_two_five {n : Nat} : IsThree n → IsFive (n + 2)</code>",
  "1941": "<code>IsFive.isFive : IsFive 5</code>",
  "1940": "<code>IsFive : Nat → Prop</code>",
- "194":
- "<code>Unit : Type</code><span class=\"sep\"></span><code class=\"docstring\">The canonical type with one element. This element is written `()`.\n\n`Unit` has a number of uses:\n* It can be used to model control flow that returns from a function call without providing other\n  information.\n* Monadic actions that return `Unit` have side effects without computing values.\n* In polymorphic types, it can be used to indicate that no data is to be stored in a particular\n  field.\n</code>",
+ "194": "<code>SourcePos : Type</code>",
  "1939": "<code>three_is_three : IsThree 3</code>",
  "1938": "<code>IsThree.isThree : IsThree 3</code>",
  "1937": "<code>IsThree : Nat → Prop</code>",
@@ -1550,7 +1549,8 @@
  "<code>Nat → Nat → Prop</code><span class=\"sep\"></span><code class=\"docstring\">The less-equal relation: `x ≤ y` </code>",
  "1930":
  "<code>Nat.le (n : Nat) : Nat → Prop</code><span class=\"sep\"></span><code class=\"docstring\">Non-strict, or weak, inequality of natural numbers, usually accessed via the `≤` operator.\n</code>",
- "193": "<code>SourcePos : Type</code>",
+ "193":
+ "<code>ArithExpr.times {ann : Type} : ann → ArithExpr ann → ArithExpr ann → ArithExpr ann</code>",
  "1929":
  "<code>LT.lt.{u} {α : Type u} [self : LT α] : α → α → Prop</code><span class=\"sep\"></span><code class=\"docstring\">The less-than relation: `x &lt; y` </code>",
  "1928":
@@ -1567,7 +1567,7 @@
  "1921": "<code>Nat.zero_add (n : Nat) : 0 + n = n</code>",
  "1920": "<code>Nat.add_comm (n m : Nat) : n + m = m + n</code>",
  "192":
- "<code>ArithExpr.times {ann : Type} : ann → ArithExpr ann → ArithExpr ann → ArithExpr ann</code>",
+ "<code>ArithExpr.minus {ann : Type} : ann → ArithExpr ann → ArithExpr ann → ArithExpr ann</code>",
  "1919": "<code>Nat.add_assoc (n m k : Nat) : n + m + k = n + (m + k)</code>",
  "1918":
  "<code class=\"docstring\">Introduces one or more hypotheses, optionally naming and/or pattern-matching them.\nFor each hypothesis to be introduced, the remaining main goal's target type must\nbe a `let` or function type.\n\n* `intro` by itself introduces one anonymous hypothesis, which can be accessed\n  by e.g. `assumption`. It is equivalent to `intro _`.\n* `intro x y` introduces two hypotheses and names them. Individual hypotheses\n  can be anonymized via `_`, given a type ascription, or matched against a pattern:\n  ```lean\n  -- ... ⊢ α × β → ...\n  intro (a, b)\n  -- ..., a : α, b : β ⊢ ...\n  ```\n* `intro rfl` is short for `intro h; subst h`, if `h` is an equality where the left-hand or right-hand side\n  is a variable.\n* Alternatively, `intro` can be combined with pattern matching much like `fun`:\n  ```lean\n  intro\n  | n + 1, 0 =&gt; tac\n  | ...\n  ```\n</code>",
@@ -1584,7 +1584,7 @@
  "1910":
  "<code>NonTail.filter.{u_1} {α : Type u_1} (p : α → Bool) : List α → List α</code>",
  "191":
- "<code>ArithExpr.minus {ann : Type} : ann → ArithExpr ann → ArithExpr ann → ArithExpr ann</code>",
+ "<code>ArithExpr.plus {ann : Type} : ann → ArithExpr ann → ArithExpr ann → ArithExpr ann</code>",
  "1909": "<code>NonTail.factorial : Nat → Nat</code>",
  "1908": "<code>NonTail.length.{u_1} {α : Type u_1} : List α → Nat</code>",
  "1907":
@@ -1599,9 +1599,8 @@
  "<code>List.append_assoc.{u_1} {α : Type u_1} (xs ys zs : List α) : xs ++ (ys ++ zs) = xs ++ ys ++ zs</code>",
  "1900":
  "<code class=\"docstring\">`grind` is a tactic inspired by modern SMT solvers. **Picture a virtual whiteboard**:\nevery time grind discovers a new equality, inequality, or logical fact,\nit writes it on the board, groups together terms known to be equal,\nand lets each reasoning engine read from and contribute to the shared workspace.\nThese engines work together to handle equality reasoning, apply known theorems,\npropagate new facts, perform case analysis, and run specialized solvers\nfor domains like linear arithmetic and commutative rings.\n\n`grind` is *not* designed for goals whose search space explodes combinatorially,\nthink large pigeonhole instances, graph‑coloring reductions, high‑order N‑queens boards,\nor a 200‑variable Sudoku encoded as Boolean constraints.  Such encodings require\n thousands (or millions) of case‑splits that overwhelm `grind`’s branching search.\n\nFor **bit‑level or combinatorial problems**, consider using **`bv_decide`**.\n`bv_decide` calls a state‑of‑the‑art SAT solver (CaDiCaL) and then returns a\n*compact, machine‑checkable certificate*.\n\n### Equality reasoning\n\n`grind` uses **congruence closure** to track equalities between terms.\nWhen two terms are known to be equal, congruence closure automatically deduces\nequalities between more complex expressions built from them.\nFor example, if `a = b`, then congruence closure will also conclude that `f a` = `f b`\nfor any function `f`. This forms the foundation for efficient equality reasoning in `grind`.\nHere is an example:\n```\nexample (f : Nat → Nat) (h : a = b) : f (f b) = f (f a) := by\n  grind\n```\n\n### Applying theorems using E-matching\n\nTo apply existing theorems, `grind` uses a technique called **E-matching**,\nwhich finds matches for known theorem patterns while taking equalities into account.\nCombined with congruence closure, E-matching helps `grind` discover\nnon-obvious consequences of theorems and equalities automatically.\n\nConsider the following functions and theorems:\n```\ndef f (a : Nat) : Nat :=\n  a + 1\n\ndef g (a : Nat) : Nat :=\n  a - 1\n\n@[grind =]\ntheorem gf (x : Nat) : g (f x) = x := by\n  simp [f, g]\n```\nThe theorem `gf` asserts that `g (f x) = x` for all natural numbers `x`.\nThe attribute `[grind =]` instructs `grind` to use the left-hand side of the equation,\n`g (f x)`, as a pattern for E-matching.\nSuppose we now have a goal involving:\n```\nexample {a b} (h : f b = a) : g a = b := by\n  grind\n```\nAlthough `g a` is not an instance of the pattern `g (f x)`,\nit becomes one modulo the equation `f b = a`. By substituting `a`\nwith `f b` in `g a`, we obtain the term `g (f b)`,\nwhich matches the pattern `g (f x)` with the assignment `x := b`.\nThus, the theorem `gf` is instantiated with `x := b`,\nand the new equality `g (f b) = b` is asserted.\n`grind` then uses congruence closure to derive the implied equality\n`g a = g (f b)` and completes the proof.\n\nThe pattern used to instantiate theorems affects the effectiveness of `grind`.\nFor example, the pattern `g (f x)` is too restrictive in the following case:\nthe theorem `gf` will not be instantiated because the goal does not even\ncontain the function symbol `g`.\n\n```\nexample (h₁ : f b = a) (h₂ : f c = a) : b = c := by\n  grind\n```\n\nYou can use the command `grind_pattern` to manually select a pattern for a given theorem.\nIn the following example, we instruct `grind` to use `f x` as the pattern,\nallowing it to solve the goal automatically:\n```\ngrind_pattern gf =&gt; f x\n\nexample {a b c} (h₁ : f b = a) (h₂ : f c = a) : b = c := by\n  grind\n```\nYou can enable the option `trace.grind.ematch.instance` to make `grind` print a\ntrace message for each theorem instance it generates.\n\nYou can also specify a **multi-pattern** to control when `grind` should apply a theorem.\nA multi-pattern requires that all specified patterns are matched in the current context\nbefore the theorem is applied. This is useful for theorems such as transitivity rules,\nwhere multiple premises must be simultaneously present for the rule to apply.\nThe following example demonstrates this feature using a transitivity axiom for a binary relation `R`:\n```\nopaque R : Int → Int → Prop\naxiom Rtrans {x y z : Int} : R x y → R y z → R x z\n\ngrind_pattern Rtrans =&gt; R x y, R y z\n\nexample {a b c d} : R a b → R b c → R c d → R a d := by\n  grind\n```\nBy specifying the multi-pattern `R x y, R y z`, we instruct `grind` to\ninstantiate `Rtrans` only when both `R x y` and `R y z` are available in the context.\nIn the example, `grind` applies `Rtrans` to derive `R a c` from `R a b` and `R b c`,\nand can then repeat the same reasoning to deduce `R a d` from `R a c` and `R c d`.\n\nInstead of using `grind_pattern` to explicitly specify a pattern,\nyou can use the `@[grind]` attribute or one of its variants, which will use a heuristic to\ngenerate a (multi-)pattern. The complete list is available in the reference manual. The main ones are:\n\n- `@[grind →]` will select a multi-pattern from the hypotheses of the theorem (i.e. it will use the theorem for forwards reasoning).\n  In more detail, it will traverse the hypotheses of the theorem from left-to-right, and each time it encounters a minimal indexable\n  (i.e. has a constant as its head) subexpression which \"covers\" (i.e. fixes the value of) an argument which was not\n  previously covered, it will add that subexpression as a pattern, until all arguments have been covered.\n- `@[grind ←]` will select a multi-pattern from the conclusion of theorem (i.e. it will use the theorem for backwards reasoning).\n  This may fail if not all the arguments to the theorem appear in the conclusion.\n- `@[grind]` will traverse the conclusion and then the hypotheses left-to-right, adding patterns as they increase the coverage,\n  stopping when all arguments are covered.\n- `@[grind =]` checks that the conclusion of the theorem is an equality, and then uses the left-hand-side of the equality as a pattern.\n  This may fail if not all of the arguments appear in the left-hand-side.\n\nHere is the previous example again but using the attribute `[grind →]`\n```\nopaque R : Int → Int → Prop\n@[grind →] axiom Rtrans {x y z : Int} : R x y → R y z → R x z\n\nexample {a b c d} : R a b → R b c → R c d → R a d := by\n  grind\n```\n\nTo control theorem instantiation and avoid generating an unbounded number of instances,\n`grind` uses a generation counter. Terms in the original goal are assigned generation zero.\nWhen `grind` applies a theorem using terms of generation `≤ n`, any new terms it creates\nare assigned generation `n + 1`. This limits how far the tactic explores when applying\ntheorems and helps prevent an excessive number of instantiations.\n\n#### Key options:\n- `grind (ematch := &lt;num&gt;)` controls the number of E-matching rounds.\n- `grind [&lt;name&gt;, ...]` instructs `grind` to use the declaration `name` during E-matching.\n- `grind only [&lt;name&gt;, ...]` is like `grind [&lt;name&gt;, ...]` but does not use theorems tagged with `@[grind]`.\n- `grind (gen := &lt;num&gt;)` sets the maximum generation.\n\n### Linear integer arithmetic (`cutsat`)\n\n`grind` can solve goals that reduce to **linear integer arithmetic (LIA)** using an\nintegrated decision procedure called **`cutsat`**.  It understands\n\n* equalities   `p = 0`\n* inequalities  `p ≤ 0`\n* disequalities `p ≠ 0`\n* divisibility  `d ∣ p`\n\nThe solver incrementally assigns integer values to variables; when a partial\nassignment violates a constraint it adds a new, implied constraint and retries.\nThis *model-based* search is **complete for LIA**.\n\n#### Key options:\n\n* `grind -cutsat` disable the solver (useful for debugging)\n* `grind +qlia` accept rational models (shrinks the search space but is incomplete for ℤ)\n\n#### Examples:\n\n```\n-- Even + even is never odd.\nexample {x y : Int} : 2 * x + 4 * y ≠ 5 := by\n  grind\n\n-- Mixing equalities and inequalities.\nexample {x y : Int} :\n    2 * x + 3 * y = 0 → 1 ≤ x → y &lt; 1 := by\n  grind\n\n-- Reasoning with divisibility.\nexample (a b : Int) :\n    2 ∣ a + 1 → 2 ∣ b + a → ¬ 2 ∣ b + 2 * a := by\n  grind\n\nexample (x y : Int) :\n    27 ≤ 11*x + 13*y →\n    11*x + 13*y ≤ 45 →\n    -10 ≤ 7*x - 9*y →\n    7*x - 9*y ≤ 4 → False := by\n  grind\n\n-- Types that implement the `ToInt` type-class.\nexample (a b c : UInt64)\n    : a ≤ 2 → b ≤ 3 → c - a - b = 0 → c ≤ 5 := by\n  grind\n```\n\n### Algebraic solver (`ring`)\n\n`grind` ships with an algebraic solver nick-named **`ring`** for goals that can\nbe phrased as polynomial equations (or disequations) over commutative rings,\nsemirings, or fields.\n\n*Works out of the box*\nAll core numeric types and relevant Mathlib types already provide the required\ntype-class instances, so the solver is ready to use in most developments.\n\nWhat it can decide:\n\n* equalities of the form `p = q`\n* disequalities `p ≠ q`\n* basic reasoning under field inverses (`a / b := a * b⁻¹`)\n* goals that mix ring facts with other `grind` engines\n\n#### Key options:\n\n* `grind -ring` turn the solver off (useful when debugging)\n* `grind (ringSteps := n)` cap the number of steps performed by this procedure.\n\n#### Examples\n\n```\nopen Lean Grind\n\nexample [CommRing α] (x : α) : (x + 1) * (x - 1) = x^2 - 1 := by\n  grind\n\n-- Characteristic 256 means 16 * 16 = 0.\nexample [CommRing α] [IsCharP α 256] (x : α) :\n    (x + 16) * (x - 16) = x^2 := by\n  grind\n\n-- Works on built-in rings such as `UInt8`.\nexample (x : UInt8) : (x + 16) * (x - 16) = x^2 := by\n  grind\n\nexample [CommRing α] (a b c : α) :\n    a + b + c = 3 →\n    a^2 + b^2 + c^2 = 5 →\n    a^3 + b^3 + c^3 = 7 →\n    a^4 + b^4 = 9 - c^4 := by\n  grind\n\nexample [Field α] [NoNatZeroDivisors α] (a : α) :\n    1 / a + 1 / (2 * a) = 3 / (2 * a) := by\n  grind\n```\n\n### Other options\n\n- `grind (splits := &lt;num&gt;)` caps the *depth* of the search tree.  Once a branch performs `num` splits\n  `grind` stops splitting further in that branch.\n- `grind -splitIte` disables case splitting on if-then-else expressions.\n- `grind -splitMatch` disables case splitting on `match` expressions.\n- `grind +splitImp` instructs `grind` to split on any hypothesis `A → B` whose antecedent `A` is **propositional**.\n- `grind -linarith` disables the linear arithmetic solver for (ordered) modules and rings.\n\n### Additional Examples\n\n```\nexample {a b} {as bs : List α} : (as ++ bs ++ [b]).getLastD a = b := by\n  grind\n\nexample (x : BitVec (w+1)) : (BitVec.cons x.msb (x.setWidth w)) = x := by\n  grind\n\nexample (as : Array α) (lo hi i j : Nat) :\n    lo ≤ i → i &lt; j → j ≤ hi → j &lt; as.size → min lo (as.size - 1) ≤ i := by\n  grind\n```\n</code>",
- "190":
- "<code>ArithExpr.plus {ann : Type} : ann → ArithExpr ann → ArithExpr ann → ArithExpr ann</code>",
- "19": "<code><span class=\"literal string\">\"it is \"</span> : String</code>",
+ "190": "<code>ArithExpr.int {ann : Type} : ann → Int → ArithExpr ann</code>",
+ "19": "<code><span class=\"literal string\">\"tree\"</span> : String</code>",
  "1899": "<code>a✝.mirror.count = a✝.count</code>",
  "1898": "<code>a✝².mirror.count = a✝².count</code>",
  "1897":
@@ -1617,7 +1616,7 @@
  "1891": "<code>BinTree.count {α : Type} : BinTree α → Nat</code>",
  "1890":
  "<code class=\"docstring\">* `case tag =&gt; tac` focuses on the goal with case name `tag` and solves it using `tac`,\n  or else fails.\n* `case tag x₁ ... xₙ =&gt; tac` additionally renames the `n` most recent hypotheses\n  with inaccessible names to the given names.\n* `case tag₁ | tag₂ =&gt; tac` is equivalent to `(case tag₁ =&gt; tac); (case tag₂ =&gt; tac)`.\n</code>",
- "189": "<code>ArithExpr.int {ann : Type} : ann → Int → ArithExpr ann</code>",
+ "189": "<code>ArithExpr (ann : Type) : Type</code>",
  "1889":
  "<code>Golf.Three.plusR_zero_left (k : Nat) : k = Nat.plusR 0 k</code>",
  "1888":
@@ -1633,7 +1632,7 @@
  "<code class=\"docstring\">* `unfold id` unfolds all occurrences of definition `id` in the target.\n* `unfold id1 id2 ...` is equivalent to `unfold id1; unfold id2; ...`.\n* `unfold id at h` unfolds at the hypothesis `h`.\n\nDefinitions can be either global or local definitions.\n\nFor non-recursive global definitions, this tactic is identical to `delta`.\nFor recursive global definitions, it uses the \"unfolding lemma\" `id.eq_def`,\nwhich is generated for each recursive definition, to unfold according to the recursive definition given by the user.\nOnly one level of unfolding is performed, in contrast to `simp only [id]`, which unfolds definition `id` recursively.\n</code>",
  "1881": "<code>n = Nat.plusR 0 n</code>",
  "1880": "<code class=\"docstring\">`skip` does nothing. </code>",
- "188": "<code>ArithExpr (ann : Type) : Type</code>",
+ "188": "<code>Unit.unit : Unit</code>",
  "1879":
  "<code class=\"docstring\">After `with`, there is an optional tactic that runs on all branches, and\nthen a list of alternatives.\n</code>",
  "1878": "<code>n✝ = Nat.plusR 0 n✝</code>",
@@ -1650,7 +1649,7 @@
  "<code class=\"docstring\">This tactic applies to a goal whose target has the form `x ~ x`,\nwhere `~` is equality, heterogeneous equality or any relation that\nhas a reflexivity lemma tagged with the attribute @[refl].\n</code>",
  "1871": "<code>plusR_zero_left (k : Nat) : k = Nat.plusR 0 k</code>",
  "1870": "<code>Type ?u.11493</code>",
- "187": "<code>Unit.unit : Unit</code>",
+ "187": "<code>List PetName</code>",
  "1869":
  "<code>appendR.{u_1} {α : Type u_1} (n k : Nat) : Vect α n → Vect α k → Vect α (n + k)</code>",
  "1868": "<code>Type ?u.10624</code>",
@@ -1665,7 +1664,7 @@
  "1862": "<code>Nat.plusL : Nat → Nat → Nat</code>",
  "1861": "<code>NatParam.five.{u} {n : Nat} : NatParam n 5</code>",
  "1860": "<code>NatParam.{u} (n : Nat) : Nat → Type u</code>",
- "186": "<code>List PetName</code>",
+ "186": "<code>howManyDogs (pets : List PetName) : Nat</code>",
  "1859": "<code>Nat → Nat → Type u</code>",
  "1858": "<code>Nat → Type u → Type u</code>",
  "1857":
@@ -1680,7 +1679,7 @@
  "<code>WithParameterAfterColonDifferentNames.test1.{u} {α : Type u} : α → WithParameterAfterColonDifferentNames α</code>",
  "1850":
  "<code>WithParameterAfterColonDifferentNames.{u} : Type u → Type u</code>",
- "185": "<code>howManyDogs (pets : List PetName) : Nat</code>",
+ "185": "<code><span class=\"literal string\">\"Floof\"</span> : String</code>",
  "1849":
  "<code>WithParameterAfterColon2.test2.{u} {α : Type u} : WithParameterAfterColon2 α</code>",
  "1848":
@@ -1698,7 +1697,7 @@
  "1841": "<code>WithParameter.{u} (α : Type u) : Type u</code>",
  "1840":
  "<code><span class=\"literal string\">\"price\"</span> : String</code>",
- "184": "<code><span class=\"literal string\">\"Floof\"</span> : String</code>",
+ "184": "<code><span class=\"literal string\">\"Rex\"</span> : String</code>",
  "1839": "<code>NDBType</code>",
  "1838": "<code>NDBType.asType (t : NDBType) : Type</code>",
  "1837": "<code>NDBType.nullable (self : NDBType) : Bool</code>",
@@ -1712,7 +1711,7 @@
  "<code><span class=\"literal string\">\"mountain.lastVisited\"</span> : String</code>",
  "1830":
  "<code><span class=\"literal string\">\"mountain.elevation\"</span> : String</code>",
- "183": "<code><span class=\"literal string\">\"Rex\"</span> : String</code>",
+ "183": "<code><span class=\"literal string\">\"Fifi\"</span> : String</code>",
  "1829":
  "<code>Query (List.map (fun c =&gt; { name := \"waterfall\" ++ \".\" ++ c.name, contains := c.contains }) waterfall)</code>",
  "1828":
@@ -1733,7 +1732,7 @@
  "<code>Query (List.map (fun c =&gt; { name := \"mountain\" ++ \".\" ++ c.name, contains := c.contains }) peak)</code>",
  "1820":
  "<code>example2 :\n  Query\n    [{ name := \"mountain.name\", contains := DBType.string }, { name := \"waterfall.name\", contains := DBType.string }]</code>",
- "182": "<code><span class=\"literal string\">\"Fifi\"</span> : String</code>",
+ "182": "<code><span class=\"literal string\">\"Tiger\"</span> : String</code>",
  "1819":
  "<code>example1 : Query [{ name := \"elevation\", contains := DBType.int }]</code>",
  "1818": "<code>HasCol s✝ n✝ t✝</code>",
@@ -1746,7 +1745,7 @@
  "1811": "<code>Query.exec {s : Schema} : Query s → Table s</code>",
  "1810":
  "<code>prefixRow {s : Schema} {n : String} (row : Row s) :\n  Row (List.map (fun c =&gt; { name := n ++ \".\" ++ c.name, contains := c.contains }) s)</code>",
- "181": "<code><span class=\"literal string\">\"Tiger\"</span> : String</code>",
+ "181": "<code><span class=\"literal string\">\"Spot\"</span> : String</code>",
  "1809":
  "<code>Row.rename {s : Schema} {n : String} {t : DBType} {n' : String} (c : HasCol s n t) (row : Row s) :\n  Row (s.renameColumn c n')</code>",
  "1808":
@@ -1766,8 +1765,8 @@
  "1801": "<code>Table (s1 ++ s2)</code>",
  "1800":
  "<code>List.flatMap.{u, v} {α : Type u} {β : Type v} (b : α → List β) (as : List α) : List β</code><span class=\"sep\"></span><code class=\"docstring\">Applies a function that returns a list to each element of a list, and concatenates the resulting\nlists.\n\nExamples:\n* `[2, 3, 2].flatMap List.range = [0, 1, 0, 1, 2, 0, 1]`\n* `[\"red\", \"blue\"].flatMap String.toList = ['r', 'e', 'd', 'b', 'l', 'u', 'e']`\n</code>",
- "180": "<code><span class=\"literal string\">\"Spot\"</span> : String</code>",
- "18": "<code><span class=\"literal string\">\"tree\"</span> : String</code>",
+ "180": "<code>animals : List PetName</code>",
+ "18": "<code><span class=\"literal string\">\"oak \"</span> : String</code>",
  "1799": "<code>Table s2</code>",
  "1798": "<code>Table s1</code>",
  "1797":
@@ -1783,7 +1782,8 @@
  "1791": "<code>Row s1</code>",
  "1790":
  "<code>Row.append {s1 s2 : Schema} (r1 : Row s1) (r2 : Row s2) : Row (s1 ++ s2)</code>",
- "179": "<code>animals : List PetName</code>",
+ "179":
+ "<code>inr.{u, v} {α : Type u} {β : Type v} (val : β) : α ⊕ β</code><span class=\"sep\"></span><code class=\"docstring\">Right injection into the sum type `α ⊕ β`. </code>",
  "1789": "<code>Row (c' :: cs)</code>",
  "1788": "<code>c.contains.asType</code>",
  "1787":
@@ -1802,7 +1802,7 @@
  "1780":
  "<code>disjoint.{u_1} {α : Type u_1} [BEq α] (xs ys : List α) : Bool</code>",
  "178":
- "<code>inr.{u, v} {α : Type u} {β : Type v} (val : β) : α ⊕ β</code><span class=\"sep\"></span><code class=\"docstring\">Right injection into the sum type `α ⊕ β`. </code>",
+ "<code>inl.{u, v} {α : Type u} {β : Type v} (val : α) : α ⊕ β</code><span class=\"sep\"></span><code class=\"docstring\">Left injection into the sum type `α ⊕ β`. </code>",
  "1779":
  "<code>Query.product {s1 s2 : Schema} :\n  Query s1 → Query s2 → disjoint (List.map Column.name s1) (List.map Column.name s2) = true → Query (s1 ++ s2)</code>",
  "1778":
@@ -1819,8 +1819,7 @@
  "<code><span class=\"literal string\">\"Fictional mountain\"</span> : String</code>",
  "1770":
  "<code><span class=\"literal string\">\"Valby Bakke\"</span> : String</code>",
- "177":
- "<code>inl.{u, v} {α : Type u} {β : Type v} (val : α) : α ⊕ β</code><span class=\"sep\"></span><code class=\"docstring\">Left injection into the sum type `α ⊕ β`. </code>",
+ "177": "<code>PetName : Type</code>",
  "1769": "<code>DBExpr s t✝</code>",
  "1768": "<code>HasCol s n✝ t</code>",
  "1767":
@@ -1834,7 +1833,7 @@
  "1761":
  "<code>DBExpr.const {s : Schema} {t : DBType} : t.asType → DBExpr s t</code>",
  "1760": "<code>DBExpr s DBType.bool</code>",
- "176": "<code>PetName : Type</code>",
+ "176": "<code>Sum.inr {α β : Type} : β → Sum α β</code>",
  "1759":
  "<code>DBExpr.and {s : Schema} (e1 e2 : DBExpr s DBType.bool) : DBExpr s DBType.bool</code>",
  "1758": "<code>DBExpr s DBType.int</code>",
@@ -1850,7 +1849,7 @@
  "1751": "<code>HasCol s n✝ t✝</code>",
  "1750":
  "<code>Row.project {s : Schema} (row : Row s) (s' : Schema) : Subschema s' s → Row s'</code>",
- "175": "<code>Sum.inr {α β : Type} : β → Sum α β</code>",
+ "175": "<code>Sum.inl {α β : Type} : α → Sum α β</code>",
  "1749": "<code>Subschema.reflexive (s : Schema) : Subschema s s</code>",
  "1748": "<code>Subschema smaller✝ bigger</code>",
  "1747": "<code>HasCol bigger n✝ t✝</code>",
@@ -1865,7 +1864,8 @@
  "1741": "<code>Subschema : Schema → Schema → Type</code>",
  "1740":
  "<code>Subschema.cons {bigger : Schema} {n : String} {t : DBType} {smaller : Schema} :\n  HasCol bigger n t → Subschema smaller bigger → Subschema ({ name := n, contains := t } :: smaller) bigger</code>",
- "174": "<code>Sum.inl {α β : Type} : α → Sum α β</code>",
+ "174":
+ "<code>Sum.{u, v} (α : Type u) (β : Type v) : Type (max u v)</code><span class=\"sep\"></span><code class=\"docstring\">The disjoint union of types `α` and `β`, ordinarily written `α ⊕ β`.\n\nAn element of `α ⊕ β` is either an `a : α` wrapped in `Sum.inl` or a `b : β` wrapped in `Sum.inr`.\n`α ⊕ β` is not equivalent to the set-theoretic union of `α` and `β` because its values include an\nindication of which of the two types was chosen. The union of a singleton set with itself contains\none element, while `Unit ⊕ Unit` contains distinct values `inl ()` and `inr ()`.\n</code>",
  "1739": "<code>Subschema.nil {bigger : Schema} : Subschema [] bigger</code>",
  "1738": "<code>HasCol (head✝ :: tail✝) n t</code>",
  "1737": "<code>{ name := n, contains := t }.contains.asType</code>",
@@ -1880,8 +1880,7 @@
  "1731": "<code>HasCol : Schema → String → DBType → Type</code>",
  "1730":
  "<code>Row s → Row s → Bool</code><span class=\"sep\"></span><code class=\"docstring\">Boolean equality, notated as `a == b`. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `==` in identifiers is `beq`.</code>",
- "173":
- "<code>Sum.{u, v} (α : Type u) (β : Type v) : Type (max u v)</code><span class=\"sep\"></span><code class=\"docstring\">The disjoint union of types `α` and `β`, ordinarily written `α ⊕ β`.\n\nAn element of `α ⊕ β` is either an `a : α` wrapped in `Sum.inl` or a `b : β` wrapped in `Sum.inr`.\n`α ⊕ β` is not equivalent to the set-theoretic union of `α` and `β` because its values include an\nindication of which of the two types was chosen. The union of a singleton set with itself contains\none element, while `Unit ⊕ Unit` contains distinct values `inl ()` and `inr ()`.\n</code>",
+ "173": "<code><span class=\"literal string\">\"VII\"</span> : String</code>",
  "1729": "<code>Row (head✝ :: tail✝)</code>",
  "1728": "<code>head✝¹.contains.asType</code>",
  "1727": "<code>Row (head✝¹ :: head✝ :: tail✝)</code>",
@@ -1894,7 +1893,7 @@
  "<code><span class=\"literal string\">\"Shoshone Falls\"</span> : String</code>",
  "1720":
  "<code><span class=\"literal string\">\"Multnomah Falls\"</span> : String</code>",
- "172": "<code><span class=\"literal string\">\"VII\"</span> : String</code>",
+ "172": "<code>sevens : String × Int × Nat</code>",
  "1719": "<code>waterfallDiary : Table waterfall</code>",
  "1718": "<code>waterfall : Schema</code>",
  "1717":
@@ -1912,7 +1911,8 @@
  "1711": "<code><span class=\"literal string\">\"USA\"</span> : String</code>",
  "1710":
  "<code><span class=\"literal string\">\"Mount Nebo\"</span> : String</code>",
- "171": "<code>sevens : String × Int × Nat</code>",
+ "171":
+ "<code>Int</code><span class=\"sep\"></span><code class=\"docstring\">The second element of a pair. </code>",
  "1709": "<code>mountainDiary : Table peak</code>",
  "1708":
  "<code><span class=\"literal string\">\"lastVisited\"</span> : String</code>",
@@ -1926,9 +1926,8 @@
  "1702": "<code>Table (s : Schema) : Type</code>",
  "1701": "<code>List Column</code>",
  "1700": "<code>Column</code>",
- "170":
- "<code>Int</code><span class=\"sep\"></span><code class=\"docstring\">The second element of a pair. </code>",
- "17": "<code><span class=\"literal string\">\"oak \"</span> : String</code>",
+ "170": "<code><span class=\"literal string\">\"five\"</span> : String</code>",
+ "17": "<code><span class=\"literal string\">\"great \"</span> : String</code>",
  "1699": "<code>Row : Schema → Type</code>",
  "1698": "<code>Schema : Type</code>",
  "1697": "<code>Column.contains (self : Column) : DBType</code>",
@@ -1942,7 +1941,8 @@
  "<code>DBType → DBType → Bool</code><span class=\"sep\"></span><code class=\"docstring\">Boolean equality, notated as `a == b`. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `==` in identifiers is `beq`.</code>",
  "1691": "<code>string.asType</code>",
  "1690": "<code>int.asType</code>",
- "169": "<code><span class=\"literal string\">\"five\"</span> : String</code>",
+ "169":
+ "<code>String</code><span class=\"sep\"></span><code class=\"docstring\">The first element of a pair. </code>",
  "1689": "<code>DBType</code>",
  "1688": "<code>DBType.beq (t : DBType) (x y : t.asType) : Bool</code>",
  "1687": "<code>DBType.asType : DBType → Type</code>",
@@ -1953,8 +1953,7 @@
  "1682": "<code>(t1.arr t2).asType</code>",
  "1681": "<code>t2.asType → (t1.arr t2).asType → α</code>",
  "1680": "<code>List ((t1.arr t2).asType → α)</code>",
- "168":
- "<code>String</code><span class=\"sep\"></span><code class=\"docstring\">The first element of a pair. </code>",
+ "168": "<code>fives : String × Int</code>",
  "1679": "<code>List t1.asType</code>",
  "1678":
  "<code>List.foldr.{u, v} {α : Type u} {β : Type v} (f : α → β → β) (init : β) (l : List α) : β</code><span class=\"sep\"></span><code class=\"docstring\">Folds a function over a list from the right, accumulating a value starting with `init`. The\naccumulated value is combined with the each element of the list in reverse order, using `f`.\n\n`O(|l|)`. Replaced at runtime with `List.foldrTR`.\n\nExamples:\n * `[a, b, c].foldr f init  = f a (f b (f c init))`\n * `[1, 2, 3].foldr (toString · ++ ·) \"\" = \"123\"`\n * `[1, 2, 3].foldr (s!\"({·} {·})\") \"!\" = \"(1 (2 (3 !)))\"`\n</code>",
@@ -1969,7 +1968,7 @@
  "<code>Finite.functions {α : Type} (t : Finite) (results : List α) : List (t.asType → α)</code>",
  "1670":
  "<code>List.product.{u_1, u_2} {α : Type u_1} {β : Type u_2} (xs : List α) (ys : List β) : List (α × β)</code>",
- "167": "<code>fives : String × Int</code>",
+ "167": "<code>Prod.snd {α β : Type} (self : Prod α β) : β</code>",
  "1669": "<code>Finite.bool.asType</code>",
  "1668": "<code>(dom.arr cod).asType</code>",
  "1667": "<code>dom.asType</code>",
@@ -1981,7 +1980,7 @@
  "1662": "<code>Finite</code>",
  "1661": "<code>Finite.asType : Finite → Type</code>",
  "1660": "<code>Finite.arr : Finite → Finite → Finite</code>",
- "166": "<code>Prod.snd {α β : Type} (self : Prod α β) : β</code>",
+ "166": "<code>Prod.fst {α β : Type} (self : Prod α β) : α</code>",
  "1659": "<code>Finite.pair : Finite → Finite → Finite</code>",
  "1658": "<code>Finite.bool : Finite</code>",
  "1657": "<code>Finite.unit : Finite</code>",
@@ -1994,7 +1993,8 @@
  "1651":
  "<code>NestedPairs.beq (t : NestedPairs) (x y : t.asType) : Bool</code>",
  "1650": "<code>NestedPairs</code>",
- "165": "<code>Prod.fst {α β : Type} (self : Prod α β) : α</code>",
+ "165":
+ "<code>Prod.{u, v} (α : Type u) (β : Type v) : Type (max u v)</code><span class=\"sep\"></span><code class=\"docstring\">The product type, usually written `α × β`. Product types are also called pair or tuple types.\nElements of this type are pairs in which the first element is an `α` and the second element is a\n`β`.\n\nProducts nest to the right, so `(x, y, z) : α × β × γ` is equivalent to `(x, (y, z)) : α × (β × γ)`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `×` in identifiers is `Prod`.</code>",
  "1649": "<code>NestedPairs.asType : NestedPairs → Type</code>",
  "1648":
  "<code>NestedPairs.pair : NestedPairs → NestedPairs → NestedPairs</code>",
@@ -2007,8 +2007,7 @@
  "1642": "<code>NatOrBool : Type</code>",
  "1641": "<code>NatOrBool.bool : NatOrBool</code>",
  "1640": "<code>NatOrBool.nat : NatOrBool</code>",
- "164":
- "<code>Prod.{u, v} (α : Type u) (β : Type v) : Type (max u v)</code><span class=\"sep\"></span><code class=\"docstring\">The product type, usually written `α × β`. Product types are also called pair or tuple types.\nElements of this type are pairs in which the first element is an `α` and the second element is a\n`β`.\n\nProducts nest to the right, so `(x, y, z) : α × β × γ` is equivalent to `(x, (y, z)) : α × (β × γ)`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `×` in identifiers is `Prod`.</code>",
+ "164": "<code>Prod (α β : Type) : Type</code>",
  "1639":
  "<code>Vect.take.{u_1} {α : Type u_1} {k : Nat} (n : Nat) : Vect α (k + n) → Vect α n</code>",
  "1638":
@@ -2028,7 +2027,8 @@
  "1631":
  "<code>Vect.map.{u_1, u_2} {α : Type u_1} {β : Type u_2} {n : Nat} : (α → β) → Vect α n → Vect β n</code>",
  "1630": "<code>danishPeaks : Vect String 3</code>",
- "163": "<code>Prod (α β : Type) : Type</code>",
+ "163":
+ "<code>_root_.List.head?.{u} {α : Type u} : List α → Option α</code><span class=\"sep\"></span><code class=\"docstring\">Returns the first element in the list, if there is one. Returns `none` if the list is empty.\n\nUse `List.headD` to provide a fallback value for empty lists, or `List.head!` to panic on empty\nlists.\n\nExamples:\n * `([] : List Nat).head? = none`\n * `[3, 2, 1].head? = some 3`\n</code>",
  "1629": "<code>oregonianPeaks : Vect String 3</code>",
  "1628": "<code>Vect β k</code>",
  "1627": "<code>Vect α k</code>",
@@ -2042,7 +2042,7 @@
  "1621": "<code>Vect β n✝</code>",
  "1620": "<code>Vect α n✝</code>",
  "162":
- "<code>_root_.List.head?.{u} {α : Type u} : List α → Option α</code><span class=\"sep\"></span><code class=\"docstring\">Returns the first element in the list, if there is one. Returns `none` if the list is empty.\n\nUse `List.headD` to provide a fallback value for empty lists, or `List.head!` to panic on empty\nlists.\n\nExamples:\n * `([] : List Nat).head? = none`\n * `[3, 2, 1].head? = some 3`\n</code>",
+ "<code>List.headD.{u} {α : Type u} (as : List α) (fallback : α) : α</code><span class=\"sep\"></span><code class=\"docstring\">Returns the first element in the list if there is one, or `fallback` if the list is empty.\n\nUse `List.head?` to return an `Option`, and `List.head!` to panic on empty lists.\n\nExamples:\n* `[].headD \"empty\" = \"empty\"`\n* `[].headD 2 = 2`\n* `[\"head\", \"shoulders\", \"knees\"].headD \"toes\" = \"head\"`\n</code>",
  "1619":
  "<code>Vect.zip.{u_1, u_2} {α : Type u_1} {n : Nat} {β : Type u_2} : Vect α n → Vect β n → Vect (α × β) n</code>",
  "1618":
@@ -2063,7 +2063,7 @@
  "1610":
  "<code>List.replicate.{u_1} {α : Type u_1} (n : Nat) (x : α) : List α</code>",
  "161":
- "<code>List.headD.{u} {α : Type u} (as : List α) (fallback : α) : α</code><span class=\"sep\"></span><code class=\"docstring\">Returns the first element in the list if there is one, or `fallback` if the list is empty.\n\nUse `List.head?` to return an `Option`, and `List.head!` to panic on empty lists.\n\nExamples:\n* `[].headD \"empty\" = \"empty\"`\n* `[].headD 2 = 2`\n* `[\"head\", \"shoulders\", \"knees\"].headD \"toes\" = \"head\"`\n</code>",
+ "<code>List.head!.{u_1} {α : Type u_1} [Inhabited α] : List α → α</code><span class=\"sep\"></span><code class=\"docstring\">Returns the first element in the list. If the list is empty, panics and returns `default`.\n\nSafer alternatives include:\n* `List.head`, which requires a proof that the list is non-empty,\n* `List.head?`, which returns an `Option`, and\n* `List.headD`, which returns an explicitly-provided fallback value on empty lists.\n</code>",
  "1609":
  "<code>Vect.replicate.{u_1} {α : Type u_1} (n : Nat) (x : α) : Vect α n</code>",
  "1608":
@@ -2082,8 +2082,9 @@
  "1600":
  "<code><span class=\"literal string\">\"It is 15\"</span> : String</code>",
  "160":
- "<code>List.head!.{u_1} {α : Type u_1} [Inhabited α] : List α → α</code><span class=\"sep\"></span><code class=\"docstring\">Returns the first element in the list. If the list is empty, panics and returns `default`.\n\nSafer alternatives include:\n* `List.head`, which requires a proof that the list is non-empty,\n* `List.head?`, which returns an `Option`, and\n* `List.headD`, which returns an explicitly-provided fallback value on empty lists.\n</code>",
- "16": "<code><span class=\"literal string\">\"great \"</span> : String</code>",
+ "<code>List.head?.{u} {α : Type u} : List α → Option α</code><span class=\"sep\"></span><code class=\"docstring\">Returns the first element in the list, if there is one. Returns `none` if the list is empty.\n\nUse `List.headD` to provide a fallback value for empty lists, or `List.head!` to panic on empty\nlists.\n\nExamples:\n * `([] : List Nat).head? = none`\n * `[3, 2, 1].head? = some 3`\n</code>",
+ "16":
+ "<code><span class=\"literal string\">\"great oak tree\"</span> : String</code>",
  "1599": "<code>times3 (n : Nat) : Nat</code>",
  "1598":
  "<code><span class=\"literal string\">\"(some 5)\"</span> : String</code>",
@@ -2097,7 +2098,7 @@
  "1591": "<code>six : Nat</code>",
  "1590": "<code>three : Nat</code>",
  "159":
- "<code>List.head?.{u} {α : Type u} : List α → Option α</code><span class=\"sep\"></span><code class=\"docstring\">Returns the first element in the list, if there is one. Returns `none` if the list is empty.\n\nUse `List.headD` to provide a fallback value for empty lists, or `List.head!` to panic on empty\nlists.\n\nExamples:\n * `([] : List Nat).head? = none`\n * `[3, 2, 1].head? = some 3`\n</code>",
+ "<code>List.head.{u} {α : Type u} (as : List α) : as ≠ [] → α</code><span class=\"sep\"></span><code class=\"docstring\">Returns the first element of a non-empty list.\n</code>",
  "1589": "<code>StateT Nat Id Nat</code>",
  "1588": "<code>St.two : Nat</code>",
  "1587": "<code>two : Nat</code>",
@@ -2112,8 +2113,7 @@
  "1581":
  "<code><span class=\"literal string\">\"currant\"</span> : String</code>",
  "1580": "<code>parallelLoop : IO PUnit</code>",
- "158":
- "<code>List.head.{u} {α : Type u} (as : List α) : as ≠ [] → α</code><span class=\"sep\"></span><code class=\"docstring\">Returns the first element of a non-empty list.\n</code>",
+ "158": "<code>List.head? {α : Type} (xs : List α) : Option α</code>",
  "1579": "<code>fourToEight : IO Unit</code>",
  "1578": "<code>Std.Range : Type</code>",
  "1577":
@@ -2130,7 +2130,8 @@
  "<code class=\"docstring\">`for x in e do s`  iterates over `e` assuming `e`'s type has an instance of the `ForIn` typeclass.\n`break` and `continue` are supported inside `for` loops.\n`for x in e, x2 in e2, ... do s` iterates of the given collections in parallel,\nuntil at least one of them is exhausted.\nThe types of `e2` etc. must implement the `Std.ToStream` typeclass.\n</code>",
  "1571": "<code>countToThree (n : Nat) : IO Unit</code>",
  "1570": "<code>AllLessThan.mk (num : Nat) : AllLessThan</code>",
- "157": "<code>List.head? {α : Type} (xs : List α) : Option α</code>",
+ "157":
+ "<code>some.{u} {α : Type u} (val : α) : Option α</code><span class=\"sep\"></span><code class=\"docstring\">Some value of type `α`. </code>",
  "1569": "<code>Transformed.countToThree (n : Nat) : IO Unit</code>",
  "1568":
  "<code>Transformed.OptionT.exec.{u_1} {m : Type → Type u_1} {α : Type} [Applicative m] (action : OptionT m α) : m Unit</code>",
@@ -2148,7 +2149,7 @@
  "1561": "<code>String → IO Unit</code>",
  "1560": "<code>LinesOf</code>",
  "156":
- "<code>some.{u} {α : Type u} (val : α) : Option α</code><span class=\"sep\"></span><code class=\"docstring\">Some value of type `α`. </code>",
+ "<code>none.{u} {α : Type u} : Option α</code><span class=\"sep\"></span><code class=\"docstring\">No value. </code>",
  "1559":
  "<code>LinesOf.forM (readFrom : LinesOf) (action : String → IO Unit) : IO Unit</code>",
  "1558": "<code>LinesOf.stream (self : LinesOf) : IO.FS.Stream</code>",
@@ -2164,8 +2165,7 @@
  "1551":
  "<code>AllLessThan.forM.{u_1} {m : Type → Type u_1} [Monad m] (coll : AllLessThan) (action : Nat → m Unit) : m Unit</code>",
  "1550": "<code>AllLessThan.num (self : AllLessThan) : Nat</code>",
- "155":
- "<code>none.{u} {α : Type u} : Option α</code><span class=\"sep\"></span><code class=\"docstring\">No value. </code>",
+ "155": "<code>Option.none {α : Type} : Option α</code>",
  "1549": "<code>AllLessThan : Type</code>",
  "1548":
  "<code>[Monad m] → Many α → (α → m PUnit) → m PUnit</code><span class=\"sep\"></span><code class=\"docstring\">Runs the monadic action `f` on each element of the collection `coll`.\n</code>",
@@ -2183,7 +2183,7 @@
  "<code>Fake.List.forM.{u_1, u_2} {m : Type → Type u_1} {α : Type u_2} [Monad m] : List α → (α → m PUnit) → m PUnit</code>",
  "1540":
  "<code>Fake.ForM.forM.{u, v, w₁, w₂} {m : Type u → Type v} {γ : Type w₁} {α : outParam (Type w₂)} [self : ForM m γ α]\n  [Monad m] : γ → (α → m PUnit) → m PUnit</code>",
- "154": "<code>Option.none {α : Type} : Option α</code>",
+ "154": "<code>Option.some {α : Type} (val : α) : Option α</code>",
  "1539": "<code class=\"docstring\">The universe parameter w₂</code>",
  "1538": "<code>outParam (Type w₂)</code>",
  "1537": "<code class=\"docstring\">The universe parameter w₁</code>",
@@ -2198,7 +2198,8 @@
  "1531":
  "<code>String.Slice.trimAscii (s : String.Slice) : String.Slice</code><span class=\"sep\"></span><code class=\"docstring\">Removes leading and trailing whitespace from a slice\\.\n\n“Whitespace” is defined as characters for which `Char.isWhitespace` returns `true`\\.\n\nExamples:\n\n* `\"abc\".toSlice.trimAscii == \"abc\".toSlice`\n\n* `\"   abc\".toSlice.trimAscii == \"abc\".toSlice`\n\n* `\"abc \\t  \".toSlice.trimAscii == \"abc\".toSlice`\n\n* `\"  abc   \".toSlice.trimAscii == \"abc\".toSlice`\n\n* `\"abc\\ndef\\n\".toSlice.trimAscii == \"abc\\ndef\".toSlice`\n  </code>",
  "1530": "<code>main (argv : List String) : IO UInt32</code>",
- "153": "<code>Option.some {α : Type} (val : α) : Option α</code>",
+ "153":
+ "<code>Option.{u} (α : Type u) : Type u</code><span class=\"sep\"></span><code class=\"docstring\">Optional values, which are either `some` around a value from the underlying type or `none`.\n\n`Option` can represent nullable types or computations that might fail. In the codomain of a function\ntype, it can also represent partiality.\n</code>",
  "1529":
  "<code>Desugared.List.find? {α : Type} (p : α → Bool) : List α → Option α</code>",
  "1528": "<code>ExceptT α m α</code>",
@@ -2217,8 +2218,7 @@
  "<code>count.{u_1, u_2} {m : Type → Type u_1} {α : Type u_2} [Monad m] [MonadState Nat m] (p : α → m Bool) : List α → m Unit</code>",
  "1520":
  "<code>FancyDo.countLetters.loop (chars : List Char) : StateT LetterCounts (Except Err) Unit</code>",
- "152":
- "<code>Option.{u} (α : Type u) : Type u</code><span class=\"sep\"></span><code class=\"docstring\">Optional values, which are either `some` around a value from the underlying type or `none`.\n\n`Option` can represent nullable types or computations that might fail. In the codomain of a function\ntype, it can also represent partiality.\n</code>",
+ "152": "<code>Option (α : Type) : Type</code>",
  "1519":
  "<code>FancyDo.countLetters (str : String) : StateT LetterCounts (Except Err) Unit</code>",
  "1518":
@@ -2237,7 +2237,8 @@
  "<code>Reorder.countLetters.loop.{u_1} {m : Type → Type u_1} [Monad m] [MonadState LetterCounts m] [MonadExcept Err m]\n  (chars : List Char) : m Unit</code>",
  "1510":
  "<code>Reorder.countLetters.{u_1} {m : Type → Type u_1} [Monad m] [MonadState LetterCounts m] [MonadExcept Err m]\n  (str : String) : m Unit</code>",
- "151": "<code>Option (α : Type) : Type</code>",
+ "151":
+ "<code>List.length.{u_1} {α : Type u_1} : List α → Nat</code><span class=\"sep\"></span><code class=\"docstring\">The length of a list.\n\nThis function is overridden in the compiler to `lengthTR`, which uses constant stack space.\n\nExamples:\n* `([] : List String).length = 0`\n* `[\"green\", \"brown\"].length = 2`\n</code>",
  "1509":
  "<code>modifyThe.{u, v} (σ : Type u) {m : Type u → Type v} [MonadStateOf σ m] (f : σ → σ) : m PUnit</code><span class=\"sep\"></span><code class=\"docstring\">Mutates the current state that has the explicitly-provided type `σ`, replacing its value with the\nresult of applying `f` to it. When the current monad has multiple state types available, this\nfunction selects one of them.\n\nIt is equivalent to `do set (f (← get))`. However, using `modify` may lead to higher performance\nbecause it doesn't add a new reference to the state value. Additional references can inhibit\nin-place updates of data.\n</code>",
  "1508":
@@ -2256,13 +2257,11 @@
  "1501":
  "<code>MonadState.{u, v} (σ : outParam (Type u)) (m : Type u → Type v) : Type (max (u + 1) v)</code><span class=\"sep\"></span><code class=\"docstring\">State monads provide a value of a given type (the _state_) that can be retrieved or replaced.\nInstances may implement these operations by passing state values around, by using a mutable\nreference cell (e.g. `ST.Ref σ`), or in other ways.\n\nIn this class, `σ` is an `outParam`, which means that it is inferred from `m`. `MonadStateOf σ`\nprovides the same operations, but allows `σ` to influence instance synthesis.\n\nThe mutable state of a state monad is visible between multiple `do`-blocks or functions, unlike\n[local mutable state](https://lean-lang.org/doc/reference/4.26.0/find/?domain=Verso.Genre.Manual.section&name=do-notation-let-mut) in `do`-notation.\n</code>",
  "1500":
- "<code>MonadState.modifyGet.{u, v} {σ : outParam (Type u)} {m : Type u → Type v} [self : MonadState σ m] {α : Type u} :\n  (σ → α × σ) → m α</code><span class=\"sep\"></span><code class=\"docstring\">Applies a function to the current state that both computes a new state and a value. The new state\nreplaces the current state, and the value is returned.\n\nIt is equivalent to `do let (a, s) := f (← get); set s; pure a`. However, using `modifyGet` may\nlead to higher performance because it doesn't add a new reference to the state value. Additional\nreferences can inhibit in-place updates of data.\n</code>",
- "150":
- "<code>List.length.{u_1} {α : Type u_1} : List α → Nat</code><span class=\"sep\"></span><code class=\"docstring\">The length of a list.\n\nThis function is overridden in the compiler to `lengthTR`, which uses constant stack space.\n\nExamples:\n* `([] : List String).length = 0`\n* `[\"green\", \"brown\"].length = 2`\n</code>",
- "15":
- "<code><span class=\"literal string\">\"great oak tree\"</span> : String</code>",
- "1499":
  "<code>Modify.modify.{u_1} {σ : Type} {m : Type → Type u_1} [MonadState σ m] (f : σ → σ) : m Unit</code>",
+ "150": "<code>length {α : Type} (xs : List α) : Nat</code>",
+ "15": "<code><span class=\"literal string\">\"Lean!\"</span> : String</code>",
+ "1499":
+ "<code>MonadState.modifyGet.{u, v} {σ : outParam (Type u)} {m : Type u → Type v} [self : MonadState σ m] {α : Type u} :\n  (σ → α × σ) → m α</code><span class=\"sep\"></span><code class=\"docstring\">Applies a function to the current state that both computes a new state and a value. The new state\nreplaces the current state, and the value is returned.\n\nIt is equivalent to `do let (a, s) := f (← get); set s; pure a`. However, using `modifyGet` may\nlead to higher performance because it doesn't add a new reference to the state value. Additional\nreferences can inhibit in-place updates of data.\n</code>",
  "1498":
  "<code>Modify.countLetters.loop (chars : List Char) : StateT LetterCounts (Except Err) Unit</code>",
  "1497":
@@ -2279,7 +2278,8 @@
  "1491": "<code>List Char</code>",
  "1490":
  "<code>countLetters.loop (chars : List Char) : StateT LetterCounts (Except Err) Unit</code>",
- "149": "<code>length {α : Type} (xs : List α) : Nat</code>",
+ "149":
+ "<code>replaceX {α : Type} (point : PPoint α) (newX : α) : PPoint α</code>",
  "1489":
  "<code>StateT.{u, v} (σ : Type u) (m : Type u → Type v) (α : Type u) : Type (max u v)</code><span class=\"sep\"></span><code class=\"docstring\">Adds a mutable state of type `σ` to a monad.\n\nActions in the resulting monad are functions that take an initial state and return, in `m`, a tuple\nof a value and a state.\n</code>",
  "1488":
@@ -2296,8 +2296,7 @@
  "1482": "<code>vowels : String</code>",
  "1481": "<code>Err.notALetter : Char → Err</code>",
  "1480": "<code>LetterCounts.consonants (self : LetterCounts) : Nat</code>",
- "148":
- "<code>replaceX {α : Type} (point : PPoint α) (newX : α) : PPoint α</code>",
+ "148": "<code>List α</code>",
  "1479": "<code>LetterCounts.vowels (self : LetterCounts) : Nat</code>",
  "1478": "<code>LetterCounts : Type</code>",
  "1477":
@@ -2314,7 +2313,7 @@
  "<code>divFrontend.{u_1} {m : Type → Type u_1} [Monad m] [MonadExcept Err m] (n k : String) : m String</code>",
  "1470":
  "<code><span class=\"literal string\">\"Division by zero!\"</span> : String</code>",
- "147": "<code>List α</code>",
+ "147": "<code><span class=\"literal string\">\"bread\"</span> : String</code>",
  "1469":
  "<code>MonadExcept.tryCatch.{u, v, w} {ε : outParam (Type u)} {m : Type v → Type w} [self : MonadExcept ε m] {α : Type v}\n  (body : m α) (handler : ε → m α) : m α</code><span class=\"sep\"></span><code class=\"docstring\">Catches errors thrown in `body`, passing them to `handler`. Errors in `handler` are not caught.\n</code>",
  "1468":
@@ -2332,7 +2331,8 @@
  "1462": "<code>Err.notANumber : String → Err</code>",
  "1461": "<code>Err.divByZero : Err</code>",
  "1460": "<code>Err : Type</code>",
- "146": "<code><span class=\"literal string\">\"bread\"</span> : String</code>",
+ "146":
+ "<code><span class=\"literal string\">\"Sourdough\"</span> : String</code>",
  "1459":
  "<code>MyMonadExcept.MonadExcept.tryCatch.{u, v, w} {ε : outParam (Type u)} {m : Type v → Type w} [self : MonadExcept ε m]\n  {α : Type v} : m α → (ε → m α) → m α</code>",
  "1458":
@@ -2349,8 +2349,7 @@
  "1451":
  "<code>Huh.ExceptT.mk.{u_1, u_2, u_3} {m : Type (max u_1 u_2) → Type u_3} {ε α : Type (max u_1 u_2)} (x : m (Except ε α)) :\n  ExceptT ε m α</code>",
  "1450": "<code>α✝ → ExceptT ε m β✝</code>",
- "145":
- "<code><span class=\"literal string\">\"Sourdough\"</span> : String</code>",
+ "145": "<code>length (α : Type) (xs : List α) : Nat</code>",
  "1449": "<code>ExceptT ε m α✝</code>",
  "1448":
  "<code>{α β : Type u} → ExceptT ε m α → (α → ExceptT ε m β) → ExceptT ε m β</code><span class=\"sep\"></span><code class=\"docstring\">Sequences two computations, allowing the second to depend on the value computed by the first.\n\nIf `x : m α` and `f : α → m β`, then `x &gt;&gt;= f : m β` represents the result of executing `x` to get\na value of type `α` and then passing it to `f`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&gt;&gt;=` in identifiers is `bind`.</code>",
@@ -2366,7 +2365,8 @@
  "1441":
  "<code>{α : Type u_1} → m α → OptionT m α</code><span class=\"sep\"></span><code class=\"docstring\">Translates an action from monad `m` into monad `n`. </code>",
  "1440": "<code>Unit → OptionT m α✝</code>",
- "144": "<code>length (α : Type) (xs : List α) : Nat</code>",
+ "144":
+ "<code>List.nil.{u} {α : Type u} : List α</code><span class=\"sep\"></span><code class=\"docstring\">The empty list, usually written `[]`. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `[]` in identifiers is `nil`.</code>",
  "1439":
  "<code>{α : Type u_1} → OptionT m α → (Unit → OptionT m α) → OptionT m α</code><span class=\"sep\"></span><code class=\"docstring\">Depending on the `Alternative` instance, collects values or recovers from `failure`s by\nreturning the leftmost success. Can be written using the `&lt;|&gt;` operator syntax.\n</code>",
  "1438":
@@ -2383,8 +2383,7 @@
  "<code>Structed.OptionT.mk.{u, v} {m : Type u → Type v} {α : Type u} (run : m (Option α)) : OptionT m α</code>",
  "1430":
  "<code>Structed.OptionT.run.{u, v} {m : Type u → Type v} {α : Type u} (self : OptionT m α) : m (Option α)</code>",
- "143":
- "<code>List.nil.{u} {α : Type u} : List α</code><span class=\"sep\"></span><code class=\"docstring\">The empty list, usually written `[]`. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `[]` in identifiers is `nil`.</code>",
+ "143": "<code>explicitPrimesUnder10 : List Nat</code>",
  "1429":
  "<code>Structed.OptionT.{u, v} (m : Type u → Type v) (α : Type u) : Type v</code>",
  "1428":
@@ -2401,7 +2400,7 @@
  "<code>{α : Type u_1} → α → OptionT m α</code><span class=\"sep\"></span><code class=\"docstring\">Given `a : α`, then `pure a : f α` represents an action that does nothing and returns `a`.\n\nExamples:\n* `(pure \"hello\" : Option String) = some \"hello\"`\n* `(pure \"hello\" : Except (Array String) String) = Except.ok \"hello\"`\n* `(pure \"hello\" : StateM Nat String).run 105 = (\"hello\", 105)`\n</code>",
  "1420":
  "<code>{α β : Type u_1} → OptionT m α → (α → OptionT m β) → OptionT m β</code><span class=\"sep\"></span><code class=\"docstring\">Sequences two computations, allowing the second to depend on the value computed by the first.\n\nIf `x : m α` and `f : α → m β`, then `x &gt;&gt;= f : m β` represents the result of executing `x` to get\na value of type `α` and then passing it to `f`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&gt;&gt;=` in identifiers is `bind`.</code>",
- "142": "<code>explicitPrimesUnder10 : List Nat</code>",
+ "142": "<code>List.cons {α : Type} : α → List α → List α</code>",
  "1419":
  "<code>{α : Type u} → α → ExceptT ε m α</code><span class=\"sep\"></span><code class=\"docstring\">Given `a : α`, then `pure a : f α` represents an action that does nothing and returns `a`.\n\nExamples:\n* `(pure \"hello\" : Option String) = some \"hello\"`\n* `(pure \"hello\" : Except (Array String) String) = Except.ok \"hello\"`\n* `(pure \"hello\" : StateM Nat String).run 105 = (\"hello\", 105)`\n</code>",
  "1418":
@@ -2416,7 +2415,7 @@
  "1412": "<code>UserInfo.favoriteBeetle (self : UserInfo) : String</code>",
  "1411": "<code>UserInfo.name (self : UserInfo) : String</code>",
  "1410": "<code>UserInfo : Type</code>",
- "141": "<code>List.cons {α : Type} : α → List α → List α</code>",
+ "141": "<code>List.nil {α : Type} : List α</code>",
  "1409": "<code>getSomeInput : OptionT IO String</code>",
  "1408":
  "<code>OptionT.{u, v} (m : Type u → Type v) (α : Type u) : Type v</code>",
@@ -2432,8 +2431,9 @@
  "<code>ReaderT.{u, v} (ρ : Type u) (m : Type u → Type v) (α : Type u) : Type (max u v)</code><span class=\"sep\"></span><code class=\"docstring\">Adds the ability to access a read-only value of type `ρ` to a monad. The value can be locally\noverridden by `withReader`, but it cannot be mutated.\n\nActions in the resulting monad are functions that take the local value as a parameter, returning\nordinary actions in `m`.\n</code>",
  "1401": "<code>ρ → ρ</code>",
  "1400": "<code>{α : Type u_1} → (ρ → ρ) → ReaderT ρ m α → ρ → m α</code>",
- "140": "<code>List.nil {α : Type} : List α</code>",
- "14": "<code><span class=\"literal string\">\"Lean!\"</span> : String</code>",
+ "140": "<code>List (α : Type) : Type</code>",
+ "14":
+ "<code><span class=\"literal string\">\"Hello, \"</span> : String</code>",
  "1399":
  "<code>MonadWithReader.{u, v} (ρ : outParam (Type u)) (m : Type u → Type v) : Type (max (u + 1) v)</code>",
  "1398":
@@ -2450,7 +2450,7 @@
  "<code>MyMonadLift.MonadLift.{u, v, w} (m : Type u → Type v) (n : Type u → Type w) : Type (max (max (u + 1) v) w)</code>",
  "1391": "<code>α✝ → ReaderT ρ m β✝</code>",
  "1390": "<code>ReaderT ρ m α✝</code>",
- "139": "<code>List (α : Type) : Type</code>",
+ "139": "<code>primesUnder10 : List Nat</code>",
  "1389":
  "<code>{α β : Type u_1} → ReaderT ρ m α → (α → ReaderT ρ m β) → ρ → m β</code><span class=\"sep\"></span><code class=\"docstring\">Sequences two computations, allowing the second to depend on the value computed by the first.\n\nIf `x : m α` and `f : α → m β`, then `x &gt;&gt;= f : m β` represents the result of executing `x` to get\na value of type `α` and then passing it to `f`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&gt;&gt;=` in identifiers is `bind`.</code>",
  "1388":
@@ -2468,7 +2468,7 @@
  "1381":
  "<code>ReaderT.{u, v} (ρ : Type u) (m : Type u → Type v) (α : Type u) : Type (max u v)</code>",
  "1380": "<code>dirTree (path : System.FilePath) : ConfigIO Unit</code>",
- "138": "<code>primesUnder10 : List Nat</code>",
+ "138": "<code>Sign</code>",
  "1379": "<code>showDirName (dir : String) : ConfigIO Unit</code>",
  "1378": "<code>showFileName (file : String) : ConfigIO Unit</code>",
  "1377": "<code>IO α</code>",
@@ -2481,7 +2481,8 @@
  "1371":
  "<code>ConfigIO.run {α : Type} (action : ConfigIO α) (cfg : Config) : IO α</code>",
  "1370": "<code>α✝ → ConfigIO β✝</code>",
- "137": "<code>Sign</code>",
+ "137":
+ "<code>posOrNegThree (s : Sign) :\n  match s with\n  | Sign.pos =&gt; Nat\n  | Sign.neg =&gt; Int</code>",
  "1369": "<code>ConfigIO α✝</code>",
  "1368":
  "<code>{α β : Type} → ConfigIO α → (α → ConfigIO β) → Config → IO β</code><span class=\"sep\"></span><code class=\"docstring\">Sequences two computations, allowing the second to depend on the value computed by the first.\n\nIf `x : m α` and `f : α → m β`, then `x &gt;&gt;= f : m β` represents the result of executing `x` to get\na value of type `α` and then passing it to `f`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&gt;&gt;=` in identifiers is `bind`.</code>",
@@ -2494,8 +2495,7 @@
  "1362": "<code>Config.preDir (cfg : Config) : String</code>",
  "1361": "<code><span class=\"literal string\">\"├──\"</span> : String</code>",
  "1360": "<code><span class=\"literal string\">\"|--\"</span> : String</code>",
- "136":
- "<code>posOrNegThree (s : Sign) :\n  match s with\n  | Sign.pos =&gt; Nat\n  | Sign.neg =&gt; Int</code>",
+ "136": "<code>Sign.neg : Sign</code>",
  "1359": "<code>Config.preFile (cfg : Config) : String</code>",
  "1358": "<code>Config.dirName (cfg : Config) (dir : String) : String</code>",
  "1357": "<code>Config.fileName (cfg : Config) (file : String) : String</code>",
@@ -2511,7 +2511,7 @@
  "1351": "<code>dirLT (e1 e2 : IO.FS.DirEntry) : Bool</code>",
  "1350":
  "<code>Array.qsort.{u_1} {α : Type u_1} (as : Array α) (lt : α → α → Bool := by exact (· &lt; ·)) (lo : Nat := 0)\n  (hi : Nat := as.size - 1) : Array α</code><span class=\"sep\"></span><code class=\"docstring\">In-place quicksort.\n\n`qsort as lt lo hi` sorts the subarray `as[lo...=hi]` in-place using `lt` to compare elements.\n</code>",
- "135": "<code>Sign.neg : Sign</code>",
+ "135": "<code>Sign.pos : Sign</code>",
  "1349":
  "<code>doList.{u_1, u_2} {f : Type → Type u_1} {α : Type u_2} [Applicative f] : List α → (α → f Unit) → f Unit</code>",
  "1348": "<code>Config.inDirectory (cfg : Config) : Config</code>",
@@ -2526,7 +2526,7 @@
  "1341": "<code><span class=\"literal string\">\".\"</span> : String</code>",
  "1340":
  "<code>System.FilePath.components (p : System.FilePath) : List String</code><span class=\"sep\"></span><code class=\"docstring\">Splits a path into a list of individual file names at the platform-specific path separator.\n</code>",
- "134": "<code>Sign.pos : Sign</code>",
+ "134": "<code>Sign : Type</code>",
  "1339": "<code>toEntry (path : System.FilePath) : IO (Option Entry)</code>",
  "1338": "<code>Entry.dir : String → Entry</code>",
  "1337": "<code>Entry.file : String → Entry</code>",
@@ -2541,7 +2541,7 @@
  "<code>dirTree (cfg : Config) (path : System.FilePath) : IO Unit</code>",
  "1330":
  "<code><span class=\"literal string\">\"--ascii\"</span> : String</code>",
- "133": "<code>Sign : Type</code>",
+ "133": "<code>α</code>",
  "1329": "<code>configFromArgs : List String → Option Config</code>",
  "1328":
  "<code><span class=\"literal string\">\"Usage: doug [--ascii]\\nOptions:\\n\\t--ascii\\tUse ASCII characters to display the directory structure\"</span> : String</code>",
@@ -2553,7 +2553,7 @@
  "1322": "<code>{α : Type u} → α → m α</code>",
  "1321": "<code>{α β : Type u} → m α → (α → m β) → m β</code>",
  "1320": "<code>m α✝</code>",
- "132": "<code>α</code>",
+ "132": "<code>PPoint α</code>",
  "1319":
  "<code>Bind.bind.{u, v} {m : Type u → Type v} [self : Bind m] {α β : Type u} : m α → (α → m β) → m β</code>",
  "1318":
@@ -2572,7 +2572,7 @@
  "<code>SeqRight.{u, v} (f : Type u → Type v) : Type (max (u + 1) v)</code>",
  "1310":
  "<code>Pure.pure.{u, v} {f : Type u → Type v} [self : Pure f] {α : Type u} : α → f α</code>",
- "131": "<code>PPoint α</code>",
+ "131": "<code>α</code>",
  "1309":
  "<code>Seq.seq.{u, v} {f : Type u → Type v} [self : Seq f] {α β : Type u} : f (α → β) → (Unit → f α) → f β</code>",
  "1308": "<code>{α : Type u} → α → f α</code>",
@@ -2588,9 +2588,10 @@
  "<code>simpleConst.{u_1, u_2} {α : Sort u_1} {β : Sort u_2} (x : α) : β → α</code>",
  "1300":
  "<code>Function.const.{u, v} {α : Sort u} (β : Sort v) (a : α) : β → α</code><span class=\"sep\"></span><code class=\"docstring\">The constant function that ignores its argument.\n\nIf `a : α`, then `Function.const β a : β → α` is the “constant function with value `a`”. For all\narguments `b : β`, `Function.const β a b = a`.\n\nExamples:\n * `Function.const Bool 10 true = 10`\n * `Function.const Bool 10 false = 10`\n * `Function.const String 10 \"any string\" = 10`\n</code>",
- "130": "<code>α</code>",
+ "130":
+ "<code>replaceX (α : Type) (point : PPoint α) (newX : α) : PPoint α</code>",
  "13":
- "<code><span class=\"literal string\">\"Hello, \"</span> : String</code>",
+ "<code>String.append (s : String) (t : String) : String</code><span class=\"sep\"></span><code class=\"docstring\">Appends two strings. Usually accessed via the `++` operator.\n\nThe internal implementation will perform destructive updates if the string is not shared.\n\nExamples:\n* `\"abc\".append \"def\" = \"abcdef\"`\n* `\"abc\" ++ \"def\" = \"abcdef\"`\n* `\"\" ++ \"\" = \"\"`\n</code>",
  "1299": "<code>{α β : Type u} → (α → β) → f α → f β</code>",
  "1298":
  "<code>Function.comp.{u, v, w} {α : Sort u} {β : Sort v} {δ : Sort w} (f : β → δ) (g : α → β) : α → δ</code><span class=\"sep\"></span><code class=\"docstring\">Function composition, usually written with the infix operator `∘`. A new function is created from\ntwo existing functions, where one function's output is used as input to the other.\n\nExamples:\n * `Function.comp List.reverse (List.drop 2) [3, 2, 4, 1] = [1, 4]`\n * `(List.reverse ∘ List.drop 2) [3, 2, 4, 1] = [1, 4]`\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `∘` in identifiers is `comp`.</code>",
@@ -2608,8 +2609,7 @@
  "1291":
  "<code class=\"docstring\">A specific universe in Lean's infinite hierarchy of universes. </code>",
  "1290": "<code>Explicit.someTruePropositions : List Prop</code>",
- "129":
- "<code>replaceX (α : Type) (point : PPoint α) (newX : α) : PPoint α</code>",
+ "129": "<code>Nat</code>",
  "1289":
  "<code><span class=\"literal string\">\"world!\"</span> : String</code>",
  "1288": "<code>someTruePropositions : List Prop</code>",
@@ -2621,7 +2621,7 @@
  "1282": "<code class=\"docstring\">The universe parameter v</code>",
  "1281": "<code>Type v</code>",
  "1280": "<code>Sum.{u, v} (α : Type u) (β : Type v) : Type (max u v)</code>",
- "128": "<code>Nat</code>",
+ "128": "<code>natOrigin : PPoint Nat</code>",
  "1279": "<code>Inflexible.stringOrType : Sum String sorry</code>",
  "1278": "<code>Inflexible.typeOrType : Sum Type Type</code>",
  "1277": "<code>Inflexible.stringOrNat : Sum String Nat</code>",
@@ -2632,7 +2632,7 @@
  "1272": "<code>Explicit.myListOfNat : MyList Type</code>",
  "1271": "<code>Explicit.myListOfNumbers : MyList Nat</code>",
  "1270": "<code>myListOfList : MyList (Type → Type)</code>",
- "127": "<code>natOrigin : PPoint Nat</code>",
+ "127": "<code>PPoint.y {α : Type} (self : PPoint α) : α</code>",
  "1269": "<code>myListOfNat : MyList Type</code>",
  "1268": "<code>myListOfNumbers : MyList Nat</code>",
  "1267": "<code>MyList.cons.{u} {α : Type u} : α → MyList α → MyList α</code>",
@@ -2643,7 +2643,7 @@
  "1262": "<code>myListOfNat : MyList sorry</code>",
  "1261": "<code>MyList.cons {α : Type} : α → MyList α → MyList α</code>",
  "1260": "<code>MyList.nil {α : Type} : MyList α</code>",
- "126": "<code>PPoint.y {α : Type} (self : PPoint α) : α</code>",
+ "126": "<code>PPoint.x {α : Type} (self : PPoint α) : α</code>",
  "1259": "<code>MyList (α : Type) : Type</code>",
  "1258": "<code class=\"docstring\">The universe level 4</code>",
  "1257": "<code class=\"docstring\">The universe level 3</code>",
@@ -2656,7 +2656,7 @@
  "<code>TreeError → TreeError → TreeError</code><span class=\"sep\"></span><code class=\"docstring\">`a ++ b` is the result of concatenation of `a` and `b`. See `HAppend`. </code>",
  "1251": "<code>TreeError.both : TreeError → TreeError → TreeError</code>",
  "1250": "<code>TreeError.path : String → TreeError → TreeError</code>",
- "125": "<code>PPoint.x {α : Type} (self : PPoint α) : α</code>",
+ "125": "<code>Type</code>",
  "1249": "<code>TreeError.field : Field → String → TreeError</code>",
  "1248": "<code>report : TreeError → String</code>",
  "1247": "<code>TreeError : Type</code>",
@@ -2672,7 +2672,7 @@
  "<code>{α : Type} → Many α → (Unit → Many α) → Many α</code><span class=\"sep\"></span><code class=\"docstring\">Depending on the `Alternative` instance, collects values or recovers from `failure`s by\nreturning the leftmost success. Can be written using the `&lt;|&gt;` operator syntax.\n</code>",
  "1240":
  "<code>{α : Type} → Many α</code><span class=\"sep\"></span><code class=\"docstring\">Produces an empty collection or recoverable failure.  The `&lt;|&gt;` operator collects values or recovers\nfrom failures. See `Alternative` for more details.\n</code>",
- "124": "<code>Type</code>",
+ "124": "<code>PPoint (α : Type) : Type</code>",
  "1239":
  "<code>Many.orElse {α : Type} : Many α → (Unit → Many α) → Many α</code>",
  "1238":
@@ -2691,7 +2691,8 @@
  "<code>Alternative.failure {f : Type → Type} [self : Alternative f] {α : Type} : f α</code>",
  "1231": "<code>Alternative (f : Type → Type) : Type 1</code>",
  "1230": "<code><span class=\"literal string\">\"1970\"</span> : String</code>",
- "123": "<code>PPoint (α : Type) : Type</code>",
+ "123":
+ "<code>LT.lt.{u} {α : Type u} [self : LT α] : α → α → Prop</code><span class=\"sep\"></span><code class=\"docstring\">The less-than relation: `x &lt; y` \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&lt;` in identifiers is `lt`.</code>",
  "1229": "<code><span class=\"literal string\">\"1963\"</span> : String</code>",
  "1228":
  "<code><span class=\"literal string\">\"Johnny\"</span> : String</code>",
@@ -2710,7 +2711,7 @@
  "<code>checkHumanBefore1970 (input : RawInput) : Validate (Field × String) LegacyCheckedInput</code>",
  "1220": "<code>List ε</code>",
  "122":
- "<code>LT.lt.{u} {α : Type u} [self : LT α] : α → α → Prop</code><span class=\"sep\"></span><code class=\"docstring\">The less-than relation: `x &lt; y` \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&lt;` in identifiers is `lt`.</code>",
+ "<code>Not (a : Prop) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">`Not p`, or `¬p`, is the negation of `p`. It is defined to be `p → False`,\nso if your goal is `¬p` you can use `intro h` to turn the goal into\n`h : p ⊢ False`, and if you have `hn : ¬p` and `h : p` then `hn h : False`\nand `(hn h).elim` will prove anything.\nFor more information: [Propositional Logic](https://lean-lang.org/theorem_proving_in_lean4/propositions_and_proofs.html#propositional-logic)\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `¬` in identifiers is `not`.</code>",
  "1219": "<code>ε</code>",
  "1218": "<code>p v</code>",
  "1217":
@@ -2727,8 +2728,7 @@
  "<code>checkCompany (input : RawInput) : Validate (Field × String) LegacyCheckedInput</code>",
  "1210":
  "<code>checkThat (condition : Bool) (field : Field) (msg : String) : Validate (Field × String) Unit</code>",
- "121":
- "<code>Not (a : Prop) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">`Not p`, or `¬p`, is the negation of `p`. It is defined to be `p → False`,\nso if your goal is `¬p` you can use `intro h` to turn the goal into\n`h : p ⊢ False`, and if you have `hn : ¬p` and `h : p` then `hn h : False`\nand `(hn h).elim` will prove anything.\nFor more information: [Propositional Logic](https://lean-lang.org/theorem_proving_in_lean4/propositions_and_proofs.html#propositional-logic)\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `¬` in identifiers is `not`.</code>",
+ "121": "<code>¬n &lt; k</code>",
  "1209":
  "<code>Validate ε α → (Unit → Validate ε α) → Validate ε α</code><span class=\"sep\"></span><code class=\"docstring\">The implementation of `a &lt;|&gt; b : α`. See `HOrElse`. </code>",
  "1208":
@@ -2746,9 +2746,9 @@
  "1201": "<code>{ y // y &gt; 1970 }</code>",
  "1200":
  "<code>LegacyCheckedInput.humanAfter1970 (birthYear : { y // y &gt; 1970 }) : NonEmptyString → LegacyCheckedInput</code>",
- "120": "<code>¬n &lt; k</code>",
+ "120": "<code>div (n k : Nat) : Nat</code>",
  "12":
- "<code>String.append (s : String) (t : String) : String</code><span class=\"sep\"></span><code class=\"docstring\">Appends two strings. Usually accessed via the `++` operator.\n\nThe internal implementation will perform destructive updates if the string is not shared.\n\nExamples:\n* `\"abc\".append \"def\" = \"abcdef\"`\n* `\"abc\" ++ \"def\" = \"abcdef\"`\n* `\"\" ++ \"\" = \"\"`\n</code>",
+ "<code><span class=\"literal string\">\"Hello, Lean!\"</span> : String</code>",
  "1199": "<code>{ y // y &gt; 999 ∧ y &lt; 1970 }</code>",
  "1198":
  "<code>LegacyCheckedInput.humanBefore1970 (birthYear : { y // y &gt; 999 ∧ y &lt; 1970 }) : String → LegacyCheckedInput</code>",
@@ -2762,7 +2762,7 @@
  "1191": "<code>notArg : Validate String Nat</code>",
  "1190":
  "<code><span class=\"literal string\">\"First error\"</span> : String</code>",
- "119": "<code>div (n k : Nat) : Nat</code>",
+ "119": "<code>minus (n k : Nat) : Nat</code>",
  "1189": "<code>notFun : Validate String (Nat → String)</code>",
  "1188": "<code>{α : Type} → α → m α</code>",
  "1187": "<code>{α β : Type} → m α → (α → m β) → m β</code>",
@@ -2773,7 +2773,7 @@
  "1182": "<code>(α → β) → α → γ</code>",
  "1181": "<code>(β → γ) → (α → β) → α → γ</code>",
  "1180": "<code>m (β → γ)</code>",
- "118": "<code>minus (n k : Nat) : Nat</code>",
+ "118": "<code>times (n k : Nat) : Nat</code>",
  "1179": "<code>α → α</code>",
  "1178": "<code>Unit → m α</code>",
  "1177": "<code>m (α → β)</code>",
@@ -2787,7 +2787,7 @@
  "<code>Applicative.pure {f : Type → Type} [self : Applicative f] {α : Type} : α → f α</code>",
  "1170":
  "<code>map.{u_1, u_2} {f : Type u_1 → Type u_2} {α β : Type u_1} [_root_.Applicative f] (g : α → β) (x : f α) : f β</code>",
- "117": "<code>times (n k : Nat) : Nat</code>",
+ "117": "<code>plus (n k : Nat) : Nat</code>",
  "1169": "<code>Type u_1 → Type u_2</code>",
  "1168":
  "<code>map.{u_1, u_2} {f : Type u_1 → Type u_2} {α β : Type u_1} [Applicative f] (g : α → β) (x : f α) : f β</code>",
@@ -2800,7 +2800,7 @@
  "1162": "<code>F (β → γ✝)</code>",
  "1161": "<code><span class=\"literal string\">\"2045\"</span> : String</code>",
  "1160": "<code><span class=\"literal string\">\"1984\"</span> : String</code>",
- "116": "<code>plus (n k : Nat) : Nat</code>",
+ "116": "<code>evenLoops (n : Nat) : Bool</code>",
  "1159":
  "<code>CheckedInput.mk {thisYear : Nat} (name : { n // n ≠ \"\" }) (birthYear : { y // y &gt; 1900 ∧ y ≤ thisYear }) :\n  CheckedInput thisYear</code>",
  "1158": "<code>RawInput</code>",
@@ -2818,7 +2818,8 @@
  "<code><span class=\"literal string\">\"birth year\"</span> : String</code>",
  "1150":
  "<code>checkYearIsNat (year : String) : Validate (Field × String) Nat</code>",
- "115": "<code>evenLoops (n : Nat) : Bool</code>",
+ "115":
+ "<code>Bool.not : Bool → Bool</code><span class=\"sep\"></span><code class=\"docstring\">Boolean negation, also known as Boolean complement. `not x` can be written `!x`.\n\nThis is a function that maps the value `true` to `false` and the value `false` to `true`. The\npropositional connective is `Not : Prop → Prop`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `!` in identifiers is `not`.</code>",
  "1149":
  "<code>String.toNat? (s : String) : Option Nat</code><span class=\"sep\"></span><code class=\"docstring\">Interprets a string as the decimal representation of a natural number, returning it. Returns `none`\nif the string does not contain a decimal natural number.\n\nA string can be interpreted as a decimal natural number if it is not empty and all the characters in\nit are digits.\n\nUse `String.isNat` to check whether `String.toNat?` would return `some`. `String.toNat!` is an\nalternative that panics instead of returning `none` when the string is not a natural number.\n\nExamples:\n * `\"\".toNat? = none`\n * `\"0\".toNat? = some 0`\n * `\"5\".toNat? = some 5`\n * `\"587\".toNat? = some 587`\n * `\"-587\".toNat? = none`\n * `\" 5\".toNat? = none`\n * `\"2+3\".toNat? = none`\n * `\"0xff\".toNat? = none`\n</code>",
  "1148": "<code>α → Validate ε β</code>",
@@ -2834,8 +2835,7 @@
  "1141": "<code>name = \"\"</code>",
  "1140":
  "<code>checkName (name : String) : Validate (Field × String) { n // n ≠ \"\" }</code>",
- "114":
- "<code>Bool.not : Bool → Bool</code><span class=\"sep\"></span><code class=\"docstring\">Boolean negation, also known as Boolean complement. `not x` can be written `!x`.\n\nThis is a function that maps the value `true` to `false` and the value `false` to `true`. The\npropositional connective is `Not : Prop → Prop`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `!` in identifiers is `not`.</code>",
+ "114": "<code>even (n : Nat) : Bool</code>",
  "1139": "<code>List (Field × String)</code>",
  "1138": "<code>Field × String</code>",
  "1137": "<code>Field</code>",
@@ -2849,7 +2849,7 @@
  "1131":
  "<code>{α : Type} → α → Validate ε α</code><span class=\"sep\"></span><code class=\"docstring\">Given `a : α`, then `pure a : f α` represents an action that does nothing and returns `a`.\n\nExamples:\n* `(pure \"hello\" : Option String) = some \"hello\"`\n* `(pure \"hello\" : Except (Array String) String) = Except.ok \"hello\"`\n* `(pure \"hello\" : StateM Nat String).run 105 = (\"hello\", 105)`\n</code>",
  "1130": "<code>NonEmptyList ε</code>",
- "113": "<code>even (n : Nat) : Bool</code>",
+ "113": "<code>Point3D</code>",
  "1129":
  "<code>{α β : Type} → (α → β) → Validate ε α → Validate ε β</code><span class=\"sep\"></span><code class=\"docstring\">Applies a function inside a functor. This is used to overload the `&lt;$&gt;` operator.\n\nWhen mapping a constant function, use `Functor.mapConst` instead, because it may be more\nefficient.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&lt;$&gt;` in identifiers is `map`.</code>",
  "1128":
@@ -2865,7 +2865,7 @@
  "<code class=\"docstring\">\"Dependent\" if-then-else, normally written via the notation `if h : c then t(h) else e(h)`,\nis sugar for `dite c (fun h =&gt; t(h)) (fun h =&gt; e(h))`, and it is the same as\n`if c then t else e` except that `t` is allowed to depend on a proof `h : c`,\nand `e` can depend on `h : ¬c`. (Both branches use the same name for the hypothesis,\neven though it has different types in the two cases.)\n\nWe use this to be able to communicate the if-then-else condition to the branches.\nFor example, `Array.get arr i h` expects a proof `h : i &lt; arr.size` in order to\navoid a bounds check, so you can write `if h : i &lt; arr.size then arr.get i h else ...`\nto avoid the bounds check inside the if branch. (Of course in this case we have only\nlifted the check into an explicit `if`, but we could also use this proof multiple times\nor derive `i &lt; arr.size` from some other proposition that we are checking in the `if`.)\n</code>",
  "1121": "<code>Nat.asFastPos? (n : Nat) : Option FastPos</code>",
  "1120": "<code>Sort ?u.68889</code>",
- "112": "<code>Point3D</code>",
+ "112": "<code>depth (p : Point3D) : Float</code>",
  "1119":
  "<code>{ x // x &gt; 0 }</code><span class=\"sep\"></span><code class=\"docstring\">The `OfNat.ofNat` function is automatically inserted by the parser when\nthe user writes a numeric literal like `1 : α`. Implementations of this\ntypeclass can therefore customize the behavior of `n : α` based on `n` and\n`α`. </code>",
  "1118":
@@ -2880,7 +2880,7 @@
  "1112": "<code>Subtype {α : Type} (p : α → Prop) : Type</code>",
  "1111": "<code>RawInput.birthYear (self : RawInput) : String</code>",
  "1110": "<code>RawInput.name (self : RawInput) : String</code>",
- "111": "<code>depth (p : Point3D) : Float</code>",
+ "111": "<code>pred (n : Nat) : Nat</code>",
  "1109": "<code>RawInput : Type</code>",
  "1108": "<code>Validate (ε α : Type) : Type</code>",
  "1107": "<code>Pair.pure {β α : Type} (x : β) : Pair α β</code>",
@@ -2893,9 +2893,10 @@
  "1102": "<code>Pair.second {α β : Type} (self : Pair α β) : β</code>",
  "1101": "<code>Pair.first {α β : Type} (self : Pair α β) : α</code>",
  "1100": "<code>Pair (α β : Type) : Type</code>",
- "110": "<code>pred (n : Nat) : Nat</code>",
+ "110":
+ "<code class=\"docstring\">Pattern matching. `match e, ... with | p, ... =&gt; f | ...` matches each given\nterm `e` against each pattern `p` of a match alternative. When all patterns\nof an alternative match, the `match` term evaluates to the value of the\ncorresponding right-hand side `f` with the pattern variables bound to the\nrespective matched values.\nIf used as `match h : e, ... with | p, ... =&gt; f | ...`, `h : e = p` is available\nwithin `f`.\n\nWhen not constructing a proof, `match` does not automatically substitute variables\nmatched on in dependent variables' types. Use `match (generalizing := true) ...` to\nenforce this.\n\nSyntax quotations can also be used in a pattern match.\nThis matches a `Syntax` value against quotations, pattern variables, or `_`.\n\nQuoted identifiers only match identical identifiers - custom matching such as by the preresolved\nnames only should be done explicitly.\n\n`Syntax.atom`s are ignored during matching by default except when part of a built-in literal.\nFor users introducing new atoms, we recommend wrapping them in dedicated syntax kinds if they\nshould participate in matching.\nFor example, in\n```lean\nsyntax \"c\" (\"foo\" &lt;|&gt; \"bar\") ...\n```\n`foo` and `bar` are indistinguishable during matching, but in\n```lean\nsyntax foo := \"foo\"\nsyntax \"c\" (foo &lt;|&gt; \"bar\") ...\n```\nthey are not.\n</code>",
  "11":
- "<code><span class=\"literal string\">\"Hello, Lean!\"</span> : String</code>",
+ "<code><span class=\"literal string\">\"Hello, world!\"</span> : String</code>",
  "1099":
  "<code>Seq.seq.{u, v} {f : Type u → Type v} [self : Seq f] {α β : Type u} : f (α → β) → (Unit → f α) → f β</code><span class=\"sep\"></span><code class=\"docstring\">The implementation of the `&lt;*&gt;` operator.\n\nIn a monad, `mf &lt;*&gt; mx` is the same as `do let f ← mf; x ← mx; pure (f x)`: it evaluates the\nfunction first, then the argument, and applies one to the other.\n\nTo avoid surprising evaluation semantics, `mx` is taken \"lazily\", using a `Unit → f α` function.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&lt;*&gt;` in identifiers is `seq`.</code>",
  "1098": "<code>f α</code>",
@@ -2910,8 +2911,7 @@
  "1091": "<code>Option (α✝ → β✝)</code>",
  "1090":
  "<code>{α β : Type u_1} → Option (α → β) → (Unit → Option α) → Option β</code><span class=\"sep\"></span><code class=\"docstring\">The implementation of the `&lt;*&gt;` operator.\n\nIn a monad, `mf &lt;*&gt; mx` is the same as `do let f ← mf; x ← mx; pure (f x)`: it evaluates the\nfunction first, then the argument, and applies one to the other.\n\nTo avoid surprising evaluation semantics, `mx` is taken \"lazily\", using a `Unit → f α` function.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&lt;*&gt;` in identifiers is `seq`.</code>",
- "109":
- "<code class=\"docstring\">Pattern matching. `match e, ... with | p, ... =&gt; f | ...` matches each given\nterm `e` against each pattern `p` of a match alternative. When all patterns\nof an alternative match, the `match` term evaluates to the value of the\ncorresponding right-hand side `f` with the pattern variables bound to the\nrespective matched values.\nIf used as `match h : e, ... with | p, ... =&gt; f | ...`, `h : e = p` is available\nwithin `f`.\n\nWhen not constructing a proof, `match` does not automatically substitute variables\nmatched on in dependent variables' types. Use `match (generalizing := true) ...` to\nenforce this.\n\nSyntax quotations can also be used in a pattern match.\nThis matches a `Syntax` value against quotations, pattern variables, or `_`.\n\nQuoted identifiers only match identical identifiers - custom matching such as by the preresolved\nnames only should be done explicitly.\n\n`Syntax.atom`s are ignored during matching by default except when part of a built-in literal.\nFor users introducing new atoms, we recommend wrapping them in dedicated syntax kinds if they\nshould participate in matching.\nFor example, in\n```lean\nsyntax \"c\" (\"foo\" &lt;|&gt; \"bar\") ...\n```\n`foo` and `bar` are indistinguishable during matching, but in\n```lean\nsyntax foo := \"foo\"\nsyntax \"c\" (foo &lt;|&gt; \"bar\") ...\n```\nthey are not.\n</code>",
+ "109": "<code>isZero (n : Nat) : Bool</code>",
  "1089": "<code>huldre : SizedCreature</code>",
  "1088": "<code>SizedCreature</code>",
  "1087": "<code>SizesMatch (sc : SizedCreature) : Prop</code>",
@@ -2922,7 +2922,8 @@
  "1082": "<code>Size.large : Size</code>",
  "1081": "<code>Size.medium : Size</code>",
  "1080": "<code>Size.small : Size</code>",
- "108": "<code>isZero (n : Nat) : Bool</code>",
+ "108":
+ "<code>Nat.succ (n : Nat) : Nat</code><span class=\"sep\"></span><code class=\"docstring\">The successor of a natural number `n`.\n\nUsing `Nat.succ n` should usually be avoided in favor of `n + 1`, which is the [simp normal\nform](https://lean-lang.org/doc/reference/4.26.0/find/?domain=Verso.Genre.Manual.section&name=simp-normal-forms).\n</code>",
  "1079": "<code>Size : Type</code>",
  "1078": "<code>SizedCreature.size (self : SizedCreature) : Size</code>",
  "1077":
@@ -2939,7 +2940,7 @@
  "<code>MonstrousAssistant.toMonster (self : MonstrousAssistant) : Monster</code>",
  "1070": "<code>Monster</code>",
  "107":
- "<code>Nat.succ (n : Nat) : Nat</code><span class=\"sep\"></span><code class=\"docstring\">The successor of a natural number `n`.\n\nUsing `Nat.succ n` should usually be avoided in favor of `n + 1`, which is the [simp normal\nform](https://lean-lang.org/doc/reference/4.26.0/find/?domain=Verso.Genre.Manual.section&name=simp-normal-forms).\n</code>",
+ "<code>Bool.true : Bool</code><span class=\"sep\"></span><code class=\"docstring\">The Boolean value `true`, not to be confused with the proposition `True`. </code>",
  "1069":
  "<code>MonstrousAssistant.mk (toMonster : Monster) (assistance payment : String) : MonstrousAssistant</code>",
  "1068":
@@ -2956,7 +2957,7 @@
  "1061": "<code>Helper.payment (self : Helper) : String</code>",
  "1060": "<code>Helper.assistance (self : Helper) : String</code>",
  "106":
- "<code>Bool.true : Bool</code><span class=\"sep\"></span><code class=\"docstring\">The Boolean value `true`, not to be confused with the proposition `True`. </code>",
+ "<code class=\"docstring\">In Lean, every concrete type other than the universes\nand every type constructor other than dependent arrows\nis an instance of a general family of type constructions known as inductive types.\nIt is remarkable that it is possible to construct a substantial edifice of mathematics\nbased on nothing more than the type universes, dependent arrow types, and inductive types;\neverything else follows from those.\nIntuitively, an inductive type is built up from a specified list of constructors.\nFor example, `List α` is the list of elements of type `α`, and is defined as follows:\n```\ninductive List (α : Type u) where\n| nil\n| cons (head : α) (tail : List α)\n```\nA list of elements of type `α` is either the empty list, `nil`,\nor an element `head : α` followed by a list `tail : List α`.\nSee [Inductive types](https://lean-lang.org/theorem_proving_in_lean4/inductive_types.html)\nfor more information.\n</code>",
  "1059": "<code>Helper : Type</code>",
  "1058": "<code>MythicalCreature.small (c : MythicalCreature) : Bool</code>",
  "1057":
@@ -2970,8 +2971,7 @@
  "1052": "<code>Monster.vulnerability (self : Monster) : String</code>",
  "1051": "<code>Monster : Type</code>",
  "1050": "<code>MythicalCreature</code>",
- "105":
- "<code class=\"docstring\">In Lean, every concrete type other than the universes\nand every type constructor other than dependent arrows\nis an instance of a general family of type constructions known as inductive types.\nIt is remarkable that it is possible to construct a substantial edifice of mathematics\nbased on nothing more than the type universes, dependent arrow types, and inductive types;\neverything else follows from those.\nIntuitively, an inductive type is built up from a specified list of constructors.\nFor example, `List α` is the list of elements of type `α`, and is defined as follows:\n```\ninductive List (α : Type u) where\n| nil\n| cons (head : α) (tail : List α)\n```\nA list of elements of type `α` is either the empty list, `nil`,\nor an element `head : α` followed by a list `tail : List α`.\nSee [Inductive types](https://lean-lang.org/theorem_proving_in_lean4/inductive_types.html)\nfor more information.\n</code>",
+ "105": "<code>Book.price (self : Book) : Float</code>",
  "1049": "<code>MythicalCreature.mk (large : Bool) : MythicalCreature</code>",
  "1048": "<code>MythicalCreature.large (self : MythicalCreature) : Bool</code>",
  "1047": "<code>MythicalCreature : Type</code>",
@@ -2986,7 +2986,7 @@
  "<code><span class=\"literal string\">\"Some string\"</span> : String</code>",
  "1041": "<code>str : String</code>",
  "1040": "<code>getTheAlpha {α : Type} : Nat × α ⊕ Nat × α → α</code>",
- "104": "<code>Book.price (self : Book) : Float</code>",
+ "104": "<code>Book.author (self : Book) : String</code>",
  "1039":
  "<code>getTheNat.{u_1} {α : Type} {β : Type u_1} : Nat × α ⊕ Nat × β → Nat</code>",
  "1038":
@@ -2999,7 +2999,7 @@
  "1032": "<code>Weekday.sunday : Weekday</code>",
  "1031": "<code>Weekday.saturday : Weekday</code>",
  "1030": "<code>Weekday.friday : Weekday</code>",
- "103": "<code>Book.author (self : Book) : String</code>",
+ "103": "<code>Book.title (self : Book) : String</code>",
  "1029": "<code>Weekday.thursday : Weekday</code>",
  "1028": "<code>Weekday.wednesday : Weekday</code>",
  "1027": "<code>Weekday.tuesday : Weekday</code>",
@@ -3010,7 +3010,8 @@
  "1022": "<code>equal? {α : Type} [BEq α] (x y : α) : Option α</code>",
  "1021": "<code>α → EST ε σ β</code>",
  "1020": "<code>EST ε σ α</code>",
- "102": "<code>Book.title (self : Book) : String</code>",
+ "102":
+ "<code>Book.makeBook (title author : String) (price : Float) : Book</code>",
  "1019": "<code>EST.pure {α ε σ : Type} (a : α) : EST ε σ α</code>",
  "1018": "<code>Void σ</code>",
  "1017":
@@ -3026,8 +3027,7 @@
  "<code>IO.Error : Type</code><span class=\"sep\"></span><code class=\"docstring\">Exceptions that may be thrown in the `IO` monad.\n\nMany of the constructors of `IO.Error` correspond to POSIX error numbers. In these cases, the\ndocumentation string lists POSIX standard error macros that correspond to the error. This list is\nnot necessarily exhaustive, and these constructor includes a field for the underlying error number.\n</code>",
  "1010":
  "<code>EIO (ε α : Type) : Type</code><span class=\"sep\"></span><code class=\"docstring\">A monad that can have side effects on the external world or throw exceptions of type `ε`.\n\n`BaseIO` is a version of this monad that cannot throw exceptions. `IO` sets the exception type to\n`IO.Error`.\n</code>",
- "101":
- "<code>Book.makeBook (title author : String) (price : Float) : Book</code>",
+ "101": "<code>Hamster.fluffy (self : Hamster) : Bool</code>",
  "1009": "<code class=\"docstring\">The universe parameter u</code>",
  "1008":
  "<code>List.isEmpty.{u} {α : Type u} : List α → Bool</code><span class=\"sep\"></span><code class=\"docstring\">Checks whether a list is empty.\n\n`O(1)`.\n\nExamples:\n* `[].isEmpty = true`\n* `[\"grape\"].isEmpty = false`\n* `[\"apple\", \"banana\"].isEmpty = false`\n</code>",
@@ -3045,7 +3045,7 @@
  "1001":
  "<code>{α : Type} → α → IO α</code><span class=\"sep\"></span><code class=\"docstring\">Given `a : α`, then `pure a : f α` represents an action that does nothing and returns `a`.\n\nExamples:\n* `(pure \"hello\" : Option String) = some \"hello\"`\n* `(pure \"hello\" : Except (Array String) String) = Except.ok \"hello\"`\n* `(pure \"hello\" : StateM Nat String).run 105 = (\"hello\", 105)`\n</code>",
  "1000": "<code>increment : State Nat Nat</code>",
- "100": "<code>Hamster.fluffy (self : Hamster) : Bool</code>",
+ "100": "<code>Hamster.name (self : Hamster) : String</code>",
  "10":
  "<code class=\"docstring\">`grind` is a tactic inspired by modern SMT solvers. **Picture a virtual whiteboard**:\nevery time grind discovers a new equality, inequality, or logical fact,\nit writes it on the board, groups together terms known to be equal,\nand lets each reasoning engine read from and contribute to the shared workspace.\nThese engines work together to handle equality reasoning, apply known theorems,\npropagate new facts, perform case analysis, and run specialized solvers\nfor domains like linear arithmetic and commutative rings.\n\n`grind` is *not* designed for goals whose search space explodes combinatorially,\nthink large pigeonhole instances, graph‑coloring reductions, high‑order N‑queens boards,\nor a 200‑variable Sudoku encoded as Boolean constraints.  Such encodings require\n thousands (or millions) of case‑splits that overwhelm `grind`’s branching search.\n\nFor **bit‑level or combinatorial problems**, consider using **`bv_decide`**.\n`bv_decide` calls a state‑of‑the‑art SAT solver (CaDiCaL) and then returns a\n*compact, machine‑checkable certificate*.\n\n### Equality reasoning\n\n`grind` uses **congruence closure** to track equalities between terms.\nWhen two terms are known to be equal, congruence closure automatically deduces\nequalities between more complex expressions built from them.\nFor example, if `a = b`, then congruence closure will also conclude that `f a` = `f b`\nfor any function `f`. This forms the foundation for efficient equality reasoning in `grind`.\nHere is an example:\n```\nexample (f : Nat → Nat) (h : a = b) : f (f b) = f (f a) := by\n  grind\n```\n\n### Applying theorems using E-matching\n\nTo apply existing theorems, `grind` uses a technique called **E-matching**,\nwhich finds matches for known theorem patterns while taking equalities into account.\nCombined with congruence closure, E-matching helps `grind` discover\nnon-obvious consequences of theorems and equalities automatically.\n\nConsider the following functions and theorems:\n```\ndef f (a : Nat) : Nat :=\n  a + 1\n\ndef g (a : Nat) : Nat :=\n  a - 1\n\n@[grind =]\ntheorem gf (x : Nat) : g (f x) = x := by\n  simp [f, g]\n```\nThe theorem `gf` asserts that `g (f x) = x` for all natural numbers `x`.\nThe attribute `[grind =]` instructs `grind` to use the left-hand side of the equation,\n`g (f x)`, as a pattern for E-matching.\nSuppose we now have a goal involving:\n```\nexample {a b} (h : f b = a) : g a = b := by\n  grind\n```\nAlthough `g a` is not an instance of the pattern `g (f x)`,\nit becomes one modulo the equation `f b = a`. By substituting `a`\nwith `f b` in `g a`, we obtain the term `g (f b)`,\nwhich matches the pattern `g (f x)` with the assignment `x := b`.\nThus, the theorem `gf` is instantiated with `x := b`,\nand the new equality `g (f b) = b` is asserted.\n`grind` then uses congruence closure to derive the implied equality\n`g a = g (f b)` and completes the proof.\n\nThe pattern used to instantiate theorems affects the effectiveness of `grind`.\nFor example, the pattern `g (f x)` is too restrictive in the following case:\nthe theorem `gf` will not be instantiated because the goal does not even\ncontain the function symbol `g`.\n\n```\nexample (h₁ : f b = a) (h₂ : f c = a) : b = c := by\n  grind\n```\n\nYou can use the command `grind_pattern` to manually select a pattern for a given theorem.\nIn the following example, we instruct `grind` to use `f x` as the pattern,\nallowing it to solve the goal automatically:\n```\ngrind_pattern gf =&gt; f x\n\nexample {a b c} (h₁ : f b = a) (h₂ : f c = a) : b = c := by\n  grind\n```\nYou can enable the option `trace.grind.ematch.instance` to make `grind` print a\ntrace message for each theorem instance it generates.\n\nYou can also specify a **multi-pattern** to control when `grind` should apply a theorem.\nA multi-pattern requires that all specified patterns are matched in the current context\nbefore the theorem is applied. This is useful for theorems such as transitivity rules,\nwhere multiple premises must be simultaneously present for the rule to apply.\nThe following example demonstrates this feature using a transitivity axiom for a binary relation `R`:\n```\nopaque R : Int → Int → Prop\naxiom Rtrans {x y z : Int} : R x y → R y z → R x z\n\ngrind_pattern Rtrans =&gt; R x y, R y z\n\nexample {a b c d} : R a b → R b c → R c d → R a d := by\n  grind\n```\nBy specifying the multi-pattern `R x y, R y z`, we instruct `grind` to\ninstantiate `Rtrans` only when both `R x y` and `R y z` are available in the context.\nIn the example, `grind` applies `Rtrans` to derive `R a c` from `R a b` and `R b c`,\nand can then repeat the same reasoning to deduce `R a d` from `R a c` and `R c d`.\n\nInstead of using `grind_pattern` to explicitly specify a pattern,\nyou can use the `@[grind]` attribute or one of its variants, which will use a heuristic to\ngenerate a (multi-)pattern. The complete list is available in the reference manual. The main ones are:\n\n- `@[grind →]` will select a multi-pattern from the hypotheses of the theorem (i.e. it will use the theorem for forwards reasoning).\n  In more detail, it will traverse the hypotheses of the theorem from left-to-right, and each time it encounters a minimal indexable\n  (i.e. has a constant as its head) subexpression which \"covers\" (i.e. fixes the value of) an argument which was not\n  previously covered, it will add that subexpression as a pattern, until all arguments have been covered.\n- `@[grind ←]` will select a multi-pattern from the conclusion of theorem (i.e. it will use the theorem for backwards reasoning).\n  This may fail if not all the arguments to the theorem appear in the conclusion.\n- `@[grind]` will traverse the conclusion and then the hypotheses left-to-right, adding patterns as they increase the coverage,\n  stopping when all arguments are covered.\n- `@[grind =]` checks that the conclusion of the theorem is an equality, and then uses the left-hand-side of the equality as a pattern.\n  This may fail if not all of the arguments appear in the left-hand-side.\n\nHere is the previous example again but using the attribute `[grind →]`\n```\nopaque R : Int → Int → Prop\n@[grind →] axiom Rtrans {x y z : Int} : R x y → R y z → R x z\n\nexample {a b c d} : R a b → R b c → R c d → R a d := by\n  grind\n```\n\nTo control theorem instantiation and avoid generating an unbounded number of instances,\n`grind` uses a generation counter. Terms in the original goal are assigned generation zero.\nWhen `grind` applies a theorem using terms of generation `≤ n`, any new terms it creates\nare assigned generation `n + 1`. This limits how far the tactic explores when applying\ntheorems and helps prevent an excessive number of instantiations.\n\n#### Key options:\n- `grind (ematch := &lt;num&gt;)` controls the number of E-matching rounds.\n- `grind [&lt;name&gt;, ...]` instructs `grind` to use the declaration `name` during E-matching.\n- `grind only [&lt;name&gt;, ...]` is like `grind [&lt;name&gt;, ...]` but does not use theorems tagged with `@[grind]`.\n- `grind (gen := &lt;num&gt;)` sets the maximum generation.\n\n### Linear integer arithmetic (`lia`)\n\n`grind` can solve goals that reduce to **linear integer arithmetic (LIA)** using an\nintegrated decision procedure called **`lia`**.  It understands\n\n* equalities   `p = 0`\n* inequalities  `p ≤ 0`\n* disequalities `p ≠ 0`\n* divisibility  `d ∣ p`\n\nThe solver incrementally assigns integer values to variables; when a partial\nassignment violates a constraint it adds a new, implied constraint and retries.\nThis *model-based* search is **complete for LIA**.\n\n#### Key options:\n\n* `grind -lia` disable the solver (useful for debugging)\n* `grind +qlia` accept rational models (shrinks the search space but is incomplete for ℤ)\n\n#### Examples:\n\n```\n-- Even + even is never odd.\nexample {x y : Int} : 2 * x + 4 * y ≠ 5 := by\n  grind\n\n-- Mixing equalities and inequalities.\nexample {x y : Int} :\n    2 * x + 3 * y = 0 → 1 ≤ x → y &lt; 1 := by\n  grind\n\n-- Reasoning with divisibility.\nexample (a b : Int) :\n    2 ∣ a + 1 → 2 ∣ b + a → ¬ 2 ∣ b + 2 * a := by\n  grind\n\nexample (x y : Int) :\n    27 ≤ 11*x + 13*y →\n    11*x + 13*y ≤ 45 →\n    -10 ≤ 7*x - 9*y →\n    7*x - 9*y ≤ 4 → False := by\n  grind\n\n-- Types that implement the `ToInt` type-class.\nexample (a b c : UInt64)\n    : a ≤ 2 → b ≤ 3 → c - a - b = 0 → c ≤ 5 := by\n  grind\n```\n\n### Algebraic solver (`ring`)\n\n`grind` ships with an algebraic solver nick-named **`ring`** for goals that can\nbe phrased as polynomial equations (or disequations) over commutative rings,\nsemirings, or fields.\n\n*Works out of the box*\nAll core numeric types and relevant Mathlib types already provide the required\ntype-class instances, so the solver is ready to use in most developments.\n\nWhat it can decide:\n\n* equalities of the form `p = q`\n* disequalities `p ≠ q`\n* basic reasoning under field inverses (`a / b := a * b⁻¹`)\n* goals that mix ring facts with other `grind` engines\n\n#### Key options:\n\n* `grind -ring` turn the solver off (useful when debugging)\n* `grind (ringSteps := n)` cap the number of steps performed by this procedure.\n\n#### Examples\n\n```\nopen Lean Grind\n\nexample [CommRing α] (x : α) : (x + 1) * (x - 1) = x^2 - 1 := by\n  grind\n\n-- Characteristic 256 means 16 * 16 = 0.\nexample [CommRing α] [IsCharP α 256] (x : α) :\n    (x + 16) * (x - 16) = x^2 := by\n  grind\n\n-- Works on built-in rings such as `UInt8`.\nexample (x : UInt8) : (x + 16) * (x - 16) = x^2 := by\n  grind\n\nexample [CommRing α] (a b c : α) :\n    a + b + c = 3 →\n    a^2 + b^2 + c^2 = 5 →\n    a^3 + b^3 + c^3 = 7 →\n    a^4 + b^4 = 9 - c^4 := by\n  grind\n\nexample [Field α] [NoNatZeroDivisors α] (a : α) :\n    1 / a + 1 / (2 * a) = 3 / (2 * a) := by\n  grind\n```\n\n### Other options\n\n- `grind (splits := &lt;num&gt;)` caps the *depth* of the search tree.  Once a branch performs `num` splits\n  `grind` stops splitting further in that branch.\n- `grind -splitIte` disables case splitting on if-then-else expressions.\n- `grind -splitMatch` disables case splitting on `match` expressions.\n- `grind +splitImp` instructs `grind` to split on any hypothesis `A → B` whose antecedent `A` is **propositional**.\n- `grind -linarith` disables the linear arithmetic solver for (ordered) modules and rings.\n\n### Additional Examples\n\n```\nexample {a b} {as bs : List α} : (as ++ bs ++ [b]).getLastD a = b := by\n  grind\n\nexample (x : BitVec (w+1)) : (BitVec.cons x.msb (x.setWidth w)) = x := by\n  grind\n\nexample (as : Array α) (lo hi i j : Nat) :\n    lo ≤ i → i &lt; j → j ≤ hi → j &lt; as.size → min lo (as.size - 1) ≤ i := by\n  grind\n```\n</code>",
  "1": "<code>Unit : Type</code>",

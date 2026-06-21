@@ -1,0 +1,2129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      (function(){
+  const {protocol:proto, host:hostName, pathname:path, search:srch, hash:hsh} = window.location;
+  if (!(path.endsWith("/") || path.endsWith(".html"))) {
+    window.location.replace(`${proto}//${hostName}${path}/${srch}${hsh}`);
+  }
+})()</script>
+    <base href="./../../"><meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>选择</title><link rel="stylesheet" href="book.css">
+    <link rel="stylesheet" href="verso-vars.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js" integrity="sha384-zbcZAIxlvJtNE3Dp5nxLXdXtXyxwOdnILY1TDPVmKFhl4r4nSUG1r8bcFXGVa4Te" crossorigin="anonymous"></script>
+    <script src="-verso-search/elasticlunr.min.js"></script>
+    <script src="-verso-search/fuzzysort.min.js"></script>
+    <script src="-verso-search/searchIndex.js"></script>
+    <script type="module" src="-verso-search/search-init.js"></script>
+    <link rel="stylesheet" href="-verso-search/search-box.css">
+    <link rel="stylesheet" href="-verso-search/search-highlight.css">
+    <link rel="stylesheet" href="-verso-search/domain-display.css">
+    <script src="-verso-data/popper.min.js"></script>
+    <script src="-verso-data/katex/math.js"></script>
+    <script src="-verso-data/tippy-bundle.umd.min.js"></script>
+    <script src="-verso-data/katex/katex.js"></script>
+    <link rel="stylesheet" href="-verso-data/tippy-border.css">
+    <link rel="stylesheet" href="-verso-data/katex/katex.css">
+    <style>
+div.paragraph > .eval-steps:not(:first-child), div.paragraph > .eval-steps:not(:first-child) > * {
+  margin-top: 0.5rem;
+}
+
+div.paragraph > .eval-steps:not(:last-child), div.paragraph > .eval-steps:not(:last-child) > * {
+  margin-bottom: 0.5rem;
+}
+
+.eval-steps .hl.lean.block {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.eval-steps .hl.lean.block:not(:last-child)::after {
+  content: "⟹";
+  display: block;
+  margin-left: 1em;
+  font-size: 175%;
+}
+
+</style><style>
+.shell-commands {
+
+}
+.shell-commands > * {
+  display: block;
+  white-space: pre;
+}
+.shell-commands .command::before {
+  content: "$ ";
+  font-weight: 600;
+}
+
+div.paragraph > .shell-commands:not(:first-child) {
+  margin-top: 0.5rem;
+}
+
+div.paragraph > .shell-commands:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+</style><style>
+.eq-steps .hl.lean.block {
+  background-color: #f6f7f6;
+  padding: 1rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+.eq-steps .reason {
+  font-style: italic;
+  margin-left: 2.5em;
+  display: flex;
+}
+.eq-steps .reason::before {
+  content: "={";
+  font-family: var(--verso-code-font-family);
+  font-style: normal;
+  font-weight: 600;
+  margin-right: 0.5em;
+  align-self: center;
+}
+.eq-steps .reason > p {
+  margin: 0;
+  max-width: 25em;
+  align-self: center;
+}
+.eq-steps .reason::after {
+  content: "}=";
+  font-family: var(--verso-code-font-family);
+  font-style: normal;
+  font-weight: 600;
+  margin-left: 1em;
+  align-self: center;
+}
+</style><style>/static/theme.css</style><style>
+.shell-command {
+
+}
+.shell-command.block > * {
+  display: block;
+  white-space: pre;
+}
+.shell-command .command .prompt {
+  font-weight: 600;
+}
+
+div.paragraph > .shell-command:not(:first-child) {
+  margin-top: 0.5rem;
+}
+
+div.paragraph > .shell-command:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+</style><style>
+.example-file {
+  white-space: normal;
+  font-family: var(--verso-structure-font-family);
+  margin: 1rem;
+  width: fit-content;
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+
+  /* These are necessary for the container to behave nicely on mobile */
+  overflow-x: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.example-file::before {
+  counter-reset: linenumber;
+}
+.example-file > .line {
+  display: block;
+  white-space: pre;
+  counter-increment: linenumber;
+  font-family: var(--verso-code-font-family);
+}
+.example-file > .line::before {
+  -webkit-user-select: none;
+  display: inline-block;
+  content: counter(linenumber);
+  border-right: 1px solid #ddd;
+  width: 2em;
+  padding-right: 0.25em;
+  margin-right: 0.25em;
+  font-family: var(--verso-code-font-family);
+  text-align: right;
+}
+.example-file > .line::after {
+  -webkit-user-select: none;
+  display: inline-block;
+  content: "⏎";
+  opacity: 0;
+}
+.example-file > .line:hover::after {
+  opacity: 1;
+}
+.example-file > .line:hover, .example-file > .line:hover::before {
+  background-color: #eee;
+}
+.example-file > .empty {
+  display: block;
+  white-space: pre;
+  font-family: var(--verso-code-font-family);
+  font-style: italic;
+}
+.example-file > .empty::before {
+  -webkit-user-select: none;
+  display: inline-block;
+  content: "";
+  border-right: 1px solid #ddd;
+  width: 2em;
+  padding-right: 0.25em;
+  margin-right: 0.25em;
+  font-family: var(--verso-code-font-family);
+  text-align: right;
+}
+</style><style>/static/fonts/source-code-pro/source-code-pro.css</style><style>
+.namedocs {
+  position: relative;
+  border: solid 1px #98B2C0;
+  border-radius: .5rem;
+  padding-top: var(--verso--box-padding);
+  margin-top: var(--verso--box-vertical-margin);
+  margin-bottom: var(--verso--box-vertical-margin);
+}
+
+.namedocs .text {
+  /* Causes margins on child elements to collapse inside the element, such
+     that the margins don't extend into parent with the background color.
+     The effect is that weird borders in the definition box don't happen anymore. */
+  display: flow-root;
+  /* Add a padding. this is the same as the margin applied to the first and last child.
+     The effect is that the padding looks the same size on all sides. */
+  padding: 0 var(--verso--box-padding);
+  border-top: 1px solid #98B2C0;
+}
+
+.namedocs .text > pre {
+  overflow-x: auto;
+}
+
+.namedocs .signature {
+  font-family: var(--verso-code-font-family);
+  margin-top: 0 !important;
+  margin-left: var(--verso--box-padding) !important;
+  margin-bottom: .75rem !important;
+}
+
+.namedocs .label {
+  display: block;
+  font-size: small;
+  font-family: var(--verso-structure-font-family);
+  position: absolute;
+  top: -0.65rem;
+  left: 1rem;
+  background: #fff;
+  padding: 0 .5rem .125rem;
+  border: 1px solid #98B2C0;
+  border-radius: 1rem;
+  color: #555;
+}
+
+.namedocs h1 {
+  font-size: inherit;
+  font-weight: bold
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.namedocs > .text .constructor {
+  padding-top: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.namedocs > .text .constructor::before {
+  content: '| ';
+  display: block;
+  font-family: var(--verso-code-font-family);
+  font-weight: bold;
+  float: left;
+  width: 0.5rem;
+  white-space: pre;
+}
+
+.namedocs > .text .constructor .name-and-type {
+  padding-left: 0.5rem;
+  float: left;
+  margin-top: 0;
+  max-width: calc(100% - 1rem);
+}
+.namedocs > .text .constructor .docs {
+  clear: both;
+  padding-left: 1rem;
+}
+
+/* These margins work together with the padding on .text */
+.namedocs .text > :first-child {
+  margin-top: var(--verso--box-padding);
+}
+.namedocs .text > :last-child {
+  margin-bottom: var(--verso--box-padding);
+}
+
+.namedocs .methods td, .namedocs .fields td {
+  vertical-align: top;
+}
+.namedocs .inheritance {
+  vertical-align: top;
+  font-size: smaller;
+  font-family: var(--verso-structure-font-family);
+}
+.namedocs .inheritance ol {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+.namedocs .inheritance ol li {
+  list-style-type: none;
+  display: inline-block;
+}
+.namedocs .inheritance ol li::after {
+  content: " > "
+}
+.namedocs .inheritance ol li:last-child::after {
+  content: "";
+}
+
+.namedocs .extends {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+.namedocs .extends li {
+  list-style-type: none;
+  display: inline-block;
+}
+
+.namedocs .extends li label {
+  padding-right: 1rem;
+}
+
+.namedocs .subdocs .name-and-type {
+  font-size: 1rem;
+  margin-left: 0;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0.5rem;
+}
+
+.namedocs .subdocs .docs {
+  margin-left: 1.5rem;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0.5rem;
+}
+
+.namedocs:has(input[data-parent-idx]) [data-inherited-from] {
+  transition-property: opacity, display;
+  transition-duration: 0.4s;
+  transition-behavior: allow-discrete;
+  @starting-style { opacity: 0 !important; }
+}
+
+#this-page-items .tactic-name { font-weight: bold; }
+.namedocs:has(input[data-parent-idx="0"]) [data-inherited-from="0"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="0"]:checked) [data-inherited-from="0"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="0"]:checked):has(.inheritance[data-inherited-from="0"]:hover) [data-inherited-from]:not([data-inherited-from="0"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="1"]) [data-inherited-from="1"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="1"]:checked) [data-inherited-from="1"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="1"]:checked):has(.inheritance[data-inherited-from="1"]:hover) [data-inherited-from]:not([data-inherited-from="1"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="2"]) [data-inherited-from="2"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="2"]:checked) [data-inherited-from="2"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="2"]:checked):has(.inheritance[data-inherited-from="2"]:hover) [data-inherited-from]:not([data-inherited-from="2"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="3"]) [data-inherited-from="3"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="3"]:checked) [data-inherited-from="3"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="3"]:checked):has(.inheritance[data-inherited-from="3"]:hover) [data-inherited-from]:not([data-inherited-from="3"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="4"]) [data-inherited-from="4"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="4"]:checked) [data-inherited-from="4"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="4"]:checked):has(.inheritance[data-inherited-from="4"]:hover) [data-inherited-from]:not([data-inherited-from="4"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="5"]) [data-inherited-from="5"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="5"]:checked) [data-inherited-from="5"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="5"]:checked):has(.inheritance[data-inherited-from="5"]:hover) [data-inherited-from]:not([data-inherited-from="5"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="6"]) [data-inherited-from="6"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="6"]:checked) [data-inherited-from="6"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="6"]:checked):has(.inheritance[data-inherited-from="6"]:hover) [data-inherited-from]:not([data-inherited-from="6"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="7"]) [data-inherited-from="7"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="7"]:checked) [data-inherited-from="7"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="7"]:checked):has(.inheritance[data-inherited-from="7"]:hover) [data-inherited-from]:not([data-inherited-from="7"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="8"]) [data-inherited-from="8"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="8"]:checked) [data-inherited-from="8"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="8"]:checked):has(.inheritance[data-inherited-from="8"]:hover) [data-inherited-from]:not([data-inherited-from="8"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="9"]) [data-inherited-from="9"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="9"]:checked) [data-inherited-from="9"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="9"]:checked):has(.inheritance[data-inherited-from="9"]:hover) [data-inherited-from]:not([data-inherited-from="9"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="10"]) [data-inherited-from="10"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="10"]:checked) [data-inherited-from="10"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="10"]:checked):has(.inheritance[data-inherited-from="10"]:hover) [data-inherited-from]:not([data-inherited-from="10"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="11"]) [data-inherited-from="11"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="11"]:checked) [data-inherited-from="11"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="11"]:checked):has(.inheritance[data-inherited-from="11"]:hover) [data-inherited-from]:not([data-inherited-from="11"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="12"]) [data-inherited-from="12"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="12"]:checked) [data-inherited-from="12"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="12"]:checked):has(.inheritance[data-inherited-from="12"]:hover) [data-inherited-from]:not([data-inherited-from="12"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="13"]) [data-inherited-from="13"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="13"]:checked) [data-inherited-from="13"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="13"]:checked):has(.inheritance[data-inherited-from="13"]:hover) [data-inherited-from]:not([data-inherited-from="13"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="14"]) [data-inherited-from="14"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="14"]:checked) [data-inherited-from="14"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="14"]:checked):has(.inheritance[data-inherited-from="14"]:hover) [data-inherited-from]:not([data-inherited-from="14"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="15"]) [data-inherited-from="15"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="15"]:checked) [data-inherited-from="15"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="15"]:checked):has(.inheritance[data-inherited-from="15"]:hover) [data-inherited-from]:not([data-inherited-from="15"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="16"]) [data-inherited-from="16"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="16"]:checked) [data-inherited-from="16"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="16"]:checked):has(.inheritance[data-inherited-from="16"]:hover) [data-inherited-from]:not([data-inherited-from="16"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="17"]) [data-inherited-from="17"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="17"]:checked) [data-inherited-from="17"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="17"]:checked):has(.inheritance[data-inherited-from="17"]:hover) [data-inherited-from]:not([data-inherited-from="17"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="18"]) [data-inherited-from="18"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="18"]:checked) [data-inherited-from="18"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="18"]:checked):has(.inheritance[data-inherited-from="18"]:hover) [data-inherited-from]:not([data-inherited-from="18"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="19"]) [data-inherited-from="19"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="19"]:checked) [data-inherited-from="19"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="19"]:checked):has(.inheritance[data-inherited-from="19"]:hover) [data-inherited-from]:not([data-inherited-from="19"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="20"]) [data-inherited-from="20"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="20"]:checked) [data-inherited-from="20"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="20"]:checked):has(.inheritance[data-inherited-from="20"]:hover) [data-inherited-from]:not([data-inherited-from="20"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="21"]) [data-inherited-from="21"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="21"]:checked) [data-inherited-from="21"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="21"]:checked):has(.inheritance[data-inherited-from="21"]:hover) [data-inherited-from]:not([data-inherited-from="21"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="22"]) [data-inherited-from="22"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="22"]:checked) [data-inherited-from="22"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="22"]:checked):has(.inheritance[data-inherited-from="22"]:hover) [data-inherited-from]:not([data-inherited-from="22"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="23"]) [data-inherited-from="23"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="23"]:checked) [data-inherited-from="23"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="23"]:checked):has(.inheritance[data-inherited-from="23"]:hover) [data-inherited-from]:not([data-inherited-from="23"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="24"]) [data-inherited-from="24"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="24"]:checked) [data-inherited-from="24"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="24"]:checked):has(.inheritance[data-inherited-from="24"]:hover) [data-inherited-from]:not([data-inherited-from="24"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="25"]) [data-inherited-from="25"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="25"]:checked) [data-inherited-from="25"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="25"]:checked):has(.inheritance[data-inherited-from="25"]:hover) [data-inherited-from]:not([data-inherited-from="25"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="26"]) [data-inherited-from="26"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="26"]:checked) [data-inherited-from="26"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="26"]:checked):has(.inheritance[data-inherited-from="26"]:hover) [data-inherited-from]:not([data-inherited-from="26"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="27"]) [data-inherited-from="27"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="27"]:checked) [data-inherited-from="27"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="27"]:checked):has(.inheritance[data-inherited-from="27"]:hover) [data-inherited-from]:not([data-inherited-from="27"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="28"]) [data-inherited-from="28"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="28"]:checked) [data-inherited-from="28"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="28"]:checked):has(.inheritance[data-inherited-from="28"]:hover) [data-inherited-from]:not([data-inherited-from="28"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="29"]) [data-inherited-from="29"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="29"]:checked) [data-inherited-from="29"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="29"]:checked):has(.inheritance[data-inherited-from="29"]:hover) [data-inherited-from]:not([data-inherited-from="29"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="30"]) [data-inherited-from="30"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="30"]:checked) [data-inherited-from="30"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="30"]:checked):has(.inheritance[data-inherited-from="30"]:hover) [data-inherited-from]:not([data-inherited-from="30"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="31"]) [data-inherited-from="31"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="31"]:checked) [data-inherited-from="31"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="31"]:checked):has(.inheritance[data-inherited-from="31"]:hover) [data-inherited-from]:not([data-inherited-from="31"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="32"]) [data-inherited-from="32"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="32"]:checked) [data-inherited-from="32"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="32"]:checked):has(.inheritance[data-inherited-from="32"]:hover) [data-inherited-from]:not([data-inherited-from="32"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="33"]) [data-inherited-from="33"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="33"]:checked) [data-inherited-from="33"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="33"]:checked):has(.inheritance[data-inherited-from="33"]:hover) [data-inherited-from]:not([data-inherited-from="33"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="34"]) [data-inherited-from="34"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="34"]:checked) [data-inherited-from="34"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="34"]:checked):has(.inheritance[data-inherited-from="34"]:hover) [data-inherited-from]:not([data-inherited-from="34"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="35"]) [data-inherited-from="35"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="35"]:checked) [data-inherited-from="35"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="35"]:checked):has(.inheritance[data-inherited-from="35"]:hover) [data-inherited-from]:not([data-inherited-from="35"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="36"]) [data-inherited-from="36"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="36"]:checked) [data-inherited-from="36"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="36"]:checked):has(.inheritance[data-inherited-from="36"]:hover) [data-inherited-from]:not([data-inherited-from="36"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="37"]) [data-inherited-from="37"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="37"]:checked) [data-inherited-from="37"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="37"]:checked):has(.inheritance[data-inherited-from="37"]:hover) [data-inherited-from]:not([data-inherited-from="37"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="38"]) [data-inherited-from="38"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="38"]:checked) [data-inherited-from="38"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="38"]:checked):has(.inheritance[data-inherited-from="38"]:hover) [data-inherited-from]:not([data-inherited-from="38"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="39"]) [data-inherited-from="39"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="39"]:checked) [data-inherited-from="39"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="39"]:checked):has(.inheritance[data-inherited-from="39"]:hover) [data-inherited-from]:not([data-inherited-from="39"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="40"]) [data-inherited-from="40"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="40"]:checked) [data-inherited-from="40"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="40"]:checked):has(.inheritance[data-inherited-from="40"]:hover) [data-inherited-from]:not([data-inherited-from="40"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="41"]) [data-inherited-from="41"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="41"]:checked) [data-inherited-from="41"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="41"]:checked):has(.inheritance[data-inherited-from="41"]:hover) [data-inherited-from]:not([data-inherited-from="41"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="42"]) [data-inherited-from="42"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="42"]:checked) [data-inherited-from="42"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="42"]:checked):has(.inheritance[data-inherited-from="42"]:hover) [data-inherited-from]:not([data-inherited-from="42"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="43"]) [data-inherited-from="43"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="43"]:checked) [data-inherited-from="43"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="43"]:checked):has(.inheritance[data-inherited-from="43"]:hover) [data-inherited-from]:not([data-inherited-from="43"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="44"]) [data-inherited-from="44"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="44"]:checked) [data-inherited-from="44"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="44"]:checked):has(.inheritance[data-inherited-from="44"]:hover) [data-inherited-from]:not([data-inherited-from="44"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="45"]) [data-inherited-from="45"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="45"]:checked) [data-inherited-from="45"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="45"]:checked):has(.inheritance[data-inherited-from="45"]:hover) [data-inherited-from]:not([data-inherited-from="45"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="46"]) [data-inherited-from="46"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="46"]:checked) [data-inherited-from="46"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="46"]:checked):has(.inheritance[data-inherited-from="46"]:hover) [data-inherited-from]:not([data-inherited-from="46"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="47"]) [data-inherited-from="47"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="47"]:checked) [data-inherited-from="47"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="47"]:checked):has(.inheritance[data-inherited-from="47"]:hover) [data-inherited-from]:not([data-inherited-from="47"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="48"]) [data-inherited-from="48"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="48"]:checked) [data-inherited-from="48"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="48"]:checked):has(.inheritance[data-inherited-from="48"]:hover) [data-inherited-from]:not([data-inherited-from="48"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="49"]) [data-inherited-from="49"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="49"]:checked) [data-inherited-from="49"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="49"]:checked):has(.inheritance[data-inherited-from="49"]:hover) [data-inherited-from]:not([data-inherited-from="49"]) {
+  opacity: 0.5;
+}
+</style><style>
+table.tabular {
+  margin: auto;
+  border-spacing: 1rem;
+}
+table.tabular.left-align {
+  margin-right: auto;
+  margin-left: 0;
+}
+table.tabular.center-align {
+  margin: auto;
+}
+table.tabular.right-align {
+  margin-left auto;
+  margin-right: 0;
+}
+table.tabular td, table.tabular th {
+  text-align: left;
+  vertical-align: top;
+}
+table.tabular td > p:first-child, table.tabular th > p:first-child {
+  margin-top: 0;
+}
+table.tabular td > p:last-child, table.tabular th > p:first-child {
+  margin-bottom: 0;
+}
+</style><style>/static/fonts/source-serif/source-serif-text.css</style><style>/static/fonts/source-sans/source-sans-3.css</style><style>
+.shell-command {
+
+}
+.shell-command.inline > * {
+  display: inline;
+  white-space: pre;
+}
+.shell-command.inline .command::before {
+  content: "$ ";
+  font-weight: 600;
+}
+</style><style>/static/fonts/noto-sans-mono/noto-sans-mono.css</style><style>
+div.paragraph > .eq-steps:not(:first-child) {
+  margin-top: 0.5rem;
+}
+
+div.paragraph > .eq-steps:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+</style><style>
+
+.hl.lean {
+  white-space: pre;
+  font-weight: normal;
+  font-style: normal;
+  font-size: inherit;
+}
+
+.hl.lean .keyword {
+  color: var(--verso-code-keyword-color,);
+  font-weight: var(--verso-code-keyword-weight, bold);
+  font-style: var(--verso-code-keyword-style, normal);
+  font-family: var(--verso-code-keyword-font-family,);
+}
+
+.hl.lean .const {
+  color: var(--verso-code-const-color,);
+  font-weight: var(--verso-code-const-weight, normal);
+  font-style: var(--verso-code-const-style, normal);
+  font-family: var(--verso-code-const-font-family,);
+}
+
+.hl.lean .var {
+  color: var(--verso-code-var-color,);
+  font-weight: var(--verso-code-var-weight, normal);
+  font-style: var(--verso-code-var-style, italic);
+  font-family: var(--verso-code-var-font-family,);
+
+  position: relative;
+}
+
+.hl.lean .literal, .hl.lean .unknown {
+  color: var(--verso-code-color,);
+  font-weight: normal;
+  font-style: normal;
+  font-family: var(--verso-code-font-family,);
+}
+
+.hover-container {
+  width: 0;
+  height: 0;
+  position: relative;
+  display: inline;
+}
+
+.hl.lean a {
+  color: inherit;
+  text-decoration: currentcolor underline dotted;
+}
+
+.hl.lean a:hover {
+  text-decoration: currentcolor underline solid;
+}
+
+.hl.lean .hover-info {
+  white-space: normal;
+}
+
+.hl.lean .token .hover-info {
+  display: none;
+  position: absolute;
+  background-color: #e5e5e5;
+  border: 1px solid black;
+  padding: 0.5rem;
+  z-index: 300;
+}
+
+.hl.lean .hover-info.messages {
+  max-height: 10rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  padding: 0 0.5rem 0 0;
+  display: block;
+}
+
+.hl.lean .hover-info code {
+  white-space: pre-wrap;
+  background: none;
+  color: black;
+}
+
+.hl.lean .hover-info.messages > code {
+  padding: 0.5rem;
+  display: block;
+  width: fit-content;
+}
+
+.hl.lean .hover-info.messages > code:only-child {
+  margin: 0;
+}
+
+.hl.lean .hover-info.messages > code {
+  margin: 0.1rem;
+}
+
+.hl.lean .hover-info.messages > code:not(:first-child) {
+  margin-top: 0rem;
+}
+
+.hl.lean {
+}
+
+.hl.lean.block {
+  display: block;
+}
+
+.hl.lean.inline {
+  display: inline;
+  white-space: pre-wrap;
+}
+
+.hl.lean * {
+}
+
+.hl.lean .token {
+  transition: all 0.25s; /* Slight fade for highlights */
+}
+
+@media (hover: hover) {
+  .hl.lean .token.binding-hl, .hl.lean .literal.string:hover, .hl.lean .token.typed:hover {
+    background-color: #eee;
+    border-radius: 2px;
+    transition: none;
+  }
+}
+
+
+.hl.lean .has-info .token:not(.tactic-state):not(.tactic-state *), .hl.lean .has-info .inter-text:not(.tactic-state):not(.tactic-state *) {
+  text-decoration-style: wavy;
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.hl.lean .has-info .hover-info {
+  display: none;
+  position: absolute;
+  transform: translate(0.25rem, 0.3rem);
+  border: 1px solid black;
+  padding: 0.5rem;
+  z-index: 400;
+  text-align: left;
+}
+
+.hl.lean .has-info.error :not(.tactic-state):not(.tactic-state *){
+  text-decoration-color: red;
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.error:hover {
+    background-color: #ffb3b3;
+  }
+}
+
+.hl.lean .hover-info.messages > code.error {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid #ffb3b3;
+}
+
+.tippy-box[data-theme~='error'] .hl.lean .hover-info.messages > code.error {
+  background: none;
+  border: none;
+}
+
+.error .verso-message, .error .verso-message .token, .error .verso-message label {
+  color: var(--verso-error-color);
+}
+
+.error .verso-message .case-label:has(input[type="checkbox"])::before {
+  background-color: var(--verso-error-color) !important;
+}
+
+.hl.lean .has-info.warning :not(.tactic-state):not(.tactic-state *) {
+  text-decoration-color: var(--verso-warning-indicator-color);
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.warning:hover {
+    background-color:var(--verso-warning-color);
+  }
+}
+
+.hl.lean .hover-info.messages > code.warning {
+  background-color: var(--verso-warning-color);
+}
+
+.lean-output {
+  border-left: 0.2em solid transparent;
+  padding: 0 0 0 0.5em;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.lean-output.error {
+  border-color: var(--verso-error-indicator-color);
+}
+
+.lean-output.information {
+  border-color: var(--verso-info-indicator-color);
+}
+
+.lean-output.warning {
+  border-color: var(--verso-warning-indicator-color);
+}
+
+.hl.lean .hover-info.messages > code.error {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid var(--verso-warning-color);
+}
+
+.tippy-box[data-theme~='warning'] .hl.lean .hover-info.messages > code.warning {
+  background: none;
+  border: none;
+}
+
+
+.hl.lean .has-info.information :not(.tactic-state):not(.tactic-state *) {
+  text-decoration-color: var(--verso-info-indicator-color, blue);
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.information:hover {
+    background-color: #4777ff;
+  }
+}
+
+
+.hl.lean .hover-info.messages > code.information {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid #4777ff;
+}
+
+.tippy-box[data-theme~='info'] .hl.lean .hover-info.messages > code.information {
+  background: none;
+  border: none;
+}
+
+.hl.lean div.docstring {
+  font-family: var(--verso-text-font-family, sans-serif);
+  white-space: normal;
+  max-width: calc(min(40rem, 90vw));
+  width: max-content;
+}
+
+.hl.lean div.docstring > :last-child {
+  margin-bottom: 0;
+}
+
+.hl.lean div.docstring > :first-child {
+  margin-top: 0;
+}
+
+.hl.lean .hover-info .sep {
+  display: block;
+  width: auto;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0;
+  height: 1px;
+  border-top: 1px solid #ccc;
+}
+
+.hl.lean code {
+  font-family: var(--verso-code-font-family);
+}
+
+.hl.lean .tactic-state {
+  display: none;
+  position: relative;
+  width: fit-content;
+  border: 1px solid #888888;
+  border-radius: 0.1rem;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  background-color: #ffffff;
+}
+
+.hl.lean.popup .tactic-state {
+  position: static;
+  display: block;
+  width: auto;
+  border: none;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  background-color: #ffffff;
+}
+
+
+.hl.lean .tactic {
+  position: relative;
+  display: inline;
+  vertical-align: top;
+  /* Without these, mobile Safari will start making font sizes inconsistent when its text size adjustment feature is triggered.*/
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+.hl.lean .tactic:has(.tactic-toggle:checked) {
+  display: inline-grid;
+  grid-template-columns: 1fr;
+}
+
+.hl.lean .tactic-toggle:checked ~ .tactic-state {
+  display: inline-block;
+  vertical-align: top;
+  grid-row: 2;
+  justify-self: start;
+}
+
+.hl.lean .tactic > label {
+  position: relative;
+  grid-row: 1;
+  display: inline;
+}
+
+@media (hover: hover) {
+  .hl.lean .tactic:has(.tactic-toggle:not(:checked)) > label:hover {
+    background-color: #eeeeee;
+  }
+}
+
+.hl.lean .tactic-toggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  z-index: -10;
+}
+
+.hl.lean .tactic > label::after {
+  content: "";
+  border: 1px solid #bbbbbb;
+  /* These need to be em, not rem, to scale with the font */
+  border-radius: 1em;
+  height: 0.25em;
+  vertical-align: middle;
+  width: 0.6em;
+  margin-left: 0.1em;
+  margin-right: 0.1em;
+  display: inline-block;
+  transition: all 0.5s;
+}
+
+/*
+@media (hover: hover) {
+  .hl.lean .tactic > label:hover::after {
+    border: 1px solid #aaaaaa;
+    background-color: #aaaaaa;
+    transition: all 0.5s;
+  }
+}
+*/
+
+.hl.lean .tactic > label:has(+ .tactic-toggle:checked)::after {
+  border: 1px solid #999999;
+  background-color: #999999;
+  transition: all 0.5s;
+}
+
+.hl.lean .tactic-state .goal + .goal {
+  margin-top: 1.5em;
+}
+
+/*
+Some CSS frameworks customize details/summary in ways not compatible with Verso's output.
+*/
+
+.hl.lean details {
+  display: block !important;
+  margin: 0;
+}
+
+.hl.lean details summary {
+  display: list-item !important;
+  margin: 0;
+}
+
+.hl.lean details summary:focus {
+  outline: none;
+  outline-offset: none;
+  color: inherit;
+}
+
+.hl.lean ul > li {
+  margin-bottom: 0;
+}
+
+.hl.lean details summary::marker {
+  display: inline !important;
+}
+
+.hl.lean details > summary:first-of-type {
+  list-style-type: disclosure-closed;
+  list-style-position: inside;
+}
+
+.hl.lean details[open] > summary:first-of-type {
+  list-style-type: disclosure-open;
+}
+
+.hl.lean details summary::before, .hl.lean details summary::after {
+  content: "" !important;
+  background: none;
+  display: none;
+}
+
+.hl.lean .tactic-state summary {
+  /* These need to be em, not rem, to scale with the font */
+  margin-left: -0.5em;
+}
+
+.hl.lean .tactic-state details {
+  /* These need to be em, not rem, to scale with the font */
+  padding-left: 0.5em;
+}
+
+.hl.lean .case-label {
+  display: block;
+  position: relative;
+}
+
+.hl.lean .case-label input[type="checkbox"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  z-index: -10;
+}
+
+.hl.lean .case-label:has(input[type="checkbox"])::before {
+  display: inline-block;
+  background-color: black;
+  content: ' ';
+  transition: ease 0.2s;
+  margin-right: 0.7em;
+  clip-path: polygon(100% 0, 0 0, 50% 100%);
+  width: 0.6em;
+  height: 0.6em;
+  vertical-align: middle;
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]:not(:checked))::before {
+  transform: rotate(-90deg);
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]) {
+
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]:checked) {
+
+}
+
+
+.hl.lean .labeled-case > :not(:first-child) {
+  max-height: 0px;
+  display: block;
+  overflow: hidden;
+  transition: max-height 0.1s ease-in;
+  /* These need to be em, not rem, to scale with the font */
+  margin-left: 0.5em;
+  margin-top: 0.1em;
+}
+
+.hl.lean .labeled-case:has(.case-label input[type="checkbox"]:checked) > :not(:first-child) {
+  max-height: 100%;
+}
+
+
+.hl.lean .goal-name::before {
+  font-style: normal;
+  content: "case ";
+}
+
+.hl.lean .goal-name {
+  font-style: italic;
+  font-family: var(--verso-code-font-family);
+  color: inherit;
+}
+
+.hl.lean .hypotheses {
+  display: table;
+}
+
+.hl.lean .hypothesis {
+  display: table-row;
+}
+
+.hl.lean .hypothesis > * {
+  display: table-cell;
+}
+
+
+.hl.lean .hypotheses .colon {
+  text-align: center;
+  /* This needs to be em, not rem, to scale with the font */
+  min-width: 1em;
+}
+
+.hl.lean .hypotheses .name {
+  text-align: right;
+}
+
+.hl.lean .hypotheses .name,
+.hl.lean .hypotheses .type,
+.hl.lean .conclusion .type {
+  font-family: var(--verso-code-font-family);
+}
+
+.tippy-box {
+  /* Without these, mobile Safari will start making font sizes inconsistent when its text size adjustment feature is triggered.*/
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+
+}
+
+.tippy-box[data-theme~='lean'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 1px solid black;
+}
+.tippy-box[data-theme~='lean'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #e5e5e5;
+}
+
+.tippy-box[data-theme~='message'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #e5e5e5;
+  border-width: 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='top'] > .tippy-arrow::after {
+  bottom: -11px;
+  border-width: 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-width: 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='bottom'] > .tippy-arrow::after {
+  top: -11px;
+  border-width: 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #e5e5e5;
+  border-width: 11px 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='left'] > .tippy-arrow::after {
+  right: -11px;
+  border-width: 11px 0 11px 11px;
+}
+
+.tippy-box[data-theme~='message'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #e5e5e5;
+  border-width: 11px 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='right'] > .tippy-arrow::after {
+  left: -11px;
+  border-width: 11px 11px 11px 0;
+}
+
+
+
+.tippy-box[data-theme~='warning'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid var(--verso-warning-color);
+}
+
+.tippy-box[data-theme~='error'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid #f7a7af;
+}
+
+.tippy-box[data-theme~='info'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid #99b3c2;
+}
+
+.tippy-box[data-theme~='tactic'] {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: white;
+}
+
+.extra-doc-links {
+  list-style-type: none;
+  margin-left: 0;
+  padding: 0;
+}
+
+.extra-doc-links > li {
+  display: inline-block;
+}
+
+.extra-doc-links > li:not(:last-child)::after {
+  content: '|';
+  display: inline-block;
+  margin: 0 0.25em;
+}
+
+.verso-message .trace {
+  display: block;
+}
+
+.verso-message .trace > summary::marker {
+  color: var(--verso-text-color);
+}
+
+.verso-message .trace-children {
+  margin: 0;
+  padding: 0;
+}
+
+.verso-message .trace-children > li {
+  list-style-type: none;
+  margin-left: 1.5em;
+}
+
+.verso-message .trace-children > li:not(:has(.trace)) {
+  margin-left: 0;
+}
+
+.verso-message .trace-class {
+  color: color-mix(in srgb, currentColor 70%, transparent);
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.verso-message .text {
+  white-space: pre-wrap;
+}
+
+</style><script>
+      
+window.onload = () => {
+
+    // Don't show hovers inside of closed tactic states
+    function blockedByTactic(elem) {
+      let parent = elem.parentNode;
+      while (parent && "classList" in parent) {
+        if (parent.classList.contains("tactic")) {
+          const toggle = parent.querySelector("input.tactic-toggle");
+          if (toggle) {
+            return !toggle.checked;
+          }
+        }
+        parent = parent.parentNode;
+      }
+      return false;
+    }
+
+    function blockedByTippy(elem) {
+      // Don't show a new hover until the old ones are all closed.
+      // Scoped to the nearest "top-level block" to avoid being O(n) in the size of the document.
+      var block = elem;
+      const topLevel = new Set(["section", "body", "html", "nav", "header"]);
+      while (block.parentNode && !topLevel.has(block.parentNode.nodeName.toLowerCase())) {
+        block = block.parentNode;
+      }
+      for (const child of block.querySelectorAll(".token, .has-info")) {
+        if (child._tippy && child._tippy.state.isVisible) { return true };
+      }
+      return false;
+    }
+
+    for (const c of document.querySelectorAll(".hl.lean .token")) {
+        if (c.dataset.binding != "") {
+            c.addEventListener("mouseover", (event) => {
+                if (blockedByTactic(c)) {return;}
+                const context = c.closest(".hl.lean").dataset.leanContext;
+                for (const example of document.querySelectorAll(".hl.lean")) {
+                    if (example.dataset.leanContext == context) {
+                        for (const tok of example.querySelectorAll(".token")) {
+                            if (c.dataset.binding == tok.dataset.binding) {
+                                tok.classList.add("binding-hl");
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        c.addEventListener("mouseout", (event) => {
+            for (const tok of document.querySelectorAll(".hl.lean .token")) {
+                tok.classList.remove("binding-hl");
+            }
+        });
+    }
+    /* Render docstrings */
+    if ('undefined' !== typeof marked) {
+        for (const d of document.querySelectorAll("code.docstring, pre.docstring")) {
+            const str = d.innerText;
+            const html = marked.parse(str);
+            const rendered = document.createElement("div");
+            rendered.classList.add("docstring");
+            rendered.innerHTML = html;
+            d.parentNode.replaceChild(rendered, d);
+        }
+    }
+    // Add hovers
+    let docsJson = "-verso-docs.json";
+    fetch(docsJson).then((resp) => resp.json()).then((versoDocData) => {
+
+      function hideParentTooltips(element) {
+        let parent = element.parentElement;
+        while (parent) {
+          const tippyInstance = parent._tippy;
+          if (tippyInstance) {
+            tippyInstance.hide();
+          }
+          parent = parent.parentElement;
+        }
+      }
+
+
+
+      const defaultTippyProps = {
+        /* DEBUG -- remove the space: * /
+        onHide(any) { return false; },
+        trigger: "click",
+        // */
+        /* theme: "lean", */
+        maxWidth: "none",
+        appendTo: () => document.body,
+        interactive: true,
+        delay: [100, null],
+        /* ignoreAttributes: true, */
+        followCursor: 'initial',
+        onShow(inst) {
+          if (inst.reference.className == 'tactic') {
+
+            const toggle = inst.reference.querySelector("input.tactic-toggle");
+            if (toggle && toggle.checked) {
+              return false;
+            }
+            hideParentTooltips(inst.reference);
+            //if (blockedByTippy(inst.reference)) { return false; }
+
+          } else if (inst.reference.querySelector(".hover-info") || "versoHover" in inst.reference.dataset) {
+            if (blockedByTactic(inst.reference)) { return false };
+            if (blockedByTippy(inst.reference)) { return false; }
+          } else { // Nothing to show here!
+            return false;
+          }
+        },
+        content (tgt) {
+          const content = document.createElement("span");
+          if (tgt.className == 'tactic') {
+            const state = tgt.querySelector(".tactic-state").cloneNode(true);
+            state.style.display = "block";
+            content.appendChild(state);
+            content.style.display = "block";
+            content.className = "hl lean popup";
+          } else {
+            content.className = "hl lean";
+            content.style.display = "block";
+            content.style.maxHeight = "300px";
+            content.style.overflowY = "auto";
+            content.style.overflowX = "hidden";
+            const hoverId = tgt.dataset.versoHover;
+            const hoverInfo = tgt.querySelector(".hover-info");
+            if (hoverId) { // Docstrings from the table
+              // TODO stop doing an implicit conversion from string to number here
+              let data = versoDocData[hoverId];
+              if (data) {
+                const info = document.createElement("span");
+                info.className = "hover-info";
+                info.style.display = "block";
+                info.innerHTML = data;
+                content.appendChild(info);
+                /* Render docstrings - TODO server-side */
+                if ('undefined' !== typeof marked) {
+                    for (const d of content.querySelectorAll("code.docstring, pre.docstring")) {
+                        const str = d.innerText;
+                        const html = marked.parse(str);
+                        const rendered = document.createElement("div");
+                        rendered.classList.add("docstring");
+                        rendered.innerHTML = html;
+                        d.parentNode.replaceChild(rendered, d);
+                    }
+                }
+              } else {
+                content.innerHTML = "Failed to load doc ID: " + hoverId;
+              }
+            } else if (hoverInfo) { // The inline info, still used for compiler messages
+              content.appendChild(hoverInfo.cloneNode(true));
+            }
+            const extraLinks = tgt.parentElement.dataset['versoLinks'];
+            if (extraLinks) {
+              try {
+                const extras = JSON.parse(extraLinks);
+                const links = document.createElement('ul');
+                links.className = 'extra-doc-links';
+                extras.forEach((l) => {
+                  const li = document.createElement('li');
+                  li.innerHTML = "<a href=\"" + l['href'] + "\" title=\"" + l.long + "\">" + l.short + "</a>";
+                  links.appendChild(li);
+                });
+                content.appendChild(links);
+              } catch (error) {
+                console.error(error);
+              }
+            }
+          }
+          return content;
+        }
+      };
+
+
+      document.querySelectorAll('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'lean');
+      });
+      document.querySelectorAll('.hl.lean .has-info.warning').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'warning message');
+      });
+      document.querySelectorAll('.hl.lean .has-info.information').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'info message');
+      });
+      document.querySelectorAll('.hl.lean .has-info.error').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'error message');
+      });
+      document.querySelectorAll('.hl.lean .tactic').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'tactic');
+      });
+      let insts = tippy('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .has-info, .hl.lean .tactic, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort', defaultTippyProps);
+  });
+}
+</script>
+    <script defer="defer" data-domain="lean-lang.org" src="https://plausible.io/js/script.outbound-links.js"></script>
+    <script src="-verso-search/search-highlight.js" defer="defer"></script>
+    </head>
+  <body>
+    <header>
+      <div class="header-logo-wrapper">
+        <a href="" id="logo"><img src="static/lean_logo.svg"></a></div>
+      <div class="header-title-wrapper">
+        <a href="" class="header-title"><h1>
+            Lean 函数式编程</h1>
+          </a></div>
+      </header>
+    <label for="toggle-toc" id="toggle-toc-click"><span class="line line1"></span><span class="line line2"></span><span class="line line3"></span></label><div class="with-toc">
+      <div class="toc-backdrop" onclick="document.getElementById('toggle-toc-click')?.click()"></div>
+      <nav id="toc">
+        <input type="checkbox" id="toggle-toc"><div class="first">
+          <a href="" class="toc-title"><h1>
+              Lean 函数式编程</h1>
+            </a><div class="split-tocs">
+            <div class="split-toc book">
+              <div class="title">
+                <label for="--verso-manual-toc-----bookRoot" class="toggle-split-toc"><input type="checkbox" class="toggle-split-toc" id="--verso-manual-toc-----bookRoot"></label><span class="">Table of Contents</span></div>
+              <table><tr class="unnumbered"><td class="num"><td><a href="Introduction/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u5f15__u8a00_">引言</a></td></tr><tr class="unnumbered"><td class="num"><td><a href="Acknowledgments/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u81f4__u8c22_">致谢</a></td></tr><tr class="numbered"><td class="num">1.</td><td><a href="Getting-to-Know-Lean/#getting-to-know">初识 Lean</a></td></tr><tr class="numbered"><td class="num">2.</td><td><a href="Hello___-World___/#hello-world">Hello, World!</a></td></tr><tr class="unnumbered"><td class="num"><td><a href="Interlude___-Propositions___-Proofs___-and-Indexing/#props-proofs-indexing">插曲：命题、证明与索引</a></td></tr><tr class="numbered"><td class="num">3.</td><td><a href="Overloading-and-Type-Classes/#type-classes">重载与类型类</a></td></tr><tr class="numbered"><td class="num">4.</td><td><a href="Monads/#monads">单子</a></td></tr><tr class="current numbered"><td class="num">5.</td><td><a href="Functors___-Applicative-Functors___-and-Monads/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u51fd__u5b50__u3001__u5e94__u7528__u51fd__u5b50__u4e0e__u5355__u5b50_">函子、应用函子与单子</a></td></tr><tr class="numbered"><td class="num">6.</td><td><a href="Monad-Transformers/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u5355__u5b50__u8f6c__u6362__u5668_">单子转换器</a></td></tr><tr class="numbered"><td class="num">7.</td><td><a href="Programming-with-Dependent-Types/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u4f9d__u503c__u7c7b__u578b__u7f16__u7a0b_">依值类型编程</a></td></tr><tr class="unnumbered"><td class="num"><td><a href="Interlude___-Tactics___-Induction___-and-Proofs/#tactics-induction-proofs">插曲：策略、归纳与证明</a></td></tr><tr class="numbered"><td class="num">8.</td><td><a href="Programming___-Proving___-and-Performance/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u7f16__u7a0b__u3001__u8bc1__u660e__u4e0e__u6027__u80fd_">编程、证明与性能</a></td></tr><tr class="numbered"><td class="num">9.</td><td><a href="Next-Steps/#next-steps">后续学习</a></td></tr></table></div>
+            <div class="split-toc">
+              <div class="title">
+                <label for="--verso-manual-toc-Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u51fd__u5b50__u3001__u5e94__u7528__u51fd__u5b50__u4e0e__u5355__u5b50_" class="toggle-split-toc"><input type="checkbox" class="toggle-split-toc" id="--verso-manual-toc-Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u51fd__u5b50__u3001__u5e94__u7528__u51fd__u5b50__u4e0e__u5355__u5b50_" checked="checked"></label><span class="number">5.</span> <span class=""><a href="Functors___-Applicative-Functors___-and-Monads/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u51fd__u5b50__u3001__u5e94__u7528__u51fd__u5b50__u4e0e__u5355__u5b50_">函子、应用函子与单子</a></span></div>
+              <table><tr class="numbered"><td class="num">5.1.</td><td><a href="Functors___-Applicative-Functors___-and-Monads/Structures-and-Inheritance/#structure-inheritance">结构与继承</a></td></tr><tr class="numbered"><td class="num">5.2.</td><td><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#applicative">应用函子</a></td></tr><tr class="numbered"><td class="num">5.3.</td><td><a href="Functors___-Applicative-Functors___-and-Monads/The-Applicative-Contract/#applicative-laws">应用函子约定</a></td></tr><tr class="current numbered"><td class="num">5.4.</td><td><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#alternative">选择</a></td></tr><tr class="numbered"><td class="num">5.5.</td><td><a href="Functors___-Applicative-Functors___-and-Monads/Universes/#universe-levels">宇宙</a></td></tr><tr class="numbered"><td class="num">5.6.</td><td><a href="Functors___-Applicative-Functors___-and-Monads/The-Complete-Definitions/#complete-definitions">完整定义</a></td></tr><tr class="numbered"><td class="num">5.7.</td><td><a href="Functors___-Applicative-Functors___-and-Monads/Summary/#structure-applicative-monad-summary">小结</a></td></tr></table></div>
+            <div class="split-toc">
+              <div class="title">
+                <label for="--verso-manual-toc-alternative" class="toggle-split-toc"><input type="checkbox" class="toggle-split-toc" id="--verso-manual-toc-alternative" checked="checked"></label><span class="number">5.4.</span> <span class="current"><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#alternative">选择</a></span></div>
+              <table><tr class="numbered"><td class="num">5.4.1.</td><td><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#alternative-recovery">从失败中恢复</a></td></tr><tr class="numbered"><td class="num">5.4.2.</td><td><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#Alternative"><code>Alternative</code> 类</a></td></tr><tr class="numbered"><td class="num">5.4.3.</td><td><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#Alternative-exercises">练习</a></td></tr></table></div>
+            </div>
+          </div>
+        <div class="last">
+          <ul id="meta-links">
+            <li>
+              <a href="https://github.com/MiemieMethod/fp-lean">Source Code</a></li>
+            <li>
+              <a href="https://github.com/MiemieMethod/fp-lean/issues">Report Issues</a></li>
+            </ul>
+          </div>
+        </nav>
+      <main><div class="content-wrapper">
+          <nav class="prev-next-buttons">
+            <a class="local-button active" href="Functors___-Applicative-Functors___-and-Monads/The-Applicative-Contract/#applicative-laws" rel="prev" title="5.3. 应用函子约定"><span class="arrow">←</span><span class="where">5.3. 应用函子约定</span></a><a class="local-button active" href="Functors___-Applicative-Functors___-and-Monads/Universes/#universe-levels" rel="next" title="5.5. 宇宙"><span class="where">5.5. 宇宙</span><span class="arrow">→</span></a></nav>
+          <section>
+            <h1>
+              5.4. 选择<span class="permalink-widget inline"><a href="find/?domain=Verso.Genre.Manual.section&amp;name=alternative" title="Permalink">🔗</a></span></h1>
+            <section>
+              <h2 id="alternative-recovery">
+                5.4.1. 从失败中恢复<span class="permalink-widget inline"><a href="find/?domain=Verso.Genre.Manual.section&amp;name=alternative-recovery" title="Permalink">🔗</a></span></h2>
+              <p>
+                <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span></code> 也可用于输入有多种可接受方式的情形。
+对于输入表单 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-RawInput" data-verso-hover="1109">RawInput</span></code>，一组实现旧系统约定的替代业务规则可以如下：</p>
+              <ol start="1">
+                <li>
+                  <p>
+                    所有人类用户都必须提供四位数字的出生年份。</p>
+                  </li>
+                <li>
+                  <p>
+                    由于较早记录不完整，1970 年以前出生的用户不需要提供姓名。</p>
+                  </li>
+                <li>
+                  <p>
+                    1970 年以后出生的用户必须提供姓名。</p>
+                  </li>
+                <li>
+                  <p>
+                    公司应当将 <code class="hl lean inline" data-lean-context="examples"><span class="literal string token" data-binding="" data-verso-hover="1195">"FIRM"</span></code> 输入为其诞生年份，并提供公司名称。</p>
+                  </li>
+                </ol>
+              <p>
+                对于 1970 年出生的用户，并未作出任何特别安排。
+预期他们要么放弃，要么谎报自己的出生年份，要么打电话联系。
+公司认为这是开展业务可以接受的成本。</p>
+              <p>
+                下面的归纳类型刻画了可由这些给定规则产生的值：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.abbrev-26149">abbrev</span><span class="inter-text"> </span><span class="const token" data-binding="const-NonEmptyString" data-verso-hover="1196" id="NonEmptyString">NonEmptyString</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><span class="unknown token" data-binding="">{</span><span class="var token" data-binding="var-_uniq.85501" data-verso-hover="47">s</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">//</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.85501" data-verso-hover="47">s</span><span class="inter-text"> </span><span class="unknown token" data-binding="">≠</span><span class="inter-text"> </span><span class="literal string token" data-binding="" data-verso-hover="229">""</span><span class="unknown token" data-binding="">}</span><span class="inter-text">
+
+</span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.inductive-26200" data-verso-hover="106">inductive</span><span class="inter-text"> </span><span class="const token" data-binding="const-LegacyCheckedInput" data-verso-hover="1197">LegacyCheckedInput</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-null-26229">where</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="const token" data-binding="const-LegacyCheckedInput.humanBefore1970" data-verso-hover="1198" id="LegacyCheckedInput_u2e_humanBefore1970">humanBefore1970</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.85560" data-verso-hover="1199">birthYear</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="unknown token" data-binding="">{</span><span class="var token" data-binding="var-_uniq.85515" data-verso-hover="5">y</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">//</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.85515" data-verso-hover="5">y</span><span class="inter-text"> </span><span class="unknown token" data-binding="">&gt;</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="5">999</span><span class="inter-text"> </span><span class="unknown token" data-binding="">∧</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.85515" data-verso-hover="5">y</span><span class="inter-text"> </span><span class="unknown token" data-binding="">&lt;</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="5">1970</span><span class="unknown token" data-binding="">}</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text">
+    </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text">
+    </span><span class="const token" data-binding="const-LegacyCheckedInput" data-verso-hover="1197">LegacyCheckedInput</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="const token" data-binding="const-LegacyCheckedInput.humanAfter1970" data-verso-hover="1200" id="LegacyCheckedInput_u2e_humanAfter1970">humanAfter1970</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.85596" data-verso-hover="1201">birthYear</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="unknown token" data-binding="">{</span><span class="var token" data-binding="var-_uniq.85576" data-verso-hover="5">y</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">//</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.85576" data-verso-hover="5">y</span><span class="inter-text"> </span><span class="unknown token" data-binding="">&gt;</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="5">1970</span><span class="unknown token" data-binding="">}</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text">
+    </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#NonEmptyString" title="Definition of example"><span class="const token" data-binding="const-NonEmptyString" data-verso-hover="1196">NonEmptyString</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text">
+    </span><span class="const token" data-binding="const-LegacyCheckedInput" data-verso-hover="1197">LegacyCheckedInput</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="const token" data-binding="const-LegacyCheckedInput.company" data-verso-hover="1202" id="LegacyCheckedInput_u2e_company">company</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+    </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#NonEmptyString" title="Definition of example"><span class="const token" data-binding="const-NonEmptyString" data-verso-hover="1196">NonEmptyString</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text">
+    </span><span class="const token" data-binding="const-LegacyCheckedInput" data-verso-hover="1197">LegacyCheckedInput</span><span class="inter-text">
+</span><span class="keyword token" data-binding="kw-occ-null-26522">deriving</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Interacting-with-Lean/#Repr___mk" title="Documentation for Repr in Lean Language Reference"><span class="const token" data-binding="const-Repr" data-verso-hover="210">Repr</span></a></code><p>
+                然而，这些规则的验证器更为复杂，因为它必须处理全部三种情况。
+虽然它可以写成一系列嵌套的 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">if</span></code> 表达式，但更容易的做法是分别设计这三种情况，然后将它们组合起来。
+这需要一种在保留错误消息的同时从失败中恢复的机制：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-26677">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-Validate.orElse" data-verso-hover="1203" id="Validate_u2e_orElse">Validate.orElse</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.88372" data-verso-hover="1147">a</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88366" data-verso-hover="125">ε</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88370" data-verso-hover="125">α</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.88376" data-verso-hover="1204">b</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/The-Unit-Type/#Unit" title="Documentation for Unit in Lean Language Reference"><span class="const token" data-binding="const-Unit" data-verso-hover="195">Unit</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88366" data-verso-hover="125">ε</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88370" data-verso-hover="125">α</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+    </span><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88366" data-verso-hover="125">ε</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88370" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+  </span><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Pattern-Matching/#Lean___Parser___Term___match" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.match-26782" data-verso-hover="110">match</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88372" data-verso-hover="1147">a</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Pattern-Matching/#Lean___Parser___Term___match" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.match-26782" data-verso-hover="110">with</span></a><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#Validate_u2e_ok" title="Definition of example"><span class="const token" data-binding="const-Validate.ok" data-verso-hover="1127">.ok</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88393" data-verso-hover="133">x</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#Validate_u2e_ok" title="Definition of example"><span class="const token" data-binding="const-Validate.ok" data-verso-hover="1127">.ok</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88393" data-verso-hover="133">x</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="const token" data-binding="const-Validate.errors" data-verso-hover="1128">.errors</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88406" data-verso-hover="1130">errs1</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text">
+    </span><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Pattern-Matching/#Lean___Parser___Term___match" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.match-26839" data-verso-hover="110">match</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88376" data-verso-hover="1204">b</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Pattern-Matching/#Lean___Parser___Term___match" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.match-26839" data-verso-hover="110">with</span></a><span class="inter-text">
+    </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#Validate_u2e_ok" title="Definition of example"><span class="const token" data-binding="const-Validate.ok" data-verso-hover="1127">.ok</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88418" data-verso-hover="133">x</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#Validate_u2e_ok" title="Definition of example"><span class="const token" data-binding="const-Validate.ok" data-verso-hover="1127">.ok</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88418" data-verso-hover="133">x</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="const token" data-binding="const-Validate.errors" data-verso-hover="1128">.errors</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88431" data-verso-hover="1130">errs2</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><span class="const token" data-binding="const-Validate.errors" data-verso-hover="1128">.errors</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.88406" data-verso-hover="1130">errs1</span><span class="inter-text"> </span><span class="unknown token" data-binding="">++</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88431" data-verso-hover="1130">errs2</span><span class="unknown token" data-binding="">)</span></code><p>
+                这种从失败中恢复的模式非常常见，因此 Lean 为它提供了内置语法，并将其附属于名为 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-FakeOrElse.OrElse" data-verso-hover="1205">OrElse</span></code> 的类型类：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.classTk-26996">class</span><span class="inter-text"> </span><span class="const token" data-binding="const-FakeOrElse.OrElse" data-verso-hover="1205">OrElse</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.88785" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="58">Type</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-null-27021">where</span><span class="inter-text">
+  </span><span class="const token" data-binding="const-FakeOrElse.OrElse.orElse" data-verso-hover="1206" id="FakeOrElse_u2e_OrElse_u2e_orElse">orElse</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88785" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/The-Unit-Type/#Unit" title="Documentation for Unit in Lean Language Reference"><span class="const token" data-binding="const-Unit" data-verso-hover="195">Unit</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88785" data-verso-hover="125">α</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88785" data-verso-hover="125">α</span></code><p>
+                表达式 <code class="hl lean inline" data-lean-context="examples"><span class="var token" data-binding="var-_uniq.88958" data-verso-hover="133">E1</span><span class="inter-text"> </span><span class="unknown token" data-binding="">&lt;|&gt;</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88960" data-verso-hover="133">E2</span></code> 是 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-OrElse.orElse" data-verso-hover="1207">OrElse.orElse</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88958" data-verso-hover="133">E1</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.fun-27285">fun</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.88960" data-verso-hover="133">E2</span><span class="unknown token" data-binding="">)</span></code> 的简写。
+<code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span></code> 的 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-FakeOrElse.OrElse" data-verso-hover="1205">OrElse</span></code> 实例允许将此语法用于错误恢复：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.instance-27381">instance</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-OrElse" data-verso-hover="1208">OrElse</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.89037" data-verso-hover="125">ε</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.89042" data-verso-hover="125">α</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.whereStructInst-27416">where</span><span class="inter-text">
+  </span><span class="const token" data-binding="const-OrElse.orElse" data-verso-hover="1209">orElse</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#Validate_u2e_orElse" title="Definition of example"><span class="const token" data-binding="const-Validate.orElse" data-verso-hover="1203">Validate.orElse</span></a></code><p>
+                <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-LegacyCheckedInput" data-verso-hover="1197">LegacyCheckedInput</span></code> 的验证器可以由每个构造子的验证器构造出来。
+公司的规则规定，诞生年份应当是字符串 <code class="hl lean inline" data-lean-context="examples"><span class="literal string token" data-binding="" data-verso-hover="1195">"FIRM"</span></code>，并且名称应当非空。
+然而，构造子 <code class="hl lean inline" data-lean-context="examples"><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#LegacyCheckedInput_u2e_company" title="Definition of example"><span class="const token" data-binding="const-LegacyCheckedInput.company" data-verso-hover="1202">LegacyCheckedInput.company</span></a></code> 完全没有诞生年份的表示，因此没有简单的方法用 <code class="hl lean inline" data-lean-context="examples"><span class="unknown token" data-binding="">&lt;*&gt;</span></code> 来完成这一点。
+关键是使用一个带有 <code class="hl lean inline" data-lean-context="examples"><span class="unknown token" data-binding="">&lt;*&gt;</span></code> 的函数，并让它忽略自己的参数。</p>
+              <p>
+                检查一个布尔条件成立、但不在类型中记录关于这一事实的任何证据，可以用 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-checkThat" data-verso-hover="1210">checkThat</span></code> 完成：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-27503">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-checkThat" data-verso-hover="1210">checkThat</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.89104" data-verso-hover="336">condition</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Booleans/#Bool___false" title="Documentation for Bool in Lean Language Reference"><span class="const token" data-binding="const-Bool" data-verso-hover="48">Bool</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.89106" data-verso-hover="1137">field</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#Field" title="Definition of example"><span class="const token" data-binding="const-Field" data-verso-hover="1136">Field</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.89108" data-verso-hover="47">msg</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+    </span><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#Field" title="Definition of example"><span class="const token" data-binding="const-Field" data-verso-hover="1136">Field</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">×</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/The-Unit-Type/#Unit" title="Documentation for Unit in Lean Language Reference"><span class="const token" data-binding="const-Unit" data-verso-hover="195">Unit</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+  </span><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Conditionals/#termIfThenElse" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-termIfThenElse-27614" data-verso-hover="21">if</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.89104" data-verso-hover="336">condition</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Conditionals/#termIfThenElse" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-termIfThenElse-27614" data-verso-hover="21">then</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Pure___mk" title="Documentation for Pure.pure in Lean Language Reference"><span class="const token" data-binding="const-Pure.pure" data-verso-hover="301">pure</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Conditionals/#termIfThenElse" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-termIfThenElse-27614" data-verso-hover="21">else</span></a><span class="inter-text"> </span><span class="const token" data-binding="const-reportError" data-verso-hover="1135">reportError</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.89106" data-verso-hover="1137">field</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.89108" data-verso-hover="47">msg</span></code><p>
+                <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Provisional.checkCompany" data-verso-hover="1211">checkCompany</span></code> 的这个定义使用 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-checkThat" data-verso-hover="1210">checkThat</span></code>，然后丢弃所得的 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/The-Unit-Type/#Unit" title="Documentation for Unit in Lean Language Reference"><span class="const token" data-binding="const-Unit" data-verso-hover="195">Unit</span></a></code> 值：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-27745">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-Provisional.checkCompany" data-verso-hover="1211">checkCompany</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.89344" data-verso-hover="1158">input</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-RawInput" data-verso-hover="1109">RawInput</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+    </span><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#Field" title="Definition of example"><span class="const token" data-binding="const-Field" data-verso-hover="1136">Field</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">×</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="const token" data-binding="const-LegacyCheckedInput" data-verso-hover="1197">LegacyCheckedInput</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+  </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Pure___mk" title="Documentation for Pure.pure in Lean Language Reference"><span class="const token" data-binding="const-Pure.pure" data-verso-hover="301">pure</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.fun-27844">fun</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.89438" data-verso-hover="1212">name</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#LegacyCheckedInput_u2e_company" title="Definition of example"><span class="const token" data-binding="const-LegacyCheckedInput.company" data-verso-hover="1202">.company</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.89438" data-verso-hover="1212">name</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">&lt;*&gt;</span><span class="inter-text">
+    </span><span class="const token" data-binding="const-checkThat" data-verso-hover="1210">checkThat</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.89344" data-verso-hover="1158">input</span><span class="unknown token" data-binding="">.</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#RawInput_u2e_birthYear" title="Definition of example"><span class="const token" data-binding="const-RawInput.birthYear" data-verso-hover="1111">birthYear</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">==</span><span class="inter-text"> </span><span class="literal string token" data-binding="" data-verso-hover="1195">"FIRM"</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+      </span><span class="literal string token" data-binding="" data-verso-hover="1151">"birth year"</span><span class="inter-text"> </span><span class="literal string token" data-binding="" data-verso-hover="1213">"FIRM if a company"</span><span class="inter-text"> </span><span class="unknown token" data-binding="">&lt;*&gt;</span><span class="inter-text">
+    </span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#checkName" title="Definition of example"><span class="const token" data-binding="const-checkName" data-verso-hover="1140">checkName</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.89344" data-verso-hover="1158">input</span><span class="unknown token" data-binding="">.</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#RawInput_u2e_name" title="Definition of example"><span class="const token" data-binding="const-RawInput.name" data-verso-hover="1110">name</span></a></code><p>
+                然而，这一定义相当冗长。
+它可以通过两种方式简化。
+第一种是将第一次使用的 <code class="hl lean inline" data-lean-context="examples"><span class="unknown token" data-binding="">&lt;*&gt;</span></code> 替换为一个专门版本，该版本会自动忽略第一个参数返回的值，称为 <code class="hl lean inline" data-lean-context="examples"><span class="unknown token" data-binding="">*&gt;</span></code>。
+这个运算符同样由一个类型类控制，该类型类称为 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-FakeSeqRight.SeqRight" data-verso-hover="1214">SeqRight</span></code>，并且 <code class="hl lean inline" data-lean-context="examples"><span class="var token" data-binding="var-_uniq.89863" data-verso-hover="1098">E1</span><span class="inter-text"> </span><span class="unknown token" data-binding="">*&gt;</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.89865" data-verso-hover="612">E2</span></code> 是 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#SeqRight___mk" title="Documentation for SeqRight.seqRight in Lean Language Reference"><span class="const token" data-binding="const-SeqRight.seqRight" data-verso-hover="1215">SeqRight.seqRight</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.89863" data-verso-hover="1098">E1</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.fun-28219">fun</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.89865" data-verso-hover="612">E2</span><span class="unknown token" data-binding="">)</span></code> 的语法糖：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.classTk-28459">class</span><span class="inter-text"> </span><span class="const token" data-binding="const-FakeSeqRight.SeqRight" data-verso-hover="1214">SeqRight</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.90043" data-verso-hover="611">f</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="58">Type</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="58">Type</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-null-28494">where</span><span class="inter-text">
+  </span><span class="const token" data-binding="const-FakeSeqRight.SeqRight.seqRight" data-verso-hover="1216">seqRight</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.90043" data-verso-hover="611">f</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.90052" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/The-Unit-Type/#Unit" title="Documentation for Unit in Lean Language Reference"><span class="const token" data-binding="const-Unit" data-verso-hover="195">Unit</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.90043" data-verso-hover="611">f</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.90061" data-verso-hover="125">β</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.90043" data-verso-hover="611">f</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.90061" data-verso-hover="125">β</span></code><p>
+                存在一个用 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-MonadApplicative.seq" data-verso-hover="1164">seq</span></code> 定义 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-FakeSeqRight.SeqRight.seqRight" data-verso-hover="1216">seqRight</span></code> 的默认实现：<code>seqRight (a : f α) (b : Unit → f β) : f β := pure (fun _ x =&gt; x) &lt;*&gt; a &lt;*&gt; b ()</code>。</p>
+              <p>
+                使用 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-FakeSeqRight.SeqRight.seqRight" data-verso-hover="1216">seqRight</span></code> 后，<code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Provisional2.checkCompany" data-verso-hover="1211">checkCompany</span></code> 变得更简单：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-28648">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-Provisional2.checkCompany" data-verso-hover="1211">checkCompany</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.90248" data-verso-hover="1158">input</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-RawInput" data-verso-hover="1109">RawInput</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+    </span><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#Field" title="Definition of example"><span class="const token" data-binding="const-Field" data-verso-hover="1136">Field</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">×</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="const token" data-binding="const-LegacyCheckedInput" data-verso-hover="1197">LegacyCheckedInput</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+  </span><span class="const token" data-binding="const-checkThat" data-verso-hover="1210">checkThat</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.90248" data-verso-hover="1158">input</span><span class="unknown token" data-binding="">.</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#RawInput_u2e_birthYear" title="Definition of example"><span class="const token" data-binding="const-RawInput.birthYear" data-verso-hover="1111">birthYear</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">==</span><span class="inter-text"> </span><span class="literal string token" data-binding="" data-verso-hover="1195">"FIRM"</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+    </span><span class="literal string token" data-binding="" data-verso-hover="1151">"birth year"</span><span class="inter-text"> </span><span class="literal string token" data-binding="" data-verso-hover="1213">"FIRM if a company"</span><span class="inter-text"> </span><span class="unknown token" data-binding="">*&gt;</span><span class="inter-text">
+  </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Pure___mk" title="Documentation for Pure.pure in Lean Language Reference"><span class="const token" data-binding="const-Pure.pure" data-verso-hover="301">pure</span></a><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#LegacyCheckedInput_u2e_company" title="Definition of example"><span class="const token" data-binding="const-LegacyCheckedInput.company" data-verso-hover="1202">.company</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">&lt;*&gt;</span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#checkName" title="Definition of example"><span class="const token" data-binding="const-checkName" data-verso-hover="1140">checkName</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.90248" data-verso-hover="1158">input</span><span class="unknown token" data-binding="">.</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#RawInput_u2e_name" title="Definition of example"><span class="const token" data-binding="const-RawInput.name" data-verso-hover="1110">name</span></a></code><p>
+                还可以再做一次简化。
+对于每个 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Applicative___mk" title="Documentation for Applicative in Lean Language Reference"><span class="const token" data-binding="const-Applicative" data-verso-hover="1046">Applicative</span></a></code>，<code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Pure___mk" title="Documentation for Pure.pure in Lean Language Reference"><span class="const token" data-binding="const-Pure.pure" data-verso-hover="301">pure</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.113408" data-verso-hover="595">f</span><span class="inter-text"> </span><span class="unknown token" data-binding="">&lt;*&gt;</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.113415" data-verso-hover="616">E</span></code> 等价于 <code class="hl lean inline" data-lean-context="examples"><span class="var token" data-binding="var-_uniq.113408" data-verso-hover="595">f</span><span class="inter-text"> </span><span class="unknown token" data-binding="">&lt;$&gt;</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.113415" data-verso-hover="616">E</span></code>。
+换言之，使用 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-MonadApplicative.seq" data-verso-hover="1164">seq</span></code> 来应用一个通过 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-ApplicativeToFunctor.Applicative.pure" data-verso-hover="1171">pure</span></code> 放入 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-ApplicativeToFunctor.Applicative" data-verso-hover="1172">Applicative</span></code> 类型中的函数，是过度的；该函数本可以直接使用 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Functor___mk" title="Documentation for Functor.map in Lean Language Reference"><span class="const token" data-binding="const-Functor.map" data-verso-hover="597">Functor.map</span></a></code> 来应用。
+这种简化得到：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-28937">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-checkCompany" data-verso-hover="1211" id="checkCompany">checkCompany</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.90800" data-verso-hover="1158">input</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-RawInput" data-verso-hover="1109">RawInput</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+    </span><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#Field" title="Definition of example"><span class="const token" data-binding="const-Field" data-verso-hover="1136">Field</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">×</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="const token" data-binding="const-LegacyCheckedInput" data-verso-hover="1197">LegacyCheckedInput</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+  </span><span class="const token" data-binding="const-checkThat" data-verso-hover="1210">checkThat</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.90800" data-verso-hover="1158">input</span><span class="unknown token" data-binding="">.</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#RawInput_u2e_birthYear" title="Definition of example"><span class="const token" data-binding="const-RawInput.birthYear" data-verso-hover="1111">birthYear</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">==</span><span class="inter-text"> </span><span class="literal string token" data-binding="" data-verso-hover="1195">"FIRM"</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+    </span><span class="literal string token" data-binding="" data-verso-hover="1151">"birth year"</span><span class="inter-text"> </span><span class="literal string token" data-binding="" data-verso-hover="1213">"FIRM if a company"</span><span class="inter-text"> </span><span class="unknown token" data-binding="">*&gt;</span><span class="inter-text">
+  </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#LegacyCheckedInput_u2e_company" title="Definition of example"><span class="const token" data-binding="const-LegacyCheckedInput.company" data-verso-hover="1202">.company</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">&lt;$&gt;</span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#checkName" title="Definition of example"><span class="const token" data-binding="const-checkName" data-verso-hover="1140">checkName</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.90800" data-verso-hover="1158">input</span><span class="unknown token" data-binding="">.</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#RawInput_u2e_name" title="Definition of example"><span class="const token" data-binding="const-RawInput.name" data-verso-hover="1110">name</span></a></code><p>
+                <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-LegacyCheckedInput" data-verso-hover="1197">LegacyCheckedInput</span></code> 剩余的两个构造子在其字段中使用子类型。
+一个用于检查子类型的通用工具会使这些定义更易读：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-29198">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-checkSubtype" data-verso-hover="1217" id="checkSubtype">checkSubtype</span><span class="inter-text"> </span><span class="unknown token" data-binding="">{</span><span class="var token" data-binding="var-_uniq.91133" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="58">Type</span><span class="unknown token" data-binding="">}</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.91135" data-verso-hover="133">v</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91133" data-verso-hover="125">α</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.91139" data-verso-hover="1113">p</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91133" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-14430969920833713138" data-verso-hover="3">Prop</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#Decidable___isFalse" title="Documentation for Decidable in Lean Language Reference"><span class="const token" data-binding="const-Decidable" data-verso-hover="407">Decidable</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.91139" data-verso-hover="1113">p</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91135" data-verso-hover="133">v</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">]</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.91143" data-verso-hover="799">err</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91131" data-verso-hover="125">ε</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91131" data-verso-hover="125">ε</span><span class="inter-text"> </span><span class="unknown token" data-binding="">{</span><span class="var token" data-binding="var-_uniq.91148" data-verso-hover="133">x</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91133" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">//</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91139" data-verso-hover="1113">p</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91148" data-verso-hover="133">x</span><span class="unknown token" data-binding="">}</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+  </span><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Conditionals/#termDepIfThenElse" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-termDepIfThenElse-29322" data-verso-hover="1122">if</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91165" data-verso-hover="1218">h</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91139" data-verso-hover="1113">p</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91135" data-verso-hover="133">v</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Conditionals/#termDepIfThenElse" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-termDepIfThenElse-29322" data-verso-hover="1122">then</span></a><span class="inter-text">
+    </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Pure___mk" title="Documentation for Pure.pure in Lean Language Reference"><span class="const token" data-binding="const-Pure.pure" data-verso-hover="301">pure</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="const-Subtype.mk" data-verso-hover="1118">⟨</span><span class="var token" data-binding="var-_uniq.91135" data-verso-hover="133">v</span><span class="unknown token" data-binding="const-Subtype.mk" data-verso-hover="1118">,</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91165" data-verso-hover="1218">h</span><span class="unknown token" data-binding="const-Subtype.mk" data-verso-hover="1118">⟩</span><span class="inter-text">
+  </span><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Conditionals/#termDepIfThenElse" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-termDepIfThenElse-29322" data-verso-hover="1122">else</span></a><span class="inter-text">
+    </span><span class="const token" data-binding="const-Validate.errors" data-verso-hover="1128">.errors</span><span class="inter-text"> </span><span class="unknown token" data-binding="">{</span><span class="inter-text"> </span><a href="Overloading-and-Type-Classes/Arrays-and-Indexing/#NonEmptyList_u2e_head" title="Definition of example"><span class="const token" data-binding="const-NonEmptyList.head" data-verso-hover="1219">head</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91143" data-verso-hover="799">err</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><a href="Overloading-and-Type-Classes/Arrays-and-Indexing/#NonEmptyList_u2e_tail" title="Definition of example"><span class="const token" data-binding="const-NonEmptyList.tail" data-verso-hover="1220">tail</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">}</span></code><p>
+                在该函数的参数列表中，类型类 <code class="hl lean inline" data-lean-context="examples"><span class="unknown token" data-binding="">[</span><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#Decidable___isFalse" title="Documentation for Decidable in Lean Language Reference"><span class="const token" data-binding="const-Decidable" data-verso-hover="407">Decidable</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.91139" data-verso-hover="1113">p</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91135" data-verso-hover="133">v</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">]</span></code> 出现在参数 <code class="hl lean inline" data-lean-context="examples"><span class="var token" data-binding="var-_uniq.91135" data-verso-hover="133">v</span></code> 和 <code class="hl lean inline" data-lean-context="examples"><span class="var token" data-binding="var-_uniq.91139" data-verso-hover="1113">p</span></code> 的指定之后，这一点很重要。
+否则，它将指向一组额外的自动隐式参数，而不是指向手动提供的值。
+正是 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#Decidable___isFalse" title="Documentation for Decidable in Lean Language Reference"><span class="const token" data-binding="const-Decidable" data-verso-hover="407">Decidable</span></a></code> 实例使得命题 <code class="hl lean inline" data-lean-context="examples"><span class="var token" data-binding="var-_uniq.91139" data-verso-hover="1113">p</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91135" data-verso-hover="133">v</span></code> 可以用 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">if</span></code> 检查。</p>
+              <p>
+                这两种人类情形不需要任何额外工具：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-29817">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-checkHumanBefore1970" data-verso-hover="1221" id="checkHumanBefore1970">checkHumanBefore1970</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.91810" data-verso-hover="1158">input</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-RawInput" data-verso-hover="1109">RawInput</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+    </span><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#Field" title="Definition of example"><span class="const token" data-binding="const-Field" data-verso-hover="1136">Field</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">×</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="const token" data-binding="const-LegacyCheckedInput" data-verso-hover="1197">LegacyCheckedInput</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">(</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#checkYearIsNat" title="Definition of example"><span class="const token" data-binding="const-checkYearIsNat" data-verso-hover="1150">checkYearIsNat</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91810" data-verso-hover="1158">input</span><span class="unknown token" data-binding="">.</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#RawInput_u2e_birthYear" title="Definition of example"><span class="const token" data-binding="const-RawInput.birthYear" data-verso-hover="1111">birthYear</span></a><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">.</span><span class="const token" data-binding="const-Validate.andThen" data-verso-hover="1146">andThen</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.fun-29959">fun</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91826" data-verso-hover="5">y</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text">
+    </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#LegacyCheckedInput_u2e_humanBefore1970" title="Definition of example"><span class="const token" data-binding="const-LegacyCheckedInput.humanBefore1970" data-verso-hover="1198">.humanBefore1970</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">&lt;$&gt;</span><span class="inter-text">
+      </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#checkSubtype" title="Definition of example"><span class="const token" data-binding="const-checkSubtype" data-verso-hover="1217">checkSubtype</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91826" data-verso-hover="5">y</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.fun-30015">fun</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91888" data-verso-hover="5">x</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91888" data-verso-hover="5">x</span><span class="inter-text"> </span><span class="unknown token" data-binding="">&gt;</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="5">999</span><span class="inter-text"> </span><span class="unknown token" data-binding="">∧</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91888" data-verso-hover="5">x</span><span class="inter-text"> </span><span class="unknown token" data-binding="">&lt;</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="5">1970</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+        </span><span class="unknown token" data-binding="">(</span><span class="literal string token" data-binding="" data-verso-hover="1151">"birth year"</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="literal string token" data-binding="" data-verso-hover="1222">"less than 1970"</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">&lt;*&gt;</span><span class="inter-text">
+      </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Pure___mk" title="Documentation for Pure.pure in Lean Language Reference"><span class="const token" data-binding="const-Pure.pure" data-verso-hover="301">pure</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91810" data-verso-hover="1158">input</span><span class="unknown token" data-binding="">.</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#RawInput_u2e_name" title="Definition of example"><span class="const token" data-binding="const-RawInput.name" data-verso-hover="1110">name</span></a></code><code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-29466">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-checkHumanAfter1970" data-verso-hover="1223" id="checkHumanAfter1970">checkHumanAfter1970</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.91372" data-verso-hover="1158">input</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-RawInput" data-verso-hover="1109">RawInput</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+    </span><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#Field" title="Definition of example"><span class="const token" data-binding="const-Field" data-verso-hover="1136">Field</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">×</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="const token" data-binding="const-LegacyCheckedInput" data-verso-hover="1197">LegacyCheckedInput</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">(</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#checkYearIsNat" title="Definition of example"><span class="const token" data-binding="const-checkYearIsNat" data-verso-hover="1150">checkYearIsNat</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91372" data-verso-hover="1158">input</span><span class="unknown token" data-binding="">.</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#RawInput_u2e_birthYear" title="Definition of example"><span class="const token" data-binding="const-RawInput.birthYear" data-verso-hover="1111">birthYear</span></a><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">.</span><span class="const token" data-binding="const-Validate.andThen" data-verso-hover="1146">andThen</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.fun-29607">fun</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91388" data-verso-hover="5">y</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text">
+    </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#LegacyCheckedInput_u2e_humanAfter1970" title="Definition of example"><span class="const token" data-binding="const-LegacyCheckedInput.humanAfter1970" data-verso-hover="1200">.humanAfter1970</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">&lt;$&gt;</span><span class="inter-text">
+      </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#checkSubtype" title="Definition of example"><span class="const token" data-binding="const-checkSubtype" data-verso-hover="1217">checkSubtype</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91388" data-verso-hover="5">y</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="unknown token" data-binding="">·</span><span class="inter-text"> </span><span class="unknown token" data-binding="">&gt;</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="5">1970</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+        </span><span class="unknown token" data-binding="">(</span><span class="literal string token" data-binding="" data-verso-hover="1151">"birth year"</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="literal string token" data-binding="" data-verso-hover="1224">"greater than 1970"</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">&lt;*&gt;</span><span class="inter-text">
+      </span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#checkName" title="Definition of example"><span class="const token" data-binding="const-checkName" data-verso-hover="1140">checkName</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.91372" data-verso-hover="1158">input</span><span class="unknown token" data-binding="">.</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#RawInput_u2e_name" title="Definition of example"><span class="const token" data-binding="const-RawInput.name" data-verso-hover="1110">name</span></a></code><p>
+                这三种情形的验证器可以使用 <code class="hl lean inline" data-lean-context="examples"><span class="unknown token" data-binding="">&lt;|&gt;</span></code> 组合起来：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-30179">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-checkLegacyInput" data-verso-hover="1225" id="checkLegacyInput">checkLegacyInput</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.92443" data-verso-hover="1158">input</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-RawInput" data-verso-hover="1109">RawInput</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+    </span><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#Field" title="Definition of example"><span class="const token" data-binding="const-Field" data-verso-hover="1136">Field</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">×</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="const token" data-binding="const-LegacyCheckedInput" data-verso-hover="1197">LegacyCheckedInput</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+  </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#checkCompany" title="Definition of example"><span class="const token" data-binding="const-checkCompany" data-verso-hover="1211">checkCompany</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.92443" data-verso-hover="1158">input</span><span class="inter-text"> </span><span class="unknown token" data-binding="">&lt;|&gt;</span><span class="inter-text">
+  </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#checkHumanBefore1970" title="Definition of example"><span class="const token" data-binding="const-checkHumanBefore1970" data-verso-hover="1221">checkHumanBefore1970</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.92443" data-verso-hover="1158">input</span><span class="inter-text"> </span><span class="unknown token" data-binding="">&lt;|&gt;</span><span class="inter-text">
+  </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#checkHumanAfter1970" title="Definition of example"><span class="const token" data-binding="const-checkHumanAfter1970" data-verso-hover="1223">checkHumanAfter1970</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.92443" data-verso-hover="1158">input</span></code><p>
+                成功的情形如预期那样返回 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-LegacyCheckedInput" data-verso-hover="1197">LegacyCheckedInput</span></code> 的构造子：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="has-info information"><span class="hover-container"><span class="hover-info messages"><code class="verso-message information"><span class="text"></span><span class="text">Validate.ok (LegacyCheckedInput.company "Johnny's Troll Groomers")</span></code></span></span><a href="https://lean-lang.org/doc/reference/4.26.0/Interacting-with-Lean/#Lean___Parser___Command___eval" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.eval-30514" data-verso-hover="7">#eval</span></a></span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#checkLegacyInput" title="Definition of example"><span class="const token" data-binding="const-checkLegacyInput" data-verso-hover="1225">checkLegacyInput</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="const-RawInput.mk" data-verso-hover="1226">⟨</span><span class="literal string token" data-binding="" data-verso-hover="1227">"Johnny's Troll Groomers"</span><span class="unknown token" data-binding="const-RawInput.mk" data-verso-hover="1226">,</span><span class="inter-text"> </span><span class="literal string token" data-binding="" data-verso-hover="1195">"FIRM"</span><span class="unknown token" data-binding="const-RawInput.mk" data-verso-hover="1226">⟩</span></code><pre class="hl lean lean-output information"><span class="verso-message"><span class="text"></span><span class="text">Validate.ok (LegacyCheckedInput.company "Johnny's Troll Groomers")</span></span></pre><code class="hl lean block" data-lean-context="examples"><span class="has-info information"><span class="hover-container"><span class="hover-info messages"><code class="verso-message information"><span class="text"></span><span class="text">Validate.ok (LegacyCheckedInput.humanBefore1970 1963 "Johnny")</span></code></span></span><a href="https://lean-lang.org/doc/reference/4.26.0/Interacting-with-Lean/#Lean___Parser___Command___eval" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.eval-30716" data-verso-hover="7">#eval</span></a></span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#checkLegacyInput" title="Definition of example"><span class="const token" data-binding="const-checkLegacyInput" data-verso-hover="1225">checkLegacyInput</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="const-RawInput.mk" data-verso-hover="1226">⟨</span><span class="literal string token" data-binding="" data-verso-hover="1228">"Johnny"</span><span class="unknown token" data-binding="const-RawInput.mk" data-verso-hover="1226">,</span><span class="inter-text"> </span><span class="literal string token" data-binding="" data-verso-hover="1229">"1963"</span><span class="unknown token" data-binding="const-RawInput.mk" data-verso-hover="1226">⟩</span></code><pre class="hl lean lean-output information"><span class="verso-message"><span class="text"></span><span class="text">Validate.ok (LegacyCheckedInput.humanBefore1970 1963 "Johnny")</span></span></pre><code class="hl lean block" data-lean-context="examples"><span class="has-info information"><span class="hover-container"><span class="hover-info messages"><code class="verso-message information"><span class="text"></span><span class="text">Validate.ok (LegacyCheckedInput.humanBefore1970 1963 "")</span></code></span></span><a href="https://lean-lang.org/doc/reference/4.26.0/Interacting-with-Lean/#Lean___Parser___Command___eval" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.eval-30892" data-verso-hover="7">#eval</span></a></span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#checkLegacyInput" title="Definition of example"><span class="const token" data-binding="const-checkLegacyInput" data-verso-hover="1225">checkLegacyInput</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="const-RawInput.mk" data-verso-hover="1226">⟨</span><span class="literal string token" data-binding="" data-verso-hover="229">""</span><span class="unknown token" data-binding="const-RawInput.mk" data-verso-hover="1226">,</span><span class="inter-text"> </span><span class="literal string token" data-binding="" data-verso-hover="1229">"1963"</span><span class="unknown token" data-binding="const-RawInput.mk" data-verso-hover="1226">⟩</span></code><pre class="hl lean lean-output information"><span class="verso-message"><span class="text"></span><span class="text">Validate.ok (LegacyCheckedInput.humanBefore1970 1963 "")</span></span></pre><p>
+                最坏的可能输入会返回所有可能的失败：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="has-info information"><span class="hover-container"><span class="hover-info messages"><code class="verso-message information"><span class="text"></span><span class="text">Validate.errors
+  { head := ("birth year", "FIRM if a company"),
+    tail := [("name", "Required"),
+             ("birth year", "less than 1970"),
+             ("birth year", "greater than 1970"),
+             ("name", "Required")] }</span></code></span></span><a href="https://lean-lang.org/doc/reference/4.26.0/Interacting-with-Lean/#Lean___Parser___Command___eval" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.eval-31245" data-verso-hover="7">#eval</span></a></span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#checkLegacyInput" title="Definition of example"><span class="const token" data-binding="const-checkLegacyInput" data-verso-hover="1225">checkLegacyInput</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="const-RawInput.mk" data-verso-hover="1226">⟨</span><span class="literal string token" data-binding="" data-verso-hover="229">""</span><span class="unknown token" data-binding="const-RawInput.mk" data-verso-hover="1226">,</span><span class="inter-text"> </span><span class="literal string token" data-binding="" data-verso-hover="1230">"1970"</span><span class="unknown token" data-binding="const-RawInput.mk" data-verso-hover="1226">⟩</span></code><pre class="hl lean lean-output information"><span class="verso-message"><span class="text"></span><span class="text">Validate.errors
+  { head := ("birth year", "FIRM if a company"),
+    tail := [("name", "Required"),
+             ("birth year", "less than 1970"),
+             ("birth year", "greater than 1970"),
+             ("name", "Required")] }</span></span></pre></section>
+            <section>
+              <h2 id="Alternative">
+                5.4.2. <code>Alternative</code> 类<span class="permalink-widget inline"><a href="find/?domain=Verso.Genre.Manual.section&amp;name=Alternative" title="Permalink">🔗</a></span></h2>
+              <p>
+                许多类型都支持某种失败与恢复的概念。
+关于<a href="Monads/Example___-Arithmetic-in-Monads/#nondeterministic-search">在多种单子中求值算术表达式</a>一节中的 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Many" data-verso-hover="943">Many</span></code> 单子就是这样一种类型，<code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Optional-Values/#Option___none" title="Documentation for Option in Lean Language Reference"><span class="const token" data-binding="const-Option" data-verso-hover="153">Option</span></a></code> 也是如此。
+二者都支持不提供原因的失败（这不同于例如 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/Varieties-of-Monads/#Except___error" title="Documentation for Except in Lean Language Reference"><span class="const token" data-binding="const-Except" data-verso-hover="778">Except</span></a></code> 和 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span></code>，它们要求给出某种关于出错原因的指示）。</p>
+              <p>
+                <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-FakeAlternative.Alternative" data-verso-hover="1231">Alternative</span></code> 类描述了具有额外的失败与恢复运算符的应用函子：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.classTk-31634">class</span><span class="inter-text"> </span><span class="const token" data-binding="const-FakeAlternative.Alternative" data-verso-hover="1231">Alternative</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.106312" data-verso-hover="611">f</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="58">Type</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="58">Type</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.extends-31672">extends</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Applicative___mk" title="Documentation for Applicative in Lean Language Reference"><span class="const token" data-binding="const-Applicative" data-verso-hover="1046">Applicative</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106312" data-verso-hover="611">f</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-null-31694">where</span><span class="inter-text">
+  </span><span class="const token" data-binding="const-FakeAlternative.Alternative.failure" data-verso-hover="1232" id="FakeAlternative_u2e_Alternative_u2e_failure">failure</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106312" data-verso-hover="611">f</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106430" data-verso-hover="125">α</span><span class="inter-text">
+  </span><span class="const token" data-binding="const-FakeAlternative.Alternative.orElse" data-verso-hover="1233" id="FakeAlternative_u2e_Alternative_u2e_orElse">orElse</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106312" data-verso-hover="611">f</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106437" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/The-Unit-Type/#Unit" title="Documentation for Unit in Lean Language Reference"><span class="const token" data-binding="const-Unit" data-verso-hover="195">Unit</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106312" data-verso-hover="611">f</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106437" data-verso-hover="125">α</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106312" data-verso-hover="611">f</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106437" data-verso-hover="125">α</span></code><p>
+                正如 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#Add___mk" title="Documentation for Add in Lean Language Reference"><span class="const token" data-binding="const-Add" data-verso-hover="412">Add</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.114237" data-verso-hover="1234">α</span></code> 的实现者可以免费获得 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#HAdd___mk" title="Documentation for HAdd in Lean Language Reference"><span class="const token" data-binding="const-HAdd" data-verso-hover="419">HAdd</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.114237" data-verso-hover="1234">α</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.114237" data-verso-hover="1234">α</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.114237" data-verso-hover="1234">α</span></code> 实例一样，<code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-FakeAlternative.Alternative" data-verso-hover="1231">Alternative</span></code> 的实现者也可以免费获得 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-FakeOrElse.OrElse" data-verso-hover="1205">OrElse</span></code> 实例：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.instance-31816">instance</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><span class="const token" data-binding="const-FakeAlternative.Alternative" data-verso-hover="1231">Alternative</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107218" data-verso-hover="611">f</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-OrElse" data-verso-hover="1208">OrElse</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.107218" data-verso-hover="611">f</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107226" data-verso-hover="125">α</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.whereStructInst-31857">where</span><span class="inter-text">
+  </span><span class="const token" data-binding="const-OrElse.orElse" data-verso-hover="1235">orElse</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#FakeAlternative_u2e_Alternative_u2e_orElse" title="Definition of example"><span class="const token" data-binding="const-FakeAlternative.Alternative.orElse" data-verso-hover="1233">Alternative.orElse</span></a></code><p>
+                <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Optional-Values/#Option___none" title="Documentation for Option in Lean Language Reference"><span class="const token" data-binding="const-Option" data-verso-hover="153">Option</span></a></code> 的 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-FakeAlternative.Alternative" data-verso-hover="1231">Alternative</span></code> 实现会保留第一个非 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Optional-Values/#Option___none" title="Documentation for Option.none in Lean Language Reference"><span class="const token" data-binding="const-Option.none" data-verso-hover="156">none</span></a></code> 参数：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.instance-31970">instance</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Alternative___mk" title="Documentation for Alternative in Lean Language Reference"><span class="const token" data-binding="const-Alternative" data-verso-hover="1236">Alternative</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Optional-Values/#Option___none" title="Documentation for Option in Lean Language Reference"><span class="const token" data-binding="const-Option" data-verso-hover="153">Option</span></a><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.whereStructInst-32000">where</span><span class="inter-text">
+  </span><span class="const token" data-binding="const-Alternative.failure" data-verso-hover="1237">failure</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Optional-Values/#Option___none" title="Documentation for Option.none in Lean Language Reference"><span class="const token" data-binding="const-Option.none" data-verso-hover="156">none</span></a><span class="inter-text">
+  </span><span class="const token" data-binding="const-Alternative.orElse" data-verso-hover="1238">orElse</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Optional-Values/#Option___none" title="Documentation for Option.some in Lean Language Reference"><span class="const token" data-binding="const-Option.some" data-verso-hover="157">some</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107425" data-verso-hover="614">x</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="unknown token" data-binding="">_</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Optional-Values/#Option___none" title="Documentation for Option.some in Lean Language Reference"><span class="const token" data-binding="const-Option.some" data-verso-hover="157">some</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107425" data-verso-hover="614">x</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Optional-Values/#Option___none" title="Documentation for Option.none in Lean Language Reference"><span class="const token" data-binding="const-Option.none" data-verso-hover="156">none</span></a><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107451" data-verso-hover="1092">y</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107451" data-verso-hover="1092">y</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="unknown token" data-binding="">)</span></code><p>
+                类似地，<code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Many" data-verso-hover="943">Many</span></code> 的实现遵循 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Many.union" data-verso-hover="947">Many.union</span></code> 的一般结构，只是由于诱导惰性的 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/The-Unit-Type/#Unit" title="Documentation for Unit in Lean Language Reference"><span class="const token" data-binding="const-Unit" data-verso-hover="195">Unit</span></a></code> 参数放置位置不同而有一些细微差异：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-32142">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-Many.orElse" data-verso-hover="1239" id="Many_u2e_orElse">Many.orElse</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-Many" data-verso-hover="943">Many</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107696" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/The-Unit-Type/#Unit" title="Documentation for Unit in Lean Language Reference"><span class="const token" data-binding="const-Unit" data-verso-hover="195">Unit</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="const token" data-binding="const-Many" data-verso-hover="943">Many</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107696" data-verso-hover="125">α</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="const token" data-binding="const-Many" data-verso-hover="943">Many</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107696" data-verso-hover="125">α</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><a href="Monads/Example___-Arithmetic-in-Monads/#Many_u2e_none" title="Definition of example"><span class="const token" data-binding="const-Many.none" data-verso-hover="944">.none</span></a><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107732" data-verso-hover="949">ys</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107732" data-verso-hover="949">ys</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="const token" data-binding="const-Many.more" data-verso-hover="945">.more</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107756" data-verso-hover="133">x</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107757" data-verso-hover="949">xs</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107758" data-verso-hover="949">ys</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><span class="const token" data-binding="const-Many.more" data-verso-hover="945">.more</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107756" data-verso-hover="133">x</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.fun-32257">fun</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#Many_u2e_orElse" title="Definition of example"><span class="const token" data-binding="const-Many.orElse" data-verso-hover="1239">orElse</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.107757" data-verso-hover="949">xs</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107758" data-verso-hover="949">ys</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+
+</span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.instance-32287">instance</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Alternative___mk" title="Documentation for Alternative in Lean Language Reference"><span class="const token" data-binding="const-Alternative" data-verso-hover="1236">Alternative</span></a><span class="inter-text"> </span><span class="const token" data-binding="const-Many" data-verso-hover="943">Many</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.whereStructInst-32315">where</span><span class="inter-text">
+  </span><span class="const token" data-binding="const-Alternative.failure" data-verso-hover="1240">failure</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><a href="Monads/Example___-Arithmetic-in-Monads/#Many_u2e_none" title="Definition of example"><span class="const token" data-binding="const-Many.none" data-verso-hover="944">.none</span></a><span class="inter-text">
+  </span><span class="const token" data-binding="const-Alternative.orElse" data-verso-hover="1241">orElse</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#Many_u2e_orElse" title="Definition of example"><span class="const token" data-binding="const-Many.orElse" data-verso-hover="1239">Many.orElse</span></a></code><p>
+                与其他类型类一样，<code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-FakeAlternative.Alternative" data-verso-hover="1231">Alternative</span></code> 使得可以定义多种操作，它们适用于实现了 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-FakeAlternative.Alternative" data-verso-hover="1231">Alternative</span></code> 的<em>任意</em>应用函子。
+其中最重要的一个是 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Guard.guard" data-verso-hover="1242">guard</span></code>；当一个可判定命题为假时，它会导致 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Alternative.failure" data-verso-hover="1243">failure</span></code>：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-32431">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-Guard.guard" data-verso-hover="1242">guard</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Alternative___mk" title="Documentation for Alternative in Lean Language Reference"><span class="const token" data-binding="const-Alternative" data-verso-hover="1236">Alternative</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.108266" data-verso-hover="899">f</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.108273" data-verso-hover="374">p</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-14430969920833713138" data-verso-hover="3">Prop</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#Decidable___isFalse" title="Documentation for Decidable in Lean Language Reference"><span class="const token" data-binding="const-Decidable" data-verso-hover="407">Decidable</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.108273" data-verso-hover="374">p</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.108266" data-verso-hover="899">f</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/The-Unit-Type/#Unit" title="Documentation for Unit in Lean Language Reference"><span class="const token" data-binding="const-Unit" data-verso-hover="195">Unit</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+  </span><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Conditionals/#termIfThenElse" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-termIfThenElse-32496" data-verso-hover="21">if</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.108273" data-verso-hover="374">p</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Conditionals/#termIfThenElse" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-termIfThenElse-32496" data-verso-hover="21">then</span></a><span class="inter-text">
+    </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Pure___mk" title="Documentation for Pure.pure in Lean Language Reference"><span class="const token" data-binding="const-Pure.pure" data-verso-hover="301">pure</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Conditionals/#termIfThenElse" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-termIfThenElse-32496" data-verso-hover="21">else</span></a><span class="inter-text"> </span><span class="const token" data-binding="const-Alternative.failure" data-verso-hover="1243">failure</span></code><p>
+                在单子程序中提前终止执行非常有用。
+在 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Many" data-verso-hover="943">Many</span></code> 中，它可用于过滤掉搜索的一整个分支，如下面这个计算某个自然数的所有偶因子的程序所示：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-32580">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-Guard.Many.countdown" data-verso-hover="1244" id="Guard_u2e_Many_u2e_countdown">Many.countdown</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="const token" data-binding="const-Many" data-verso-hover="943">Many</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="5">0</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><span class="unknown token" data-binding="">.none</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.108555" data-verso-hover="5">n</span><span class="inter-text"> </span><span class="unknown token" data-binding="">+</span><span class="inter-text"> </span><span class="unknown token" data-binding="">1</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><span class="const token" data-binding="const-Many.more" data-verso-hover="945">.more</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.108555" data-verso-hover="5">n</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.fun-32655">fun</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#Guard_u2e_Many_u2e_countdown" title="Definition of example"><span class="const token" data-binding="const-Guard.Many.countdown" data-verso-hover="1244">countdown</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.108555" data-verso-hover="5">n</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+
+</span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-32679">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-Guard.evenDivisors" data-verso-hover="1245" id="Guard_u2e_evenDivisors">evenDivisors</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.108770" data-verso-hover="5">n</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-Many" data-verso-hover="943">Many</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/Syntax/#Lean___Parser___Term___do" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.do-32720">do</span></a><span class="inter-text">
+  </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.doLetArrow-32725">let</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.108882" data-verso-hover="5">k</span><span class="inter-text"> </span><span class="unknown token" data-binding="">←</span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#Guard_u2e_Many_u2e_countdown" title="Definition of example"><span class="const token" data-binding="const-Guard.Many.countdown" data-verso-hover="1244">Many.countdown</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.108770" data-verso-hover="5">n</span><span class="inter-text"> </span><span class="unknown token" data-binding="">+</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="5">1</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><span class="const token" data-binding="const-Guard.guard" data-verso-hover="1242">guard</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.108882" data-verso-hover="5">k</span><span class="inter-text"> </span><span class="unknown token" data-binding="">%</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="5">2</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="5">0</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><span class="const token" data-binding="const-Guard.guard" data-verso-hover="1242">guard</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.108770" data-verso-hover="5">n</span><span class="inter-text"> </span><span class="unknown token" data-binding="">%</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.108882" data-verso-hover="5">k</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="5">0</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Pure___mk" title="Documentation for Pure.pure in Lean Language Reference"><span class="const token" data-binding="const-Pure.pure" data-verso-hover="301">pure</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.108882" data-verso-hover="5">k</span></code><p>
+                在 <code class="hl lean inline" data-lean-context="examples"><span class="typed token" data-binding="" data-verso-hover="5">20</span></code> 上运行它会得到预期结果：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="has-info information"><span class="hover-container"><span class="hover-info messages"><code class="verso-message information"><span class="text"></span><span class="highlighted"><span class="inter-text"></span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Linked-Lists/#List___nil" title="Documentation for List.cons in Lean Language Reference"><span class="const token" data-binding="const-List.cons" data-verso-hover="36">[</span></a><span class="inter-text"></span><span class="unknown token" data-binding="">20</span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Linked-Lists/#List___nil" title="Documentation for List.cons in Lean Language Reference"><span class="const token" data-binding="const-List.cons" data-verso-hover="36">,</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">10</span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Linked-Lists/#List___nil" title="Documentation for List.cons in Lean Language Reference"><span class="const token" data-binding="const-List.cons" data-verso-hover="36">,</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">4</span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Linked-Lists/#List___nil" title="Documentation for List.cons in Lean Language Reference"><span class="const token" data-binding="const-List.cons" data-verso-hover="36">,</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">2</span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Linked-Lists/#List___nil" title="Documentation for List.cons in Lean Language Reference"><span class="const token" data-binding="const-List.cons" data-verso-hover="36">]</span></a></span></code></span></span><a href="https://lean-lang.org/doc/reference/4.26.0/Interacting-with-Lean/#Lean___Parser___Command___eval" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.eval-32906" data-verso-hover="7">#eval</span></a></span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#Guard_u2e_evenDivisors" title="Definition of example"><span class="const token" data-binding="const-Guard.evenDivisors" data-verso-hover="1245">evenDivisors</span></a><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="5">20</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">.</span><a href="Monads/Example___-Arithmetic-in-Monads/#Many_u2e_takeAll" title="Definition of example"><span class="const token" data-binding="const-Many.takeAll" data-verso-hover="952">takeAll</span></a></code><pre class="hl lean lean-output information"><span class="verso-message"><span class="text"></span><span class="highlighted"><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Linked-Lists/#List___nil" title="Documentation for List.cons in Lean Language Reference"><span class="const token" data-binding="const-List.cons" data-verso-hover="36">[</span></a><span class="unknown token" data-binding="">20</span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Linked-Lists/#List___nil" title="Documentation for List.cons in Lean Language Reference"><span class="const token" data-binding="const-List.cons" data-verso-hover="36">,</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">10</span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Linked-Lists/#List___nil" title="Documentation for List.cons in Lean Language Reference"><span class="const token" data-binding="const-List.cons" data-verso-hover="36">,</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">4</span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Linked-Lists/#List___nil" title="Documentation for List.cons in Lean Language Reference"><span class="const token" data-binding="const-List.cons" data-verso-hover="36">,</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">2</span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Linked-Lists/#List___nil" title="Documentation for List.cons in Lean Language Reference"><span class="const token" data-binding="const-List.cons" data-verso-hover="36">]</span></a></span></span></pre></section>
+            <section>
+              <h2 id="Alternative-exercises">
+                5.4.3. 练习<span class="permalink-widget inline"><a href="find/?domain=Verso.Genre.Manual.section&amp;name=Alternative-exercises" title="Permalink">🔗</a></span></h2>
+              <section>
+                <h3 id="Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u51fd__u5b50__u3001__u5e94__u7528__u51fd__u5b50__u4e0e__u5355__u5b50_--_u9009__u62e9_--_u7ec3__u4e60_--_u6539__u8fdb__u9a8c__u8bc1__u7684__u53cb__u597d__u6027_">
+                  5.4.3.1. 改进验证的友好性</h3>
+                <p>
+                  使用 <code class="hl lean inline" data-lean-context="examples"><span class="unknown token" data-binding="">&lt;|&gt;</span></code> 的 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span></code> 程序所返回的错误可能难以阅读，因为被包含在错误列表中仅仅意味着该错误可以通过<em>某条</em>代码路径到达。
+可以使用一种结构更强的错误报告，更准确地引导用户完成该过程：</p>
+                <ul>
+                  <li>
+                    <p>
+                      将 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Validate.errors" data-verso-hover="1128">Validate.errors</span></code> 中的 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-NonEmptyList" data-verso-hover="491">NonEmptyList</span></code> 替换为一个裸类型变量，然后更新 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Functors___-Monads-and--do--Notation/#Applicative___mk" title="Documentation for Applicative in Lean Language Reference"><span class="const token" data-binding="const-Applicative" data-verso-hover="1046">Applicative</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.59646" data-verso-hover="125">ε</span><span class="unknown token" data-binding="">)</span></code> 和 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-OrElse" data-verso-hover="1208">OrElse</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.89037" data-verso-hover="125">ε</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.89042" data-verso-hover="125">α</span><span class="unknown token" data-binding="">)</span></code> 实例的定义，使其只要求存在可用的 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#Append___mk" title="Documentation for Append in Lean Language Reference"><span class="const token" data-binding="const-Append" data-verso-hover="589">Append</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.114240" data-verso-hover="397">ε</span></code> 实例。</p>
+                    </li>
+                  <li>
+                    <p>
+                      定义一个函数 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Validate.mapErrors" data-verso-hover="1246" id="Validate_u2e_mapErrors">Validate.mapErrors</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.113722" data-verso-hover="125">ε</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.113727" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.113722" data-verso-hover="125">ε</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.113736" data-verso-hover="125">ε'</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="const token" data-binding="const-Validate" data-verso-hover="1108">Validate</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.113736" data-verso-hover="125">ε'</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.113727" data-verso-hover="125">α</span></code>，它转换一次验证运行中的所有错误。</p>
+                    </li>
+                  <li>
+                    <p>
+                      使用数据类型 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-TreeError" data-verso-hover="1247">TreeError</span></code> 表示错误，重写旧版验证系统，使其跟踪自己穿过这三个备选分支的路径。</p>
+                    </li>
+                  <li>
+                    <p>
+                      编写一个函数 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-report" data-verso-hover="1248" id="report">report</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-TreeError" data-verso-hover="1247">TreeError</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a></code>，输出 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-TreeError" data-verso-hover="1247">TreeError</span></code> 所累积的警告和错误的用户友好视图。</p>
+                    </li>
+                  </ul>
+                <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.inductive-31334" data-verso-hover="106">inductive</span><span class="inter-text"> </span><span class="const token" data-binding="const-TreeError" data-verso-hover="1247">TreeError</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-null-31354">where</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="const token" data-binding="const-TreeError.field" data-verso-hover="1249" id="TreeError_u2e_field">field</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Applicative-Functors/#Field" title="Definition of example"><span class="const token" data-binding="const-Field" data-verso-hover="1136">Field</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="const token" data-binding="const-TreeError" data-verso-hover="1247">TreeError</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="const token" data-binding="const-TreeError.path" data-verso-hover="1250" id="TreeError_u2e_path">path</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Strings/#String___ofByteArray" title="Documentation for String in Lean Language Reference"><span class="const token" data-binding="const-String" data-verso-hover="9">String</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="const token" data-binding="const-TreeError" data-verso-hover="1247">TreeError</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="const token" data-binding="const-TreeError" data-verso-hover="1247">TreeError</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="const token" data-binding="const-TreeError.both" data-verso-hover="1251" id="TreeError_u2e_both">both</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-TreeError" data-verso-hover="1247">TreeError</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="const token" data-binding="const-TreeError" data-verso-hover="1247">TreeError</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="const token" data-binding="const-TreeError" data-verso-hover="1247">TreeError</span><span class="inter-text">
+
+</span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.instance-31499">instance</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#Append___mk" title="Documentation for Append in Lean Language Reference"><span class="const token" data-binding="const-Append" data-verso-hover="589">Append</span></a><span class="inter-text"> </span><span class="const token" data-binding="const-TreeError" data-verso-hover="1247">TreeError</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.whereStructInst-31527">where</span><span class="inter-text">
+  </span><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#Append___mk" title="Documentation for Append.append in Lean Language Reference"><span class="const token" data-binding="const-Append.append" data-verso-hover="1252">append</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><a href="Functors___-Applicative-Functors___-and-Monads/Alternatives/#TreeError_u2e_both" title="Definition of example"><span class="const token" data-binding="const-TreeError.both" data-verso-hover="1251">.both</span></a></code></section>
+              </section>
+            </section>
+          <nav class="prev-next-buttons">
+            <a class="local-button active" href="Functors___-Applicative-Functors___-and-Monads/The-Applicative-Contract/#applicative-laws" rel="prev" title="5.3. 应用函子约定"><span class="arrow">←</span><span class="where">5.3. 应用函子约定</span></a><a class="local-button active" href="Functors___-Applicative-Functors___-and-Monads/Universes/#universe-levels" rel="next" title="5.5. 宇宙"><span class="where">5.5. 宇宙</span><span class="arrow">→</span></a></nav>
+          </div>
+        </main></div>
+    </body>
+  </html>
+

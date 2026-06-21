@@ -1,0 +1,1 @@
+window.docContents[125].resolve({"/Monad-Transformers/Combining-IO-and-Reader/#reader-io-exercises":{"contents":"\n\n\n\n","context":"Lean 函数式编程\u0009单子转换器\u0009组合 IO 与 Reader","header":"6.1.4. 练习","id":"/Monad-Transformers/Combining-IO-and-Reader/#reader-io-exercises"}});

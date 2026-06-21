@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      (function(){
+  const {protocol:proto, host:hostName, pathname:path, search:srch, hash:hsh} = window.location;
+  if (!(path.endsWith("/") || path.endsWith(".html"))) {
+    window.location.replace(`${proto}//${hostName}${path}/${srch}${hsh}`);
+  }
+})()</script>
+    <base href="./../../"><meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>控制实例搜索</title><link rel="stylesheet" href="book.css">
+    <link rel="stylesheet" href="verso-vars.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js" integrity="sha384-zbcZAIxlvJtNE3Dp5nxLXdXtXyxwOdnILY1TDPVmKFhl4r4nSUG1r8bcFXGVa4Te" crossorigin="anonymous"></script>
+    <script src="-verso-search/elasticlunr.min.js"></script>
+    <script src="-verso-search/fuzzysort.min.js"></script>
+    <script src="-verso-search/searchIndex.js"></script>
+    <script type="module" src="-verso-search/search-init.js"></script>
+    <link rel="stylesheet" href="-verso-search/search-box.css">
+    <link rel="stylesheet" href="-verso-search/search-highlight.css">
+    <link rel="stylesheet" href="-verso-search/domain-display.css">
+    <script src="-verso-data/popper.min.js"></script>
+    <script src="-verso-data/katex/math.js"></script>
+    <script src="-verso-data/tippy-bundle.umd.min.js"></script>
+    <script src="-verso-data/katex/katex.js"></script>
+    <link rel="stylesheet" href="-verso-data/tippy-border.css">
+    <link rel="stylesheet" href="-verso-data/katex/katex.css">
+    <style>
+div.paragraph > .eval-steps:not(:first-child), div.paragraph > .eval-steps:not(:first-child) > * {
+  margin-top: 0.5rem;
+}
+
+div.paragraph > .eval-steps:not(:last-child), div.paragraph > .eval-steps:not(:last-child) > * {
+  margin-bottom: 0.5rem;
+}
+
+.eval-steps .hl.lean.block {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.eval-steps .hl.lean.block:not(:last-child)::after {
+  content: "⟹";
+  display: block;
+  margin-left: 1em;
+  font-size: 175%;
+}
+
+</style><style>
+.shell-commands {
+
+}
+.shell-commands > * {
+  display: block;
+  white-space: pre;
+}
+.shell-commands .command::before {
+  content: "$ ";
+  font-weight: 600;
+}
+
+div.paragraph > .shell-commands:not(:first-child) {
+  margin-top: 0.5rem;
+}
+
+div.paragraph > .shell-commands:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+</style><style>
+.eq-steps .hl.lean.block {
+  background-color: #f6f7f6;
+  padding: 1rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+.eq-steps .reason {
+  font-style: italic;
+  margin-left: 2.5em;
+  display: flex;
+}
+.eq-steps .reason::before {
+  content: "={";
+  font-family: var(--verso-code-font-family);
+  font-style: normal;
+  font-weight: 600;
+  margin-right: 0.5em;
+  align-self: center;
+}
+.eq-steps .reason > p {
+  margin: 0;
+  max-width: 25em;
+  align-self: center;
+}
+.eq-steps .reason::after {
+  content: "}=";
+  font-family: var(--verso-code-font-family);
+  font-style: normal;
+  font-weight: 600;
+  margin-left: 1em;
+  align-self: center;
+}
+</style><style>/static/theme.css</style><style>
+.shell-command {
+
+}
+.shell-command.block > * {
+  display: block;
+  white-space: pre;
+}
+.shell-command .command .prompt {
+  font-weight: 600;
+}
+
+div.paragraph > .shell-command:not(:first-child) {
+  margin-top: 0.5rem;
+}
+
+div.paragraph > .shell-command:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+</style><style>
+.example-file {
+  white-space: normal;
+  font-family: var(--verso-structure-font-family);
+  margin: 1rem;
+  width: fit-content;
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+
+  /* These are necessary for the container to behave nicely on mobile */
+  overflow-x: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.example-file::before {
+  counter-reset: linenumber;
+}
+.example-file > .line {
+  display: block;
+  white-space: pre;
+  counter-increment: linenumber;
+  font-family: var(--verso-code-font-family);
+}
+.example-file > .line::before {
+  -webkit-user-select: none;
+  display: inline-block;
+  content: counter(linenumber);
+  border-right: 1px solid #ddd;
+  width: 2em;
+  padding-right: 0.25em;
+  margin-right: 0.25em;
+  font-family: var(--verso-code-font-family);
+  text-align: right;
+}
+.example-file > .line::after {
+  -webkit-user-select: none;
+  display: inline-block;
+  content: "⏎";
+  opacity: 0;
+}
+.example-file > .line:hover::after {
+  opacity: 1;
+}
+.example-file > .line:hover, .example-file > .line:hover::before {
+  background-color: #eee;
+}
+.example-file > .empty {
+  display: block;
+  white-space: pre;
+  font-family: var(--verso-code-font-family);
+  font-style: italic;
+}
+.example-file > .empty::before {
+  -webkit-user-select: none;
+  display: inline-block;
+  content: "";
+  border-right: 1px solid #ddd;
+  width: 2em;
+  padding-right: 0.25em;
+  margin-right: 0.25em;
+  font-family: var(--verso-code-font-family);
+  text-align: right;
+}
+</style><style>/static/fonts/source-code-pro/source-code-pro.css</style><style>
+.namedocs {
+  position: relative;
+  border: solid 1px #98B2C0;
+  border-radius: .5rem;
+  padding-top: var(--verso--box-padding);
+  margin-top: var(--verso--box-vertical-margin);
+  margin-bottom: var(--verso--box-vertical-margin);
+}
+
+.namedocs .text {
+  /* Causes margins on child elements to collapse inside the element, such
+     that the margins don't extend into parent with the background color.
+     The effect is that weird borders in the definition box don't happen anymore. */
+  display: flow-root;
+  /* Add a padding. this is the same as the margin applied to the first and last child.
+     The effect is that the padding looks the same size on all sides. */
+  padding: 0 var(--verso--box-padding);
+  border-top: 1px solid #98B2C0;
+}
+
+.namedocs .text > pre {
+  overflow-x: auto;
+}
+
+.namedocs .signature {
+  font-family: var(--verso-code-font-family);
+  margin-top: 0 !important;
+  margin-left: var(--verso--box-padding) !important;
+  margin-bottom: .75rem !important;
+}
+
+.namedocs .label {
+  display: block;
+  font-size: small;
+  font-family: var(--verso-structure-font-family);
+  position: absolute;
+  top: -0.65rem;
+  left: 1rem;
+  background: #fff;
+  padding: 0 .5rem .125rem;
+  border: 1px solid #98B2C0;
+  border-radius: 1rem;
+  color: #555;
+}
+
+.namedocs h1 {
+  font-size: inherit;
+  font-weight: bold
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.namedocs > .text .constructor {
+  padding-top: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.namedocs > .text .constructor::before {
+  content: '| ';
+  display: block;
+  font-family: var(--verso-code-font-family);
+  font-weight: bold;
+  float: left;
+  width: 0.5rem;
+  white-space: pre;
+}
+
+.namedocs > .text .constructor .name-and-type {
+  padding-left: 0.5rem;
+  float: left;
+  margin-top: 0;
+  max-width: calc(100% - 1rem);
+}
+.namedocs > .text .constructor .docs {
+  clear: both;
+  padding-left: 1rem;
+}
+
+/* These margins work together with the padding on .text */
+.namedocs .text > :first-child {
+  margin-top: var(--verso--box-padding);
+}
+.namedocs .text > :last-child {
+  margin-bottom: var(--verso--box-padding);
+}
+
+.namedocs .methods td, .namedocs .fields td {
+  vertical-align: top;
+}
+.namedocs .inheritance {
+  vertical-align: top;
+  font-size: smaller;
+  font-family: var(--verso-structure-font-family);
+}
+.namedocs .inheritance ol {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+.namedocs .inheritance ol li {
+  list-style-type: none;
+  display: inline-block;
+}
+.namedocs .inheritance ol li::after {
+  content: " > "
+}
+.namedocs .inheritance ol li:last-child::after {
+  content: "";
+}
+
+.namedocs .extends {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+.namedocs .extends li {
+  list-style-type: none;
+  display: inline-block;
+}
+
+.namedocs .extends li label {
+  padding-right: 1rem;
+}
+
+.namedocs .subdocs .name-and-type {
+  font-size: 1rem;
+  margin-left: 0;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0.5rem;
+}
+
+.namedocs .subdocs .docs {
+  margin-left: 1.5rem;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0.5rem;
+}
+
+.namedocs:has(input[data-parent-idx]) [data-inherited-from] {
+  transition-property: opacity, display;
+  transition-duration: 0.4s;
+  transition-behavior: allow-discrete;
+  @starting-style { opacity: 0 !important; }
+}
+
+#this-page-items .tactic-name { font-weight: bold; }
+.namedocs:has(input[data-parent-idx="0"]) [data-inherited-from="0"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="0"]:checked) [data-inherited-from="0"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="0"]:checked):has(.inheritance[data-inherited-from="0"]:hover) [data-inherited-from]:not([data-inherited-from="0"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="1"]) [data-inherited-from="1"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="1"]:checked) [data-inherited-from="1"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="1"]:checked):has(.inheritance[data-inherited-from="1"]:hover) [data-inherited-from]:not([data-inherited-from="1"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="2"]) [data-inherited-from="2"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="2"]:checked) [data-inherited-from="2"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="2"]:checked):has(.inheritance[data-inherited-from="2"]:hover) [data-inherited-from]:not([data-inherited-from="2"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="3"]) [data-inherited-from="3"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="3"]:checked) [data-inherited-from="3"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="3"]:checked):has(.inheritance[data-inherited-from="3"]:hover) [data-inherited-from]:not([data-inherited-from="3"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="4"]) [data-inherited-from="4"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="4"]:checked) [data-inherited-from="4"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="4"]:checked):has(.inheritance[data-inherited-from="4"]:hover) [data-inherited-from]:not([data-inherited-from="4"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="5"]) [data-inherited-from="5"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="5"]:checked) [data-inherited-from="5"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="5"]:checked):has(.inheritance[data-inherited-from="5"]:hover) [data-inherited-from]:not([data-inherited-from="5"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="6"]) [data-inherited-from="6"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="6"]:checked) [data-inherited-from="6"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="6"]:checked):has(.inheritance[data-inherited-from="6"]:hover) [data-inherited-from]:not([data-inherited-from="6"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="7"]) [data-inherited-from="7"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="7"]:checked) [data-inherited-from="7"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="7"]:checked):has(.inheritance[data-inherited-from="7"]:hover) [data-inherited-from]:not([data-inherited-from="7"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="8"]) [data-inherited-from="8"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="8"]:checked) [data-inherited-from="8"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="8"]:checked):has(.inheritance[data-inherited-from="8"]:hover) [data-inherited-from]:not([data-inherited-from="8"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="9"]) [data-inherited-from="9"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="9"]:checked) [data-inherited-from="9"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="9"]:checked):has(.inheritance[data-inherited-from="9"]:hover) [data-inherited-from]:not([data-inherited-from="9"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="10"]) [data-inherited-from="10"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="10"]:checked) [data-inherited-from="10"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="10"]:checked):has(.inheritance[data-inherited-from="10"]:hover) [data-inherited-from]:not([data-inherited-from="10"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="11"]) [data-inherited-from="11"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="11"]:checked) [data-inherited-from="11"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="11"]:checked):has(.inheritance[data-inherited-from="11"]:hover) [data-inherited-from]:not([data-inherited-from="11"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="12"]) [data-inherited-from="12"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="12"]:checked) [data-inherited-from="12"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="12"]:checked):has(.inheritance[data-inherited-from="12"]:hover) [data-inherited-from]:not([data-inherited-from="12"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="13"]) [data-inherited-from="13"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="13"]:checked) [data-inherited-from="13"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="13"]:checked):has(.inheritance[data-inherited-from="13"]:hover) [data-inherited-from]:not([data-inherited-from="13"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="14"]) [data-inherited-from="14"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="14"]:checked) [data-inherited-from="14"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="14"]:checked):has(.inheritance[data-inherited-from="14"]:hover) [data-inherited-from]:not([data-inherited-from="14"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="15"]) [data-inherited-from="15"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="15"]:checked) [data-inherited-from="15"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="15"]:checked):has(.inheritance[data-inherited-from="15"]:hover) [data-inherited-from]:not([data-inherited-from="15"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="16"]) [data-inherited-from="16"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="16"]:checked) [data-inherited-from="16"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="16"]:checked):has(.inheritance[data-inherited-from="16"]:hover) [data-inherited-from]:not([data-inherited-from="16"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="17"]) [data-inherited-from="17"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="17"]:checked) [data-inherited-from="17"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="17"]:checked):has(.inheritance[data-inherited-from="17"]:hover) [data-inherited-from]:not([data-inherited-from="17"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="18"]) [data-inherited-from="18"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="18"]:checked) [data-inherited-from="18"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="18"]:checked):has(.inheritance[data-inherited-from="18"]:hover) [data-inherited-from]:not([data-inherited-from="18"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="19"]) [data-inherited-from="19"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="19"]:checked) [data-inherited-from="19"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="19"]:checked):has(.inheritance[data-inherited-from="19"]:hover) [data-inherited-from]:not([data-inherited-from="19"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="20"]) [data-inherited-from="20"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="20"]:checked) [data-inherited-from="20"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="20"]:checked):has(.inheritance[data-inherited-from="20"]:hover) [data-inherited-from]:not([data-inherited-from="20"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="21"]) [data-inherited-from="21"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="21"]:checked) [data-inherited-from="21"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="21"]:checked):has(.inheritance[data-inherited-from="21"]:hover) [data-inherited-from]:not([data-inherited-from="21"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="22"]) [data-inherited-from="22"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="22"]:checked) [data-inherited-from="22"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="22"]:checked):has(.inheritance[data-inherited-from="22"]:hover) [data-inherited-from]:not([data-inherited-from="22"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="23"]) [data-inherited-from="23"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="23"]:checked) [data-inherited-from="23"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="23"]:checked):has(.inheritance[data-inherited-from="23"]:hover) [data-inherited-from]:not([data-inherited-from="23"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="24"]) [data-inherited-from="24"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="24"]:checked) [data-inherited-from="24"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="24"]:checked):has(.inheritance[data-inherited-from="24"]:hover) [data-inherited-from]:not([data-inherited-from="24"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="25"]) [data-inherited-from="25"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="25"]:checked) [data-inherited-from="25"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="25"]:checked):has(.inheritance[data-inherited-from="25"]:hover) [data-inherited-from]:not([data-inherited-from="25"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="26"]) [data-inherited-from="26"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="26"]:checked) [data-inherited-from="26"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="26"]:checked):has(.inheritance[data-inherited-from="26"]:hover) [data-inherited-from]:not([data-inherited-from="26"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="27"]) [data-inherited-from="27"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="27"]:checked) [data-inherited-from="27"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="27"]:checked):has(.inheritance[data-inherited-from="27"]:hover) [data-inherited-from]:not([data-inherited-from="27"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="28"]) [data-inherited-from="28"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="28"]:checked) [data-inherited-from="28"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="28"]:checked):has(.inheritance[data-inherited-from="28"]:hover) [data-inherited-from]:not([data-inherited-from="28"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="29"]) [data-inherited-from="29"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="29"]:checked) [data-inherited-from="29"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="29"]:checked):has(.inheritance[data-inherited-from="29"]:hover) [data-inherited-from]:not([data-inherited-from="29"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="30"]) [data-inherited-from="30"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="30"]:checked) [data-inherited-from="30"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="30"]:checked):has(.inheritance[data-inherited-from="30"]:hover) [data-inherited-from]:not([data-inherited-from="30"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="31"]) [data-inherited-from="31"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="31"]:checked) [data-inherited-from="31"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="31"]:checked):has(.inheritance[data-inherited-from="31"]:hover) [data-inherited-from]:not([data-inherited-from="31"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="32"]) [data-inherited-from="32"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="32"]:checked) [data-inherited-from="32"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="32"]:checked):has(.inheritance[data-inherited-from="32"]:hover) [data-inherited-from]:not([data-inherited-from="32"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="33"]) [data-inherited-from="33"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="33"]:checked) [data-inherited-from="33"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="33"]:checked):has(.inheritance[data-inherited-from="33"]:hover) [data-inherited-from]:not([data-inherited-from="33"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="34"]) [data-inherited-from="34"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="34"]:checked) [data-inherited-from="34"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="34"]:checked):has(.inheritance[data-inherited-from="34"]:hover) [data-inherited-from]:not([data-inherited-from="34"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="35"]) [data-inherited-from="35"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="35"]:checked) [data-inherited-from="35"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="35"]:checked):has(.inheritance[data-inherited-from="35"]:hover) [data-inherited-from]:not([data-inherited-from="35"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="36"]) [data-inherited-from="36"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="36"]:checked) [data-inherited-from="36"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="36"]:checked):has(.inheritance[data-inherited-from="36"]:hover) [data-inherited-from]:not([data-inherited-from="36"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="37"]) [data-inherited-from="37"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="37"]:checked) [data-inherited-from="37"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="37"]:checked):has(.inheritance[data-inherited-from="37"]:hover) [data-inherited-from]:not([data-inherited-from="37"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="38"]) [data-inherited-from="38"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="38"]:checked) [data-inherited-from="38"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="38"]:checked):has(.inheritance[data-inherited-from="38"]:hover) [data-inherited-from]:not([data-inherited-from="38"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="39"]) [data-inherited-from="39"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="39"]:checked) [data-inherited-from="39"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="39"]:checked):has(.inheritance[data-inherited-from="39"]:hover) [data-inherited-from]:not([data-inherited-from="39"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="40"]) [data-inherited-from="40"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="40"]:checked) [data-inherited-from="40"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="40"]:checked):has(.inheritance[data-inherited-from="40"]:hover) [data-inherited-from]:not([data-inherited-from="40"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="41"]) [data-inherited-from="41"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="41"]:checked) [data-inherited-from="41"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="41"]:checked):has(.inheritance[data-inherited-from="41"]:hover) [data-inherited-from]:not([data-inherited-from="41"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="42"]) [data-inherited-from="42"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="42"]:checked) [data-inherited-from="42"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="42"]:checked):has(.inheritance[data-inherited-from="42"]:hover) [data-inherited-from]:not([data-inherited-from="42"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="43"]) [data-inherited-from="43"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="43"]:checked) [data-inherited-from="43"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="43"]:checked):has(.inheritance[data-inherited-from="43"]:hover) [data-inherited-from]:not([data-inherited-from="43"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="44"]) [data-inherited-from="44"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="44"]:checked) [data-inherited-from="44"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="44"]:checked):has(.inheritance[data-inherited-from="44"]:hover) [data-inherited-from]:not([data-inherited-from="44"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="45"]) [data-inherited-from="45"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="45"]:checked) [data-inherited-from="45"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="45"]:checked):has(.inheritance[data-inherited-from="45"]:hover) [data-inherited-from]:not([data-inherited-from="45"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="46"]) [data-inherited-from="46"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="46"]:checked) [data-inherited-from="46"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="46"]:checked):has(.inheritance[data-inherited-from="46"]:hover) [data-inherited-from]:not([data-inherited-from="46"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="47"]) [data-inherited-from="47"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="47"]:checked) [data-inherited-from="47"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="47"]:checked):has(.inheritance[data-inherited-from="47"]:hover) [data-inherited-from]:not([data-inherited-from="47"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="48"]) [data-inherited-from="48"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="48"]:checked) [data-inherited-from="48"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="48"]:checked):has(.inheritance[data-inherited-from="48"]:hover) [data-inherited-from]:not([data-inherited-from="48"]) {
+  opacity: 0.5;
+}
+.namedocs:has(input[data-parent-idx="49"]) [data-inherited-from="49"] {
+  display: none;
+  opacity: 0;
+}
+.namedocs:has(input[data-parent-idx="49"]:checked) [data-inherited-from="49"] {
+  display: block;
+  transform: none;
+  opacity: 1;
+}
+.namedocs:has(input[data-parent-idx="49"]:checked):has(.inheritance[data-inherited-from="49"]:hover) [data-inherited-from]:not([data-inherited-from="49"]) {
+  opacity: 0.5;
+}
+</style><style>
+table.tabular {
+  margin: auto;
+  border-spacing: 1rem;
+}
+table.tabular.left-align {
+  margin-right: auto;
+  margin-left: 0;
+}
+table.tabular.center-align {
+  margin: auto;
+}
+table.tabular.right-align {
+  margin-left auto;
+  margin-right: 0;
+}
+table.tabular td, table.tabular th {
+  text-align: left;
+  vertical-align: top;
+}
+table.tabular td > p:first-child, table.tabular th > p:first-child {
+  margin-top: 0;
+}
+table.tabular td > p:last-child, table.tabular th > p:first-child {
+  margin-bottom: 0;
+}
+</style><style>/static/fonts/source-serif/source-serif-text.css</style><style>/static/fonts/source-sans/source-sans-3.css</style><style>
+.shell-command {
+
+}
+.shell-command.inline > * {
+  display: inline;
+  white-space: pre;
+}
+.shell-command.inline .command::before {
+  content: "$ ";
+  font-weight: 600;
+}
+</style><style>/static/fonts/noto-sans-mono/noto-sans-mono.css</style><style>
+div.paragraph > .eq-steps:not(:first-child) {
+  margin-top: 0.5rem;
+}
+
+div.paragraph > .eq-steps:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+</style><style>
+
+.hl.lean {
+  white-space: pre;
+  font-weight: normal;
+  font-style: normal;
+  font-size: inherit;
+}
+
+.hl.lean .keyword {
+  color: var(--verso-code-keyword-color,);
+  font-weight: var(--verso-code-keyword-weight, bold);
+  font-style: var(--verso-code-keyword-style, normal);
+  font-family: var(--verso-code-keyword-font-family,);
+}
+
+.hl.lean .const {
+  color: var(--verso-code-const-color,);
+  font-weight: var(--verso-code-const-weight, normal);
+  font-style: var(--verso-code-const-style, normal);
+  font-family: var(--verso-code-const-font-family,);
+}
+
+.hl.lean .var {
+  color: var(--verso-code-var-color,);
+  font-weight: var(--verso-code-var-weight, normal);
+  font-style: var(--verso-code-var-style, italic);
+  font-family: var(--verso-code-var-font-family,);
+
+  position: relative;
+}
+
+.hl.lean .literal, .hl.lean .unknown {
+  color: var(--verso-code-color,);
+  font-weight: normal;
+  font-style: normal;
+  font-family: var(--verso-code-font-family,);
+}
+
+.hover-container {
+  width: 0;
+  height: 0;
+  position: relative;
+  display: inline;
+}
+
+.hl.lean a {
+  color: inherit;
+  text-decoration: currentcolor underline dotted;
+}
+
+.hl.lean a:hover {
+  text-decoration: currentcolor underline solid;
+}
+
+.hl.lean .hover-info {
+  white-space: normal;
+}
+
+.hl.lean .token .hover-info {
+  display: none;
+  position: absolute;
+  background-color: #e5e5e5;
+  border: 1px solid black;
+  padding: 0.5rem;
+  z-index: 300;
+}
+
+.hl.lean .hover-info.messages {
+  max-height: 10rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  padding: 0 0.5rem 0 0;
+  display: block;
+}
+
+.hl.lean .hover-info code {
+  white-space: pre-wrap;
+  background: none;
+  color: black;
+}
+
+.hl.lean .hover-info.messages > code {
+  padding: 0.5rem;
+  display: block;
+  width: fit-content;
+}
+
+.hl.lean .hover-info.messages > code:only-child {
+  margin: 0;
+}
+
+.hl.lean .hover-info.messages > code {
+  margin: 0.1rem;
+}
+
+.hl.lean .hover-info.messages > code:not(:first-child) {
+  margin-top: 0rem;
+}
+
+.hl.lean {
+}
+
+.hl.lean.block {
+  display: block;
+}
+
+.hl.lean.inline {
+  display: inline;
+  white-space: pre-wrap;
+}
+
+.hl.lean * {
+}
+
+.hl.lean .token {
+  transition: all 0.25s; /* Slight fade for highlights */
+}
+
+@media (hover: hover) {
+  .hl.lean .token.binding-hl, .hl.lean .literal.string:hover, .hl.lean .token.typed:hover {
+    background-color: #eee;
+    border-radius: 2px;
+    transition: none;
+  }
+}
+
+
+.hl.lean .has-info .token:not(.tactic-state):not(.tactic-state *), .hl.lean .has-info .inter-text:not(.tactic-state):not(.tactic-state *) {
+  text-decoration-style: wavy;
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.hl.lean .has-info .hover-info {
+  display: none;
+  position: absolute;
+  transform: translate(0.25rem, 0.3rem);
+  border: 1px solid black;
+  padding: 0.5rem;
+  z-index: 400;
+  text-align: left;
+}
+
+.hl.lean .has-info.error :not(.tactic-state):not(.tactic-state *){
+  text-decoration-color: red;
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.error:hover {
+    background-color: #ffb3b3;
+  }
+}
+
+.hl.lean .hover-info.messages > code.error {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid #ffb3b3;
+}
+
+.tippy-box[data-theme~='error'] .hl.lean .hover-info.messages > code.error {
+  background: none;
+  border: none;
+}
+
+.error .verso-message, .error .verso-message .token, .error .verso-message label {
+  color: var(--verso-error-color);
+}
+
+.error .verso-message .case-label:has(input[type="checkbox"])::before {
+  background-color: var(--verso-error-color) !important;
+}
+
+.hl.lean .has-info.warning :not(.tactic-state):not(.tactic-state *) {
+  text-decoration-color: var(--verso-warning-indicator-color);
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.warning:hover {
+    background-color:var(--verso-warning-color);
+  }
+}
+
+.hl.lean .hover-info.messages > code.warning {
+  background-color: var(--verso-warning-color);
+}
+
+.lean-output {
+  border-left: 0.2em solid transparent;
+  padding: 0 0 0 0.5em;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.lean-output.error {
+  border-color: var(--verso-error-indicator-color);
+}
+
+.lean-output.information {
+  border-color: var(--verso-info-indicator-color);
+}
+
+.lean-output.warning {
+  border-color: var(--verso-warning-indicator-color);
+}
+
+.hl.lean .hover-info.messages > code.error {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid var(--verso-warning-color);
+}
+
+.tippy-box[data-theme~='warning'] .hl.lean .hover-info.messages > code.warning {
+  background: none;
+  border: none;
+}
+
+
+.hl.lean .has-info.information :not(.tactic-state):not(.tactic-state *) {
+  text-decoration-color: var(--verso-info-indicator-color, blue);
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.information:hover {
+    background-color: #4777ff;
+  }
+}
+
+
+.hl.lean .hover-info.messages > code.information {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid #4777ff;
+}
+
+.tippy-box[data-theme~='info'] .hl.lean .hover-info.messages > code.information {
+  background: none;
+  border: none;
+}
+
+.hl.lean div.docstring {
+  font-family: var(--verso-text-font-family, sans-serif);
+  white-space: normal;
+  max-width: calc(min(40rem, 90vw));
+  width: max-content;
+}
+
+.hl.lean div.docstring > :last-child {
+  margin-bottom: 0;
+}
+
+.hl.lean div.docstring > :first-child {
+  margin-top: 0;
+}
+
+.hl.lean .hover-info .sep {
+  display: block;
+  width: auto;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0;
+  height: 1px;
+  border-top: 1px solid #ccc;
+}
+
+.hl.lean code {
+  font-family: var(--verso-code-font-family);
+}
+
+.hl.lean .tactic-state {
+  display: none;
+  position: relative;
+  width: fit-content;
+  border: 1px solid #888888;
+  border-radius: 0.1rem;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  background-color: #ffffff;
+}
+
+.hl.lean.popup .tactic-state {
+  position: static;
+  display: block;
+  width: auto;
+  border: none;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  background-color: #ffffff;
+}
+
+
+.hl.lean .tactic {
+  position: relative;
+  display: inline;
+  vertical-align: top;
+  /* Without these, mobile Safari will start making font sizes inconsistent when its text size adjustment feature is triggered.*/
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+.hl.lean .tactic:has(.tactic-toggle:checked) {
+  display: inline-grid;
+  grid-template-columns: 1fr;
+}
+
+.hl.lean .tactic-toggle:checked ~ .tactic-state {
+  display: inline-block;
+  vertical-align: top;
+  grid-row: 2;
+  justify-self: start;
+}
+
+.hl.lean .tactic > label {
+  position: relative;
+  grid-row: 1;
+  display: inline;
+}
+
+@media (hover: hover) {
+  .hl.lean .tactic:has(.tactic-toggle:not(:checked)) > label:hover {
+    background-color: #eeeeee;
+  }
+}
+
+.hl.lean .tactic-toggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  z-index: -10;
+}
+
+.hl.lean .tactic > label::after {
+  content: "";
+  border: 1px solid #bbbbbb;
+  /* These need to be em, not rem, to scale with the font */
+  border-radius: 1em;
+  height: 0.25em;
+  vertical-align: middle;
+  width: 0.6em;
+  margin-left: 0.1em;
+  margin-right: 0.1em;
+  display: inline-block;
+  transition: all 0.5s;
+}
+
+/*
+@media (hover: hover) {
+  .hl.lean .tactic > label:hover::after {
+    border: 1px solid #aaaaaa;
+    background-color: #aaaaaa;
+    transition: all 0.5s;
+  }
+}
+*/
+
+.hl.lean .tactic > label:has(+ .tactic-toggle:checked)::after {
+  border: 1px solid #999999;
+  background-color: #999999;
+  transition: all 0.5s;
+}
+
+.hl.lean .tactic-state .goal + .goal {
+  margin-top: 1.5em;
+}
+
+/*
+Some CSS frameworks customize details/summary in ways not compatible with Verso's output.
+*/
+
+.hl.lean details {
+  display: block !important;
+  margin: 0;
+}
+
+.hl.lean details summary {
+  display: list-item !important;
+  margin: 0;
+}
+
+.hl.lean details summary:focus {
+  outline: none;
+  outline-offset: none;
+  color: inherit;
+}
+
+.hl.lean ul > li {
+  margin-bottom: 0;
+}
+
+.hl.lean details summary::marker {
+  display: inline !important;
+}
+
+.hl.lean details > summary:first-of-type {
+  list-style-type: disclosure-closed;
+  list-style-position: inside;
+}
+
+.hl.lean details[open] > summary:first-of-type {
+  list-style-type: disclosure-open;
+}
+
+.hl.lean details summary::before, .hl.lean details summary::after {
+  content: "" !important;
+  background: none;
+  display: none;
+}
+
+.hl.lean .tactic-state summary {
+  /* These need to be em, not rem, to scale with the font */
+  margin-left: -0.5em;
+}
+
+.hl.lean .tactic-state details {
+  /* These need to be em, not rem, to scale with the font */
+  padding-left: 0.5em;
+}
+
+.hl.lean .case-label {
+  display: block;
+  position: relative;
+}
+
+.hl.lean .case-label input[type="checkbox"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  z-index: -10;
+}
+
+.hl.lean .case-label:has(input[type="checkbox"])::before {
+  display: inline-block;
+  background-color: black;
+  content: ' ';
+  transition: ease 0.2s;
+  margin-right: 0.7em;
+  clip-path: polygon(100% 0, 0 0, 50% 100%);
+  width: 0.6em;
+  height: 0.6em;
+  vertical-align: middle;
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]:not(:checked))::before {
+  transform: rotate(-90deg);
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]) {
+
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]:checked) {
+
+}
+
+
+.hl.lean .labeled-case > :not(:first-child) {
+  max-height: 0px;
+  display: block;
+  overflow: hidden;
+  transition: max-height 0.1s ease-in;
+  /* These need to be em, not rem, to scale with the font */
+  margin-left: 0.5em;
+  margin-top: 0.1em;
+}
+
+.hl.lean .labeled-case:has(.case-label input[type="checkbox"]:checked) > :not(:first-child) {
+  max-height: 100%;
+}
+
+
+.hl.lean .goal-name::before {
+  font-style: normal;
+  content: "case ";
+}
+
+.hl.lean .goal-name {
+  font-style: italic;
+  font-family: var(--verso-code-font-family);
+  color: inherit;
+}
+
+.hl.lean .hypotheses {
+  display: table;
+}
+
+.hl.lean .hypothesis {
+  display: table-row;
+}
+
+.hl.lean .hypothesis > * {
+  display: table-cell;
+}
+
+
+.hl.lean .hypotheses .colon {
+  text-align: center;
+  /* This needs to be em, not rem, to scale with the font */
+  min-width: 1em;
+}
+
+.hl.lean .hypotheses .name {
+  text-align: right;
+}
+
+.hl.lean .hypotheses .name,
+.hl.lean .hypotheses .type,
+.hl.lean .conclusion .type {
+  font-family: var(--verso-code-font-family);
+}
+
+.tippy-box {
+  /* Without these, mobile Safari will start making font sizes inconsistent when its text size adjustment feature is triggered.*/
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+
+}
+
+.tippy-box[data-theme~='lean'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 1px solid black;
+}
+.tippy-box[data-theme~='lean'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #e5e5e5;
+}
+
+.tippy-box[data-theme~='message'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #e5e5e5;
+  border-width: 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='top'] > .tippy-arrow::after {
+  bottom: -11px;
+  border-width: 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-width: 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='bottom'] > .tippy-arrow::after {
+  top: -11px;
+  border-width: 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #e5e5e5;
+  border-width: 11px 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='left'] > .tippy-arrow::after {
+  right: -11px;
+  border-width: 11px 0 11px 11px;
+}
+
+.tippy-box[data-theme~='message'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #e5e5e5;
+  border-width: 11px 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='right'] > .tippy-arrow::after {
+  left: -11px;
+  border-width: 11px 11px 11px 0;
+}
+
+
+
+.tippy-box[data-theme~='warning'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid var(--verso-warning-color);
+}
+
+.tippy-box[data-theme~='error'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid #f7a7af;
+}
+
+.tippy-box[data-theme~='info'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid #99b3c2;
+}
+
+.tippy-box[data-theme~='tactic'] {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: white;
+}
+
+.extra-doc-links {
+  list-style-type: none;
+  margin-left: 0;
+  padding: 0;
+}
+
+.extra-doc-links > li {
+  display: inline-block;
+}
+
+.extra-doc-links > li:not(:last-child)::after {
+  content: '|';
+  display: inline-block;
+  margin: 0 0.25em;
+}
+
+.verso-message .trace {
+  display: block;
+}
+
+.verso-message .trace > summary::marker {
+  color: var(--verso-text-color);
+}
+
+.verso-message .trace-children {
+  margin: 0;
+  padding: 0;
+}
+
+.verso-message .trace-children > li {
+  list-style-type: none;
+  margin-left: 1.5em;
+}
+
+.verso-message .trace-children > li:not(:has(.trace)) {
+  margin-left: 0;
+}
+
+.verso-message .trace-class {
+  color: color-mix(in srgb, currentColor 70%, transparent);
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.verso-message .text {
+  white-space: pre-wrap;
+}
+
+</style><script>
+      
+window.onload = () => {
+
+    // Don't show hovers inside of closed tactic states
+    function blockedByTactic(elem) {
+      let parent = elem.parentNode;
+      while (parent && "classList" in parent) {
+        if (parent.classList.contains("tactic")) {
+          const toggle = parent.querySelector("input.tactic-toggle");
+          if (toggle) {
+            return !toggle.checked;
+          }
+        }
+        parent = parent.parentNode;
+      }
+      return false;
+    }
+
+    function blockedByTippy(elem) {
+      // Don't show a new hover until the old ones are all closed.
+      // Scoped to the nearest "top-level block" to avoid being O(n) in the size of the document.
+      var block = elem;
+      const topLevel = new Set(["section", "body", "html", "nav", "header"]);
+      while (block.parentNode && !topLevel.has(block.parentNode.nodeName.toLowerCase())) {
+        block = block.parentNode;
+      }
+      for (const child of block.querySelectorAll(".token, .has-info")) {
+        if (child._tippy && child._tippy.state.isVisible) { return true };
+      }
+      return false;
+    }
+
+    for (const c of document.querySelectorAll(".hl.lean .token")) {
+        if (c.dataset.binding != "") {
+            c.addEventListener("mouseover", (event) => {
+                if (blockedByTactic(c)) {return;}
+                const context = c.closest(".hl.lean").dataset.leanContext;
+                for (const example of document.querySelectorAll(".hl.lean")) {
+                    if (example.dataset.leanContext == context) {
+                        for (const tok of example.querySelectorAll(".token")) {
+                            if (c.dataset.binding == tok.dataset.binding) {
+                                tok.classList.add("binding-hl");
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        c.addEventListener("mouseout", (event) => {
+            for (const tok of document.querySelectorAll(".hl.lean .token")) {
+                tok.classList.remove("binding-hl");
+            }
+        });
+    }
+    /* Render docstrings */
+    if ('undefined' !== typeof marked) {
+        for (const d of document.querySelectorAll("code.docstring, pre.docstring")) {
+            const str = d.innerText;
+            const html = marked.parse(str);
+            const rendered = document.createElement("div");
+            rendered.classList.add("docstring");
+            rendered.innerHTML = html;
+            d.parentNode.replaceChild(rendered, d);
+        }
+    }
+    // Add hovers
+    let docsJson = "-verso-docs.json";
+    fetch(docsJson).then((resp) => resp.json()).then((versoDocData) => {
+
+      function hideParentTooltips(element) {
+        let parent = element.parentElement;
+        while (parent) {
+          const tippyInstance = parent._tippy;
+          if (tippyInstance) {
+            tippyInstance.hide();
+          }
+          parent = parent.parentElement;
+        }
+      }
+
+
+
+      const defaultTippyProps = {
+        /* DEBUG -- remove the space: * /
+        onHide(any) { return false; },
+        trigger: "click",
+        // */
+        /* theme: "lean", */
+        maxWidth: "none",
+        appendTo: () => document.body,
+        interactive: true,
+        delay: [100, null],
+        /* ignoreAttributes: true, */
+        followCursor: 'initial',
+        onShow(inst) {
+          if (inst.reference.className == 'tactic') {
+
+            const toggle = inst.reference.querySelector("input.tactic-toggle");
+            if (toggle && toggle.checked) {
+              return false;
+            }
+            hideParentTooltips(inst.reference);
+            //if (blockedByTippy(inst.reference)) { return false; }
+
+          } else if (inst.reference.querySelector(".hover-info") || "versoHover" in inst.reference.dataset) {
+            if (blockedByTactic(inst.reference)) { return false };
+            if (blockedByTippy(inst.reference)) { return false; }
+          } else { // Nothing to show here!
+            return false;
+          }
+        },
+        content (tgt) {
+          const content = document.createElement("span");
+          if (tgt.className == 'tactic') {
+            const state = tgt.querySelector(".tactic-state").cloneNode(true);
+            state.style.display = "block";
+            content.appendChild(state);
+            content.style.display = "block";
+            content.className = "hl lean popup";
+          } else {
+            content.className = "hl lean";
+            content.style.display = "block";
+            content.style.maxHeight = "300px";
+            content.style.overflowY = "auto";
+            content.style.overflowX = "hidden";
+            const hoverId = tgt.dataset.versoHover;
+            const hoverInfo = tgt.querySelector(".hover-info");
+            if (hoverId) { // Docstrings from the table
+              // TODO stop doing an implicit conversion from string to number here
+              let data = versoDocData[hoverId];
+              if (data) {
+                const info = document.createElement("span");
+                info.className = "hover-info";
+                info.style.display = "block";
+                info.innerHTML = data;
+                content.appendChild(info);
+                /* Render docstrings - TODO server-side */
+                if ('undefined' !== typeof marked) {
+                    for (const d of content.querySelectorAll("code.docstring, pre.docstring")) {
+                        const str = d.innerText;
+                        const html = marked.parse(str);
+                        const rendered = document.createElement("div");
+                        rendered.classList.add("docstring");
+                        rendered.innerHTML = html;
+                        d.parentNode.replaceChild(rendered, d);
+                    }
+                }
+              } else {
+                content.innerHTML = "Failed to load doc ID: " + hoverId;
+              }
+            } else if (hoverInfo) { // The inline info, still used for compiler messages
+              content.appendChild(hoverInfo.cloneNode(true));
+            }
+            const extraLinks = tgt.parentElement.dataset['versoLinks'];
+            if (extraLinks) {
+              try {
+                const extras = JSON.parse(extraLinks);
+                const links = document.createElement('ul');
+                links.className = 'extra-doc-links';
+                extras.forEach((l) => {
+                  const li = document.createElement('li');
+                  li.innerHTML = "<a href=\"" + l['href'] + "\" title=\"" + l.long + "\">" + l.short + "</a>";
+                  links.appendChild(li);
+                });
+                content.appendChild(links);
+              } catch (error) {
+                console.error(error);
+              }
+            }
+          }
+          return content;
+        }
+      };
+
+
+      document.querySelectorAll('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'lean');
+      });
+      document.querySelectorAll('.hl.lean .has-info.warning').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'warning message');
+      });
+      document.querySelectorAll('.hl.lean .has-info.information').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'info message');
+      });
+      document.querySelectorAll('.hl.lean .has-info.error').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'error message');
+      });
+      document.querySelectorAll('.hl.lean .tactic').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'tactic');
+      });
+      let insts = tippy('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .has-info, .hl.lean .tactic, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort', defaultTippyProps);
+  });
+}
+</script>
+    <script defer="defer" data-domain="lean-lang.org" src="https://plausible.io/js/script.outbound-links.js"></script>
+    <script src="-verso-search/search-highlight.js" defer="defer"></script>
+    </head>
+  <body>
+    <header>
+      <div class="header-logo-wrapper">
+        <a href="" id="logo"><img src="static/lean_logo.svg"></a></div>
+      <div class="header-title-wrapper">
+        <a href="" class="header-title"><h1>
+            Lean 函数式编程</h1>
+          </a></div>
+      </header>
+    <label for="toggle-toc" id="toggle-toc-click"><span class="line line1"></span><span class="line line2"></span><span class="line line3"></span></label><div class="with-toc">
+      <div class="toc-backdrop" onclick="document.getElementById('toggle-toc-click')?.click()"></div>
+      <nav id="toc">
+        <input type="checkbox" id="toggle-toc"><div class="first">
+          <a href="" class="toc-title"><h1>
+              Lean 函数式编程</h1>
+            </a><div class="split-tocs">
+            <div class="split-toc book">
+              <div class="title">
+                <label for="--verso-manual-toc-----bookRoot" class="toggle-split-toc"><input type="checkbox" class="toggle-split-toc" id="--verso-manual-toc-----bookRoot"></label><span class="">Table of Contents</span></div>
+              <table><tr class="unnumbered"><td class="num"><td><a href="Introduction/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u5f15__u8a00_">引言</a></td></tr><tr class="unnumbered"><td class="num"><td><a href="Acknowledgments/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u81f4__u8c22_">致谢</a></td></tr><tr class="numbered"><td class="num">1.</td><td><a href="Getting-to-Know-Lean/#getting-to-know">初识 Lean</a></td></tr><tr class="numbered"><td class="num">2.</td><td><a href="Hello___-World___/#hello-world">Hello, World!</a></td></tr><tr class="unnumbered"><td class="num"><td><a href="Interlude___-Propositions___-Proofs___-and-Indexing/#props-proofs-indexing">插曲：命题、证明与索引</a></td></tr><tr class="current numbered"><td class="num">3.</td><td><a href="Overloading-and-Type-Classes/#type-classes">重载与类型类</a></td></tr><tr class="numbered"><td class="num">4.</td><td><a href="Monads/#monads">单子</a></td></tr><tr class="numbered"><td class="num">5.</td><td><a href="Functors___-Applicative-Functors___-and-Monads/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u51fd__u5b50__u3001__u5e94__u7528__u51fd__u5b50__u4e0e__u5355__u5b50_">函子、应用函子与单子</a></td></tr><tr class="numbered"><td class="num">6.</td><td><a href="Monad-Transformers/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u5355__u5b50__u8f6c__u6362__u5668_">单子转换器</a></td></tr><tr class="numbered"><td class="num">7.</td><td><a href="Programming-with-Dependent-Types/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u4f9d__u503c__u7c7b__u578b__u7f16__u7a0b_">依值类型编程</a></td></tr><tr class="unnumbered"><td class="num"><td><a href="Interlude___-Tactics___-Induction___-and-Proofs/#tactics-induction-proofs">插曲：策略、归纳与证明</a></td></tr><tr class="numbered"><td class="num">8.</td><td><a href="Programming___-Proving___-and-Performance/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u7f16__u7a0b__u3001__u8bc1__u660e__u4e0e__u6027__u80fd_">编程、证明与性能</a></td></tr><tr class="numbered"><td class="num">9.</td><td><a href="Next-Steps/#next-steps">后续学习</a></td></tr></table></div>
+            <div class="split-toc">
+              <div class="title">
+                <label for="--verso-manual-toc-type-classes" class="toggle-split-toc"><input type="checkbox" class="toggle-split-toc" id="--verso-manual-toc-type-classes" checked="checked"></label><span class="number">3.</span> <span class=""><a href="Overloading-and-Type-Classes/#type-classes">重载与类型类</a></span></div>
+              <table><tr class="numbered"><td class="num">3.1.</td><td><a href="Overloading-and-Type-Classes/Positive-Numbers/#positive-numbers">正数</a></td></tr><tr class="numbered"><td class="num">3.2.</td><td><a href="Overloading-and-Type-Classes/Type-Classes-and-Polymorphism/#tc-polymorphism">类型类与多态性</a></td></tr><tr class="current numbered"><td class="num">3.3.</td><td><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#out-params">控制实例搜索</a></td></tr><tr class="numbered"><td class="num">3.4.</td><td><a href="Overloading-and-Type-Classes/Arrays-and-Indexing/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u91cd__u8f7d__u4e0e__u7c7b__u578b__u7c7b_--_u6570__u7ec4__u4e0e__u7d22__u5f15_">数组与索引</a></td></tr><tr class="numbered"><td class="num">3.5.</td><td><a href="Overloading-and-Type-Classes/Standard-Classes/#standard-classes">标准类</a></td></tr><tr class="numbered"><td class="num">3.6.</td><td><a href="Overloading-and-Type-Classes/Coercions/#coercions">强制类型转换</a></td></tr><tr class="numbered"><td class="num">3.7.</td><td><a href="Overloading-and-Type-Classes/Additional-Conveniences/#type-class-conveniences">额外的便利语法</a></td></tr><tr class="numbered"><td class="num">3.8.</td><td><a href="Overloading-and-Type-Classes/Summary/#type-classes-summary">小结</a></td></tr></table></div>
+            <div class="split-toc">
+              <div class="title">
+                <label for="--verso-manual-toc-out-params" class="toggle-split-toc"><input type="checkbox" class="toggle-split-toc" id="--verso-manual-toc-out-params" checked="checked"></label><span class="number">3.3.</span> <span class="current"><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#out-params">控制实例搜索</a></span></div>
+              <table><tr class="numbered"><td class="num">3.3.1.</td><td><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#heterogeneous-operators">异构重载</a></td></tr><tr class="numbered"><td class="num">3.3.2.</td><td><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#output-parameters">输出参数</a></td></tr><tr class="numbered"><td class="num">3.3.3.</td><td><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#default-instances">默认实例</a></td></tr><tr class="numbered"><td class="num">3.3.4.</td><td><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#out-params-exercises">练习</a></td></tr></table></div>
+            </div>
+          </div>
+        <div class="last">
+          <ul id="meta-links">
+            <li>
+              <a href="https://github.com/MiemieMethod/fp-lean">Source Code</a></li>
+            <li>
+              <a href="https://github.com/MiemieMethod/fp-lean/issues">Report Issues</a></li>
+            </ul>
+          </div>
+        </nav>
+      <main><div class="content-wrapper">
+          <nav class="prev-next-buttons">
+            <a class="local-button active" href="Overloading-and-Type-Classes/Type-Classes-and-Polymorphism/#tc-polymorphism" rel="prev" title="3.2. 类型类与多态性"><span class="arrow">←</span><span class="where">3.2. 类型类与多态性</span></a><a class="local-button active" href="Overloading-and-Type-Classes/Arrays-and-Indexing/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u91cd__u8f7d__u4e0e__u7c7b__u578b__u7c7b_--_u6570__u7ec4__u4e0e__u7d22__u5f15_" rel="next" title="3.4. 数组与索引"><span class="where">3.4. 数组与索引</span><span class="arrow">→</span></a></nav>
+          <section>
+            <h1>
+              3.3. 控制实例搜索<span class="permalink-widget inline"><a href="find/?domain=Verso.Genre.Manual.section&amp;name=out-params" title="Permalink">🔗</a></span></h1>
+            <p>
+              <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#Add___mk" title="Documentation for Add in Lean Language Reference"><span class="const token" data-binding="const-Add" data-verso-hover="412">Add</span></a></code> 类的一个实例足以允许两个类型为 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span></code> 的表达式被方便地相加，并产生另一个 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span></code>。
+然而，在许多情况下，更加灵活并允许<em>异质</em>运算符重载可能很有用，其中实参可以具有不同类型。
+例如，将一个 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a></code> 加到一个 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span></code> 上，或将一个 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span></code> 加到一个 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a></code> 上，总会产生一个 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span></code>：</p>
+            <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-14506">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-addNatPos" data-verso-hover="471" id="addNatPos">addNatPos</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="5">0</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.23711" data-verso-hover="417">p</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.23711" data-verso-hover="417">p</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.23790" data-verso-hover="5">n</span><span class="inter-text"> </span><span class="unknown token" data-binding="">+</span><span class="inter-text"> </span><span class="unknown token" data-binding="">1</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.23791" data-verso-hover="417">p</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><a href="Overloading-and-Type-Classes/Positive-Numbers/#Pos_u2e_succ" title="Definition of example"><span class="const token" data-binding="const-Pos.succ" data-verso-hover="415">Pos.succ</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#addNatPos" title="Definition of example"><span class="const token" data-binding="const-addNatPos" data-verso-hover="471">addNatPos</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.23790" data-verso-hover="5">n</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.23791" data-verso-hover="417">p</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+
+</span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-14598">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-addPosNat" data-verso-hover="472" id="addPosNat">addPosNat</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.24090" data-verso-hover="417">p</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="5">0</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.24090" data-verso-hover="417">p</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.24169" data-verso-hover="417">p</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.24170" data-verso-hover="5">n</span><span class="inter-text"> </span><span class="unknown token" data-binding="">+</span><span class="inter-text"> </span><span class="unknown token" data-binding="">1</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><a href="Overloading-and-Type-Classes/Positive-Numbers/#Pos_u2e_succ" title="Definition of example"><span class="const token" data-binding="const-Pos.succ" data-verso-hover="415">Pos.succ</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#addPosNat" title="Definition of example"><span class="const token" data-binding="const-addPosNat" data-verso-hover="472">addPosNat</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.24169" data-verso-hover="417">p</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.24170" data-verso-hover="5">n</span><span class="unknown token" data-binding="">)</span></code><p>
+              这些函数允许将自然数加到正数上，但它们不能与 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#Add___mk" title="Documentation for Add in Lean Language Reference"><span class="const token" data-binding="const-Add" data-verso-hover="412">Add</span></a></code> 类型类一起使用，因为该类型类要求 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#Add___mk" title="Documentation for Add.add in Lean Language Reference"><span class="const token" data-binding="const-Add.add" data-verso-hover="427">add</span></a></code> 的两个参数具有相同类型。</p>
+            <section>
+              <h2 id="heterogeneous-operators">
+                3.3.1. 异构重载<span class="permalink-widget inline"><a href="find/?domain=Verso.Genre.Manual.section&amp;name=heterogeneous-operators" title="Permalink">🔗</a></span></h2>
+              <p>
+                如关于 <a href="Overloading-and-Type-Classes/Positive-Numbers/#overloaded-addition">重载加法</a> 的一节所述，Lean 提供了一个名为 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#HAdd___mk" title="Documentation for HAdd in Lean Language Reference"><span class="const token" data-binding="const-HAdd" data-verso-hover="419">HAdd</span></a></code> 的类型类，用于异构地重载加法。
+<code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#HAdd___mk" title="Documentation for HAdd in Lean Language Reference"><span class="const token" data-binding="const-HAdd" data-verso-hover="419">HAdd</span></a></code> 类接受三个类型参数：两个参数类型和返回类型。
+<code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#HAdd___mk" title="Documentation for HAdd in Lean Language Reference"><span class="const token" data-binding="const-HAdd" data-verso-hover="419">HAdd</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span></code> 和 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#HAdd___mk" title="Documentation for HAdd in Lean Language Reference"><span class="const token" data-binding="const-HAdd" data-verso-hover="419">HAdd</span></a><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span></code> 的实例允许使用普通的加法记号来混合这些类型：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.instance-14738">instance</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#HAdd___mk" title="Documentation for HAdd in Lean Language Reference"><span class="const token" data-binding="const-HAdd" data-verso-hover="419">HAdd</span></a><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.whereStructInst-14766">where</span><span class="inter-text">
+  </span><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#HAdd___mk" title="Documentation for HAdd.hAdd in Lean Language Reference"><span class="const token" data-binding="const-HAdd.hAdd" data-verso-hover="473">hAdd</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#addNatPos" title="Definition of example"><span class="const token" data-binding="const-addNatPos" data-verso-hover="471">addNatPos</span></a><span class="inter-text">
+
+</span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.instance-14793">instance</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#HAdd___mk" title="Documentation for HAdd in Lean Language Reference"><span class="const token" data-binding="const-HAdd" data-verso-hover="419">HAdd</span></a><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.whereStructInst-14821">where</span><span class="inter-text">
+  </span><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#HAdd___mk" title="Documentation for HAdd.hAdd in Lean Language Reference"><span class="const token" data-binding="const-HAdd.hAdd" data-verso-hover="474">hAdd</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#addPosNat" title="Definition of example"><span class="const token" data-binding="const-addPosNat" data-verso-hover="472">addPosNat</span></a></code><p>
+                给定上述两个实例，以下示例可以工作：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="has-info information"><span class="hover-container"><span class="hover-info messages"><code class="verso-message information"><span class="text"></span><span class="text">8</span></code></span></span><a href="https://lean-lang.org/doc/reference/4.26.0/Interacting-with-Lean/#Lean___Parser___Command___eval" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.eval-14924" data-verso-hover="7">#eval</span></a></span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="typed token" data-binding="" data-verso-hover="417">3</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">+</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="typed token" data-binding="" data-verso-hover="5">5</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="unknown token" data-binding="">)</span></code><pre class="hl lean lean-output information"><span class="verso-message"><span class="text"></span><span class="text">8</span></span></pre><code class="hl lean block" data-lean-context="examples"><span class="has-info information"><span class="hover-container"><span class="hover-info messages"><code class="verso-message information"><span class="text"></span><span class="text">8</span></code></span></span><a href="https://lean-lang.org/doc/reference/4.26.0/Interacting-with-Lean/#Lean___Parser___Command___eval" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.eval-15027" data-verso-hover="7">#eval</span></a></span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="typed token" data-binding="" data-verso-hover="5">3</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">+</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="typed token" data-binding="" data-verso-hover="417">5</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="unknown token" data-binding="">)</span></code><pre class="hl lean lean-output information"><span class="verso-message"><span class="text"></span><span class="text">8</span></span></pre><div class="paragraph">
+                <p>
+                  <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#HAdd___mk" title="Documentation for HAdd in Lean Language Reference"><span class="const token" data-binding="const-HAdd" data-verso-hover="419">HAdd</span></a></code> 类型类的定义非常类似于下面 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-ProblematicHPlus.HPlus" data-verso-hover="475">HPlus</span></code> 的定义及其相应实例：</p>
+                <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.classTk-15125">class</span><span class="inter-text"> </span><span class="const token" data-binding="const-ProblematicHPlus.HPlus" data-verso-hover="475">HPlus</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.25379" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="58">Type</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.25381" data-verso-hover="125">β</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="58">Type</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.25383" data-verso-hover="125">γ</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="58">Type</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-null-15173">where</span><span class="inter-text">
+  </span><span class="const token" data-binding="const-ProblematicHPlus.HPlus.hPlus" data-verso-hover="476" id="ProblematicHPlus_u2e_HPlus_u2e_hPlus">hPlus</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.25379" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.25381" data-verso-hover="125">β</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.25383" data-verso-hover="125">γ</span></code><code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.instance-15255">instance</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-ProblematicHPlus.HPlus" data-verso-hover="475">HPlus</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.whereStructInst-15284">where</span><span class="inter-text">
+  </span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#ProblematicHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-ProblematicHPlus.HPlus.hPlus" data-verso-hover="477">hPlus</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#addNatPos" title="Definition of example"><span class="const token" data-binding="const-addNatPos" data-verso-hover="471">addNatPos</span></a><span class="inter-text">
+
+</span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.instance-15312">instance</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-ProblematicHPlus.HPlus" data-verso-hover="475">HPlus</span><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.whereStructInst-15341">where</span><span class="inter-text">
+  </span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#ProblematicHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-ProblematicHPlus.HPlus.hPlus" data-verso-hover="478">hPlus</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#addPosNat" title="Definition of example"><span class="const token" data-binding="const-addPosNat" data-verso-hover="472">addPosNat</span></a></code><p>
+                  然而，<code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-ProblematicHPlus.HPlus" data-verso-hover="475">HPlus</span></code> 的实例明显不如 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#HAdd___mk" title="Documentation for HAdd in Lean Language Reference"><span class="const token" data-binding="const-HAdd" data-verso-hover="419">HAdd</span></a></code> 的实例有用。
+当试图将这些实例与 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">#eval</span></code> 一起使用时，会发生错误：</p>
+                <code class="hl lean block" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Interacting-with-Lean/#Lean___Parser___Command___eval" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.eval-16057" data-verso-hover="7">#eval</span></a><span class="inter-text"> </span><span class="const token" data-binding="const-ToString.toString" data-verso-hover="273">toString</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="has-info error"><span class="hover-container"><span class="hover-info messages"><code class="verso-message error"><span class="text"></span><span class="text">typeclass instance problem is stuck</span><span class="text">
+  </span><span class="highlighted"><span class="inter-text"></span><span class="const token" data-binding="const-ProblematicHPlus.HPlus" data-verso-hover="475">HPlus</span><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">?m.6</span></span><span class="text">
+</span><span class="text">
+</span><span class="text">Note: </span><span class="text">Lean will not try to resolve this typeclass instance problem because </span><span class="text">the third type argument</span><span class="text"> to `</span><span class="highlighted"><span class="inter-text"></span><span class="const token" data-binding="const-ProblematicHPlus.HPlus" data-verso-hover="475">HPlus</span><span class="inter-text"></span></span><span class="text">` </span><span class="text">is a metavariable</span><span class="text">. </span><span class="text">This argument</span><span class="text"> must be fully determined before Lean will try to resolve the typeclass.</span><span class="text">
+</span><span class="text">
+</span><span class="text">Hint: </span><span class="text">Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `</span><span class="highlighted"><span class="inter-text"></span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"></span></span><span class="text">`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.</span><span class="text"></span></code></span></span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#ProblematicHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-ProblematicHPlus.HPlus.hPlus" data-verso-hover="476">HPlus.hPlus</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="typed token" data-binding="" data-verso-hover="417">3</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="typed token" data-binding="" data-verso-hover="5">5</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="unknown token" data-binding="">)</span></span><span class="unknown token" data-binding="">)</span></code><pre class="hl lean lean-output error"><span class="verso-message"><span class="text"></span><span class="text">typeclass instance problem is stuck</span><span class="text">
+  </span><span class="highlighted"><span class="const token" data-binding="const-ProblematicHPlus.HPlus" data-verso-hover="475">HPlus</span><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">?m.6</span></span><span class="text">
+</span><span class="text">
+</span><span class="text">Note: </span><span class="text">Lean will not try to resolve this typeclass instance problem because </span><span class="text">the third type argument</span><span class="text"> to `</span><span class="highlighted"><span class="const token" data-binding="const-ProblematicHPlus.HPlus" data-verso-hover="475">HPlus</span></span><span class="text">` </span><span class="text">is a metavariable</span><span class="text">. </span><span class="text">This argument</span><span class="text"> must be fully determined before Lean will try to resolve the typeclass.</span><span class="text">
+</span><span class="text">
+</span><span class="text">Hint: </span><span class="text">Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `</span><span class="highlighted"><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a></span><span class="text">`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.</span><span class="text"></span></span></pre><p>
+                  该消息表明，这是因为类型中存在一个元变量，而 Lean 没有办法求解它。</p>
+                </div>
+              <p>
+                正如在 <a href="Getting-to-Know-Lean/Polymorphism/#polymorphism">对多态性的初始描述</a>中所讨论的，元变量表示程序中无法被推断出的未知部分。
+当在 <code class="hl lean inline" data-lean-context="examples"><span class="keyword token" data-binding="">#eval</span></code> 之后书写一个表达式时，Lean 会尝试自动确定其类型。
+在这个例子中，它无法做到这一点。
+由于 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-ProblematicHPlus.HPlus" data-verso-hover="475">HPlus</span></code> 的第三个类型参数未知，Lean 无法执行类型类实例搜索；但实例搜索又是 Lean 能够确定该表达式类型的唯一方式。
+也就是说，<code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-ProblematicHPlus.HPlus" data-verso-hover="475">HPlus</span><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span></code> 实例只有在该表达式应当具有类型 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span></code> 时才能适用，但程序中除了该实例本身之外，没有任何内容表明它应当具有这个类型。</p>
+              <p>
+                该问题的一种解决方案是通过给整个表达式添加类型标注，确保三个类型全部可用：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="has-info information"><span class="hover-container"><span class="hover-info messages"><code class="verso-message information"><span class="text"></span><span class="text">8</span></code></span></span><a href="https://lean-lang.org/doc/reference/4.26.0/Interacting-with-Lean/#Lean___Parser___Command___eval" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.eval-16190" data-verso-hover="7">#eval</span></a></span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#ProblematicHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-ProblematicHPlus.HPlus.hPlus" data-verso-hover="476">HPlus.hPlus</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="typed token" data-binding="" data-verso-hover="417">3</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="typed token" data-binding="" data-verso-hover="5">5</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="unknown token" data-binding="">)</span></code><pre class="hl lean lean-output information"><span class="verso-message"><span class="text"></span><span class="text">8</span></span></pre><p>
+                然而，对于正数库的用户来说，此解决方案并不十分方便。</p>
+              </section>
+            <section>
+              <h2 id="output-parameters">
+                3.3.2. 输出参数<span class="permalink-widget inline"><a href="find/?domain=Verso.Genre.Manual.section&amp;name=output-parameters" title="Permalink">🔗</a></span></h2>
+              <p>
+                也可以通过将 <code class="hl lean inline" data-lean-context="examples"><span class="var token" data-binding="var-_uniq.25383" data-verso-hover="125">γ</span></code> 声明为<em>输出参数</em>来解决此问题。
+大多数类型类参数是搜索算法的输入：它们用于选择实例。
+例如，在一个 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Numeric-Literals/#OfNat___mk" title="Documentation for OfNat in Lean Language Reference"><span class="const token" data-binding="const-OfNat" data-verso-hover="63">OfNat</span></a></code> 实例中，类型和自然数都用于选择对自然数文字的某种特定解释。
+然而，在某些情况下，即使某些类型参数尚未知晓，也可以方便地启动搜索过程，并使用搜索中发现的实例来确定元变量的值。
+启动实例搜索时不需要的参数是该过程的输出，这用 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Instance-Synthesis/#outParam" title="Documentation for outParam in Lean Language Reference"><span class="const token" data-binding="const-outParam" data-verso-hover="479">outParam</span></a></code> 修饰符声明：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.classTk-16546">class</span><span class="inter-text"> </span><span class="const token" data-binding="const-BetterHPlus.HPlus" data-verso-hover="480">HPlus</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.27594" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="58">Type</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.27596" data-verso-hover="125">β</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="58">Type</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.27599" data-verso-hover="481">γ</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Instance-Synthesis/#outParam" title="Documentation for outParam in Lean Language Reference"><span class="const token" data-binding="const-outParam" data-verso-hover="479">outParam</span></a><span class="inter-text"> </span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="58">Type</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-null-16603">where</span><span class="inter-text">
+  </span><span class="const token" data-binding="const-BetterHPlus.HPlus.hPlus" data-verso-hover="482" id="BetterHPlus_u2e_HPlus_u2e_hPlus">hPlus</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.27594" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.27596" data-verso-hover="125">β</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.27599" data-verso-hover="481">γ</span></code><p>
+                有了这个输出参数，类型类实例搜索就能够在预先不知道 <code class="hl lean inline" data-lean-context="examples"><span class="var token" data-binding="var-_uniq.27599" data-verso-hover="481">γ</span></code> 的情况下选择实例。
+例如：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="has-info information"><span class="hover-container"><span class="hover-info messages"><code class="verso-message information"><span class="text"></span><span class="text">8</span></code></span></span><a href="https://lean-lang.org/doc/reference/4.26.0/Interacting-with-Lean/#Lean___Parser___Command___eval" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.eval-16827" data-verso-hover="7">#eval</span></a></span><span class="inter-text"> </span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#BetterHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-BetterHPlus.HPlus.hPlus" data-verso-hover="482">HPlus.hPlus</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="typed token" data-binding="" data-verso-hover="417">3</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-Pos" data-verso-hover="414">Pos</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="typed token" data-binding="" data-verso-hover="5">5</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="unknown token" data-binding="">)</span></code><pre class="hl lean lean-output information"><span class="verso-message"><span class="text"></span><span class="text">8</span></span></pre><p>
+                将输出参数理解为定义了某种函数，可能会有所帮助。
+某个具有一个或多个输出参数的类型类的任意给定实例，都会向 Lean 提供根据输入确定输出的指令。
+搜索实例的过程，可能以递归方式进行，最终会比单纯的重载更强大。
+输出参数可以确定程序中的其他类型，而实例搜索可以把一组底层实例组装成一个具有此类型的程序。</p>
+              </section>
+            <section>
+              <h2 id="default-instances">
+                3.3.3. 默认实例<span class="permalink-widget inline"><a href="find/?domain=Verso.Genre.Manual.section&amp;name=default-instances" title="Permalink">🔗</a></span></h2>
+              <p>
+                判定一个参数是输入还是输出，会控制 Lean 在何种情形下发起类型类搜索。
+特别地，在所有输入均已知之前，不会发生类型类搜索。
+然而，在某些情况下，输出参数还不够；即使某些输入未知，也应当发生实例搜索。
+这有点像 Python 或 Kotlin 中可选函数参数的默认值，只不过这里被选择的是默认<em>类型</em>。</p>
+              <p>
+                <em>默认实例</em>是这样的实例：即使并非其所有输入都已知，它们也可用于实例搜索。
+当这些实例之一可以使用时，就会使用它。
+这可以使程序成功通过类型检查，而不是因未知类型和元变量相关的错误而失败。
+另一方面，默认实例会使实例选择更难预测。
+特别是，如果选中了不期望的默认实例，那么表达式的类型可能不同于预期，从而可能在程序的其他位置引发令人困惑的类型错误。
+请谨慎选择使用默认实例的位置！</p>
+              <p>
+                默认实例可能有用的一个例子是可以从 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#Add___mk" title="Documentation for Add in Lean Language Reference"><span class="const token" data-binding="const-Add" data-verso-hover="412">Add</span></a></code> 实例派生出的 <code class="hl lean inline" data-lean-context="examples"><span class="const token" data-binding="const-BetterHPlus.HPlus" data-verso-hover="480">HPlus</span></code> 实例。
+换言之，普通加法是异质加法的一个特例，其中三个类型恰好相同。
+这可以使用以下实例实现：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.instance-16918">instance</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#Add___mk" title="Documentation for Add in Lean Language Reference"><span class="const token" data-binding="const-Add" data-verso-hover="412">Add</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.28054" data-verso-hover="125">α</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-BetterHPlus.HPlus" data-verso-hover="480">HPlus</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.28054" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.28054" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.28054" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.whereStructInst-16953">where</span><span class="inter-text">
+  </span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#BetterHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-BetterHPlus.HPlus.hPlus" data-verso-hover="483">hPlus</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#Add___mk" title="Documentation for Add.add in Lean Language Reference"><span class="const token" data-binding="const-Add.add" data-verso-hover="470">Add.add</span></a></code><p>
+                有了这个实例，<code class="hl lean inline" data-lean-context="examples"><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#BetterHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-BetterHPlus.HPlus.hPlus" data-verso-hover="483">hPlus</span></a></code> 可以用于任何可加类型，例如 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a></code>：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="has-info information"><span class="hover-container"><span class="hover-info messages"><code class="verso-message information"><span class="text"></span><span class="highlighted"><span class="inter-text"></span><span class="unknown token" data-binding="">8</span><span class="inter-text"></span></span></code></span></span><a href="https://lean-lang.org/doc/reference/4.26.0/Interacting-with-Lean/#Lean___Parser___Command___eval" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.eval-17061" data-verso-hover="7">#eval</span></a></span><span class="inter-text"> </span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#BetterHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-BetterHPlus.HPlus.hPlus" data-verso-hover="482">HPlus.hPlus</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="typed token" data-binding="" data-verso-hover="5">3</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="typed token" data-binding="" data-verso-hover="5">5</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="unknown token" data-binding="">)</span></code><pre class="hl lean lean-output information"><span class="verso-message"><span class="text"></span><span class="highlighted"><span class="unknown token" data-binding="">8</span></span></span></pre><p>
+                然而，此实例只会在两个参数的类型都已知的情形中使用。
+例如，</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="has-info information"><span class="hover-container"><span class="hover-info messages"><code class="verso-message information"><span class="text"></span><span class="highlighted"><span class="inter-text"></span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#BetterHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-BetterHPlus.HPlus.hPlus" data-verso-hover="482">HPlus.hPlus</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">5</span><span class="inter-text"> </span><span class="unknown token" data-binding="">3</span></span><span class="text"> : </span><span class="highlighted"><span class="inter-text"></span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"></span></span></code></span></span><a href="https://lean-lang.org/doc/reference/4.26.0/Interacting-with-Lean/#Lean___Parser___Command___check" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.check-17203">#check</span></a></span><span class="inter-text"> </span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#BetterHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-BetterHPlus.HPlus.hPlus" data-verso-hover="482">HPlus.hPlus</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="typed token" data-binding="" data-verso-hover="5">5</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="typed token" data-binding="" data-verso-hover="5">3</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="unknown token" data-binding="">)</span></code><p>
+                产生类型</p>
+              <pre class="hl lean lean-output information"><span class="verso-message"><span class="text"></span><span class="highlighted"><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#BetterHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-BetterHPlus.HPlus.hPlus" data-verso-hover="482">HPlus.hPlus</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">5</span><span class="inter-text"> </span><span class="unknown token" data-binding="">3</span></span><span class="text"> : </span><span class="highlighted"><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a></span></span></pre><p>
+                如预期那样，但</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="has-info information"><span class="hover-container"><span class="hover-info messages"><code class="verso-message information"><span class="text"></span><span class="highlighted"><span class="inter-text"></span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#BetterHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-BetterHPlus.HPlus.hPlus" data-verso-hover="482">HPlus.hPlus</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">5</span></span><span class="text"> : </span><span class="highlighted"><span class="inter-text"></span><span class="unknown token" data-binding="">?m.2</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="unknown token" data-binding="">?m.3</span></span></code></span></span><a href="https://lean-lang.org/doc/reference/4.26.0/Interacting-with-Lean/#Lean___Parser___Command___check" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.check-17360">#check</span></a></span><span class="inter-text"> </span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#BetterHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-BetterHPlus.HPlus.hPlus" data-verso-hover="482">HPlus.hPlus</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="typed token" data-binding="" data-verso-hover="5">5</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="unknown token" data-binding="">)</span></code><p>
+                产生一个包含两个元变量的类型，一个对应于剩余参数，另一个对应于返回类型：</p>
+              <pre class="hl lean lean-output information"><span class="verso-message"><span class="text"></span><span class="highlighted"><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#BetterHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-BetterHPlus.HPlus.hPlus" data-verso-hover="482">HPlus.hPlus</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">5</span></span><span class="text"> : </span><span class="highlighted"><span class="unknown token" data-binding="">?m.2</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="unknown token" data-binding="">?m.3</span></span></span></pre><p>
+                在绝大多数情况下，当某人为加法提供一个实参时，另一个实参将具有相同类型。
+要把此实例变成默认实例，请应用 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Instance-Declarations/#Lean___Parser___Attr___default_instance" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Attr.default_instance-17443">default_instance</span></a></code> 属性：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="unknown token" data-binding="">@[</span><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Instance-Declarations/#Lean___Parser___Attr___default_instance" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Attr.default_instance-17443">default_instance</span></a><span class="unknown token" data-binding="">]</span><span class="inter-text">
+</span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.instance-17461">instance</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#Add___mk" title="Documentation for Add in Lean Language Reference"><span class="const token" data-binding="const-Add" data-verso-hover="412">Add</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.28392" data-verso-hover="125">α</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-BetterHPlus.HPlus" data-verso-hover="480">HPlus</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.28392" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.28392" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.28392" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.whereStructInst-17496">where</span><span class="inter-text">
+  </span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#BetterHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-BetterHPlus.HPlus.hPlus" data-verso-hover="483">hPlus</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#Add___mk" title="Documentation for Add.add in Lean Language Reference"><span class="const token" data-binding="const-Add.add" data-verso-hover="470">Add.add</span></a></code><p>
+                有了这个默认实例，该示例具有一个更有用的类型：</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="has-info information"><span class="hover-container"><span class="hover-info messages"><code class="verso-message information"><span class="text"></span><span class="highlighted"><span class="inter-text"></span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#BetterHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-BetterHPlus.HPlus.hPlus" data-verso-hover="482">HPlus.hPlus</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">5</span></span><span class="text"> : </span><span class="highlighted"><span class="inter-text"></span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a></span></code></span></span><a href="https://lean-lang.org/doc/reference/4.26.0/Interacting-with-Lean/#Lean___Parser___Command___check" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.check-17625">#check</span></a></span><span class="inter-text"> </span><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#BetterHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-BetterHPlus.HPlus.hPlus" data-verso-hover="482">HPlus.hPlus</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="typed token" data-binding="" data-verso-hover="5">5</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="unknown token" data-binding="">)</span></code><p>
+                产生</p>
+              <pre class="hl lean lean-output information"><span class="verso-message"><span class="text"></span><span class="highlighted"><a href="Overloading-and-Type-Classes/Controlling-Instance-Search/#BetterHPlus_u2e_HPlus_u2e_hPlus" title="Definition of example"><span class="const token" data-binding="const-BetterHPlus.HPlus.hPlus" data-verso-hover="482">HPlus.hPlus</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">5</span></span><span class="text"> : </span><span class="highlighted"><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a></span></span></pre><p>
+                每个同时存在可重载的异构版本和同构版本的运算符，都遵循一种默认实例的模式，使同构版本能够在期望异构版本的上下文中使用。
+中缀运算符会被替换为对异构版本的调用，并且在可能时选择同构的默认实例。</p>
+              <p>
+                类似地，仅仅写下 <code class="hl lean inline" data-lean-context="examples"><span class="typed token" data-binding="" data-verso-hover="5">5</span></code> 会得到一个 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a></code>，而不是得到一个带有元变量、并等待更多信息以选择 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Numeric-Literals/#OfNat___mk" title="Documentation for OfNat in Lean Language Reference"><span class="const token" data-binding="const-OfNat" data-verso-hover="63">OfNat</span></a></code> 实例的类型。
+这是因为 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Natural-Numbers/#Nat___zero" title="Documentation for Nat in Lean Language Reference"><span class="const token" data-binding="const-Nat" data-verso-hover="6">Nat</span></a></code> 的 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Terms/Numeric-Literals/#OfNat___mk" title="Documentation for OfNat in Lean Language Reference"><span class="const token" data-binding="const-OfNat" data-verso-hover="63">OfNat</span></a></code> 实例是一个默认实例。</p>
+              <p>
+                默认实例还可以被赋予<em>优先级</em>，这些优先级会影响在多个实例都可能适用的情形下选择哪一个。
+关于默认实例优先级的更多信息，请参阅 Lean 手册。</p>
+              </section>
+            <section>
+              <h2 id="out-params-exercises">
+                3.3.4. 练习<span class="permalink-widget inline"><a href="find/?domain=Verso.Genre.Manual.section&amp;name=out-params-exercises" title="Permalink">🔗</a></span></h2>
+              <p>
+                定义一个 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#HMul___mk" title="Documentation for HMul in Lean Language Reference"><span class="const token" data-binding="const-HMul" data-verso-hover="421">HMul</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="const token" data-binding="const-PointStuff.PPoint" data-verso-hover="124">PPoint</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.15925" data-verso-hover="125">α</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.15925" data-verso-hover="125">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="const token" data-binding="const-PointStuff.PPoint" data-verso-hover="124">PPoint</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.15925" data-verso-hover="125">α</span><span class="unknown token" data-binding="">)</span></code> 实例，使其将两个投影都乘以该标量。
+它应适用于任何存在 <code class="hl lean inline" data-lean-context="examples"><a href="https://lean-lang.org/doc/reference/4.26.0/Type-Classes/Basic-Classes/#Mul___mk" title="Documentation for Mul in Lean Language Reference"><span class="const token" data-binding="const-Mul" data-verso-hover="438">Mul</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.15925" data-verso-hover="125">α</span></code> 实例的类型 <code class="hl lean inline" data-lean-context="examples"><span class="var token" data-binding="var-_uniq.15925" data-verso-hover="125">α</span></code>。
+例如，</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="has-info information"><span class="hover-container"><span class="hover-info messages"><code class="verso-message information"><span class="text"></span><span class="text">{ x := 5.000000, y := 7.400000 }</span></code></span></span><a href="https://lean-lang.org/doc/reference/4.26.0/Interacting-with-Lean/#Lean___Parser___Command___eval" title="Documentation for syntax in Lean Language Reference"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.eval-10438" data-verso-hover="7">#eval</span></a></span><span class="inter-text"> </span><span class="unknown token" data-binding="">{</span><span class="const token" data-binding="const-PointStuff.PPoint.x" data-verso-hover="75">x</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><span class="unknown token" data-binding="">2.5</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="const token" data-binding="const-PointStuff.PPoint.y" data-verso-hover="75">y</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><span class="unknown token" data-binding="">3.7</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="const token" data-binding="const-PointStuff.PPoint" data-verso-hover="124">PPoint</span><span class="inter-text"> </span><a href="https://lean-lang.org/doc/reference/4.26.0/Basic-Types/Floating-Point-Numbers/#Float-next" title="Documentation for Float in Lean Language Reference"><span class="const token" data-binding="const-Float" data-verso-hover="68">Float</span></a><span class="unknown token" data-binding="">}</span><span class="inter-text"> </span><span class="unknown token" data-binding="">*</span><span class="inter-text"> </span><span class="unknown token" data-binding="">2.0</span></code><p>
+                应当产生</p>
+              <pre class="hl lean lean-output information"><span class="verso-message"><span class="text"></span><span class="text">{ x := 5.000000, y := 7.400000 }</span></span></pre></section>
+            </section>
+          <nav class="prev-next-buttons">
+            <a class="local-button active" href="Overloading-and-Type-Classes/Type-Classes-and-Polymorphism/#tc-polymorphism" rel="prev" title="3.2. 类型类与多态性"><span class="arrow">←</span><span class="where">3.2. 类型类与多态性</span></a><a class="local-button active" href="Overloading-and-Type-Classes/Arrays-and-Indexing/#Lean-_u51fd__u6570__u5f0f__u7f16__u7a0b_--_u91cd__u8f7d__u4e0e__u7c7b__u578b__u7c7b_--_u6570__u7ec4__u4e0e__u7d22__u5f15_" rel="next" title="3.4. 数组与索引"><span class="where">3.4. 数组与索引</span><span class="arrow">→</span></a></nav>
+          </div>
+        </main></div>
+    </body>
+  </html>
+

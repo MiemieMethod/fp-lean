@@ -1,0 +1,1 @@
+window.docContents[145].resolve({"/Overloading-and-Type-Classes/Positive-Numbers/#even-numbers-ex":{"contents":"定义一个只表示偶数的数据类型。定义 、 和  的实例，使其能够被方便地使用。\n 需要 下一节 中引入的特性。\n\n","context":"Lean 函数式编程\u0009重载与类型类\u0009正数\u0009练习","header":"3.1.6.2. 偶数","id":"/Overloading-and-Type-Classes/Positive-Numbers/#even-numbers-ex"}});

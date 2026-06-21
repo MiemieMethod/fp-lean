@@ -1,0 +1,1 @@
+window.docContents[228].resolve({"/Overloading-and-Type-Classes/Standard-Classes/#standard-classes-exercises":{"contents":"* 编写一个  的实例并测试它。* 为二叉树数据类型实现一个  实例。\n\n\n","context":"Lean 函数式编程\u0009重载与类型类\u0009标准类","header":"3.5.9. 练习","id":"/Overloading-and-Type-Classes/Standard-Classes/#standard-classes-exercises"}});
