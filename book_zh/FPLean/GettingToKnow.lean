@@ -18,23 +18,26 @@ set_option verso.exampleProject "../examples"
 set_option verso.exampleModule "Hello"
 
 
-#doc (Manual) "了解 Lean" =>
+#doc (Manual) "初识 Lean" =>
 %%%
 tag := "getting-to-know"
+file := "Getting-to-Know-Lean"
 %%%
 
-按照惯例，介绍一门编程语言通常会编译并运行一个在控制台上显示「Hello, world!」的程序。这个简单的程序能确保语言工具安装正确，且程序员能够运行已编译的代码。
+按照传统，介绍一种编程语言时，应当编译并运行一个在控制台上显示 {moduleTerm}`"Hello, world!"` 的程序。
+这个简单程序确保该语言的工具链已正确安装，并且程序员能够运行编译后的代码。
 
-然而，自 20 世纪 70 年代以来，编程发生了许多变化。如今，编译器通常集成到了文本编辑器中，编程环境会在编写程序时提供反馈。
-Lean 也是如此：它实现了语言服务器协议（Language Server Protocol，LSP）的扩展版本，允许它与文本编辑器通信并在用户键入时提供反馈。
+然而，自 20 世纪 70 年代以来，编程已经发生了变化。
+如今，编译器通常集成到文本编辑器中，编程环境会在程序编写过程中提供反馈。
+Lean 也不例外：它实现了 Language Server Protocol 的扩展版本，使其能够与文本编辑器通信，并在用户输入时提供反馈。
 
-Python、Haskell 和 JavaScript 等许多不同语言都提供读入-求值-打印循环（read-eval-print-loop，REPL），也称为交互式顶层或浏览器控制台；用户可以在其中输入表达式或语句。
+像 Python、Haskell 和 JavaScript 这样各不相同的语言都提供读取-求值-打印循环（REPL），也称为交互式顶层或浏览器控制台，用户可以在其中输入表达式或语句。
 随后，语言会计算并显示用户输入的结果。
-与之不同，Lean 把这些功能整合进与编辑器的交互中，提供一些命令，使文本编辑器能够把反馈直接显示在程序文本之中。
-本章简要介绍如何在编辑器中与 Lean 交互，而 {ref "hello-world"}[Hello, World!] 则说明如何以传统方式从命令行批处理模式使用 Lean。
+另一方面，Lean 将这些功能集成到与编辑器的交互中，提供一些命令，使文本编辑器能够显示直接集成在程序文本自身中的反馈。
+本章简要介绍如何在编辑器中与 Lean 交互，而 {ref "hello-world"}[Hello, World!] 则描述如何以批处理模式从命令行按传统方式使用 Lean。
 
-阅读本书时，最好在编辑器中打开 Lean，一边阅读一边输入每个示例。
-请尝试修改这些示例，看看会发生什么！
+阅读本书时，最好在编辑器中打开 Lean，跟随内容并输入每一个示例。请尝试改动这些
+示例，看看会发生什么！
 
 {include 1 FPLean.GettingToKnow.Evaluating}
 

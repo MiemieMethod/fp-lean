@@ -9,30 +9,32 @@ open FPLean
 set_option verso.exampleProject "../examples"
 set_option verso.exampleModule "Examples.FunctorApplicativeMonad"
 
-#doc (Manual) "选择子" =>
+#doc (Manual) "选择" =>
 %%%
 tag := "alternative"
+file := "Alternatives"
 %%%
 
 
 # 从失败中恢复
 %%%
 tag := "alternative-recovery"
+file := "Recovery-from-Failure"
 %%%
 
-{anchorName Validate}`Validate` 也可以用于输入有不止一种可接受方式的情形。
-对于输入表单 {anchorName RawInput}`RawInput`，实现遗留系统约定的另一组业务规则可能如下：
+{anchorName Validate}`Validate` 也可用于输入有多种可接受方式的情形。
+对于输入表单 {anchorName RawInput}`RawInput`，一组实现旧系统约定的替代业务规则可以如下：
 
- 1. 所有自然人用户都必须提供四位数的出生年份。
+ 1. 所有人类用户都必须提供四位数字的出生年份。
  2. 由于较早记录不完整，1970 年以前出生的用户不需要提供姓名。
  3. 1970 年以后出生的用户必须提供姓名。
- 4. 公司应把 {anchorTerm checkCompany}`"FIRM"` 作为出生年份输入，并提供公司名称。
+ 4. 公司应当将 {anchorTerm checkCompany}`"FIRM"` 输入为其诞生年份，并提供公司名称。
 
-对于出生于1970年的用户，没有做出特别的规定。
-预计他们要么放弃，要么谎报出生年份，要么打电话咨询。
-公司认为这是可以接受的经营成本。
+对于 1970 年出生的用户，并未作出任何特别安排。
+预期他们要么放弃，要么谎报自己的出生年份，要么打电话联系。
+公司认为这是开展业务可以接受的成本。
 
-以下归纳类型捕获了可以从这些既定规则中生成的值：
+下面的归纳类型刻画了可由这些给定规则产生的值：
 
 ```anchor LegacyCheckedInput
 abbrev NonEmptyString := {s : String // s ≠ ""}
@@ -52,9 +54,9 @@ inductive LegacyCheckedInput where
 deriving Repr
 ```
 
-然而，一个针对这些规则的验证器会更复杂，因为它必须处理所有三种情况。
-虽然可以将其写成一系列嵌套的 {kw}`if` 表达式，但更容易的方式是独立设计这三种情况，然后再将它们组合起来。
-这需要一种在保留错误信息的同时从失败中恢复的方法：
+然而，这些规则的验证器更为复杂，因为它必须处理全部三种情况。
+虽然它可以写成一系列嵌套的 {kw}`if` 表达式，但更容易的做法是分别设计这三种情况，然后将它们组合起来。
+这需要一种在保留错误消息的同时从失败中恢复的机制：
 
 ```anchor ValidateorElse
 def Validate.orElse
@@ -69,26 +71,26 @@ def Validate.orElse
     | .errors errs2 => .errors (errs1 ++ errs2)
 ```
 
-这种从失败中恢复的模式非常常见，以至于 Lean 为此内置了一种语法，并将其附加到了一个名为 {anchorName OrElse}`OrElse` 的类型类上：
+这种从失败中恢复的模式非常常见，因此 Lean 为它提供了内置语法，并将其附属于名为 {anchorName OrElse}`OrElse` 的类型类：
 
 ```anchor OrElse
 class OrElse (α : Type) where
   orElse : α → (Unit → α) → α
 ```
-表达式 {anchorTerm OrElseSugar}`E1 <|> E2` 是 {anchorTerm OrElseSugar}`OrElse.orElse E1 (fun () => E2)` 的简写形式。
-{anchorName Validate}`Validate` 的 {anchorName OrElse}`OrElse` 实例允许使用这种语法去进行错误恢复：
+表达式 {anchorTerm OrElseSugar}`E1 <|> E2` 是 {anchorTerm OrElseSugar}`OrElse.orElse E1 (fun () => E2)` 的简写。
+{anchorName Validate}`Validate` 的 {anchorName OrElse}`OrElse` 实例允许将此语法用于错误恢复：
 
 ```anchor OrElseValidate
 instance : OrElse (Validate ε α) where
   orElse := Validate.orElse
 ```
 
-{anchorName LegacyCheckedInput}`LegacyCheckedInput` 的验证器可以由每个构造子的验证器构建而成。
-对于公司的规则，规定了其出生年份应为字符串 {anchorTerm checkCompany}`"FIRM"`，且名称应为非空。
-然而，构造子 {anchorName names1}`LegacyCheckedInput.company` 根本没有出生年份的表示，因此无法通过 {anchorTerm checkCompanyProv}`<*>` 去轻松执行此操作。
-关键是使用一个带有 {anchorTerm checkCompanyProv}`<*>` 的函数，该函数忽略其参数。
+{anchorName LegacyCheckedInput}`LegacyCheckedInput` 的验证器可以由每个构造子的验证器构造出来。
+公司的规则规定，诞生年份应当是字符串 {anchorTerm checkCompany}`"FIRM"`，并且名称应当非空。
+然而，构造子 {anchorName names1}`LegacyCheckedInput.company` 完全没有诞生年份的表示，因此没有简单的方法用 {anchorTerm checkCompanyProv}`<*>` 来完成这一点。
+关键是使用一个带有 {anchorTerm checkCompanyProv}`<*>` 的函数，并让它忽略自己的参数。
 
-检查布尔条件成立而不将此事实的任何证据记录在类型中，可以通过 {anchorName checkThat}`checkThat` 来完成：
+检查一个布尔条件成立、但不在类型中记录关于这一事实的任何证据，可以用 {anchorName checkThat}`checkThat` 完成：
 
 ```anchor checkThat
 def checkThat (condition : Bool)
@@ -96,7 +98,7 @@ def checkThat (condition : Bool)
     Validate (Field × String) Unit :=
   if condition then pure () else reportError field msg
 ```
-{anchorName checkCompanyProv}`checkCompany` 的这个定义使用了 {anchorName checkCompanyProv}`checkThat`，然后丢弃了结果中的 {anchorName checkThat}`Unit` 值：
+{anchorName checkCompanyProv}`checkCompany` 的这个定义使用 {anchorName checkCompanyProv}`checkThat`，然后丢弃所得的 {anchorName checkThat}`Unit` 值：
 
 ```anchor checkCompanyProv
 def checkCompany (input : RawInput) :
@@ -107,18 +109,18 @@ def checkCompany (input : RawInput) :
     checkName input.name
 ```
 
-然而，这个定义相当嘈杂。
+然而，这一定义相当冗长。
 它可以通过两种方式简化。
-第一种是将第一次使用的 {anchorTerm checkCompanyProv}`<*>` 替换为一个专门的版本，该版本会自动忽略第一个参数返回的值，称为 {anchorTerm checkCompany}`*>`。
-这个运算符也由一个名为 {anchorName ClassSeqRight}`SeqRight` 的类型类控制，{anchorTerm seqRightSugar}`E1 *> E2` 是 {anchorTerm seqRightSugar}`SeqRight.seqRight E1 (fun () => E2)` 的语法糖：
+第一种是将第一次使用的 {anchorTerm checkCompanyProv}`<*>` 替换为一个专门版本，该版本会自动忽略第一个参数返回的值，称为 {anchorTerm checkCompany}`*>`。
+这个运算符同样由一个类型类控制，该类型类称为 {anchorName ClassSeqRight}`SeqRight`，并且 {anchorTerm seqRightSugar}`E1 *> E2` 是 {anchorTerm seqRightSugar}`SeqRight.seqRight E1 (fun () => E2)` 的语法糖：
 
 ```anchor ClassSeqRight
 class SeqRight (f : Type → Type) where
   seqRight : f α → (Unit → f β) → f β
 ```
-{anchorName ClassSeqRight}`seqRight` 有一个基于 {anchorName fakeSeq}`seq` 的默认实现：{lit}`seqRight (a : f α) (b : Unit → f β) : f β := pure (fun _ x => x) <*> a <*> b ()`。
+存在一个用 {anchorName fakeSeq}`seq` 定义 {anchorName ClassSeqRight}`seqRight` 的默认实现：{lit}`seqRight (a : f α) (b : Unit → f β) : f β := pure (fun _ x => x) <*> a <*> b ()`。
 
-使用 {anchorName ClassSeqRight}`seqRight`，{anchorName checkCompanyProv2}`checkCompany` 变得更简单：
+使用 {anchorName ClassSeqRight}`seqRight` 后，{anchorName checkCompanyProv2}`checkCompany` 变得更简单：
 
 ```anchor checkCompanyProv2
 def checkCompany (input : RawInput) :
@@ -127,10 +129,10 @@ def checkCompany (input : RawInput) :
     "birth year" "FIRM if a company" *>
   pure .company <*> checkName input.name
 ```
-还有一种简化是可能的。
+还可以再做一次简化。
 对于每个 {anchorName ApplicativeExcept}`Applicative`，{anchorTerm ApplicativeLaws}`pure f <*> E` 等价于 {anchorTerm ApplicativeLaws}`f <$> E`。
-换句话说，使用 {anchorName fakeSeq}`seq` 来应用一个通过 {anchorName ApplicativeExtendsFunctorOne}`pure` 放入 {anchorName ApplicativeExtendsFunctorOne}`Applicative` 类型的函数是大材小用，该函数本可以直接使用 {anchorName ApplicativeLaws}`Functor.map` 来应用。
-这种简化产生：
+换言之，使用 {anchorName fakeSeq}`seq` 来应用一个通过 {anchorName ApplicativeExtendsFunctorOne}`pure` 放入 {anchorName ApplicativeExtendsFunctorOne}`Applicative` 类型中的函数，是过度的；该函数本可以直接使用 {anchorName ApplicativeLaws}`Functor.map` 来应用。
+这种简化得到：
 
 ```anchor checkCompany
 def checkCompany (input : RawInput) :
@@ -140,8 +142,8 @@ def checkCompany (input : RawInput) :
   .company <$> checkName input.name
 ```
 
-{anchorName LegacyCheckedInput}`LegacyCheckedInput` 的其余两个构造子对其字段使用子类型。
-一个用于检查子类型的通用工具将使这些更容易阅读：
+{anchorName LegacyCheckedInput}`LegacyCheckedInput` 剩余的两个构造子在其字段中使用子类型。
+一个用于检查子类型的通用工具会使这些定义更易读：
 
 ```anchor checkSubtype
 def checkSubtype {α : Type} (v : α) (p : α → Prop) [Decidable (p v)]
@@ -151,11 +153,11 @@ def checkSubtype {α : Type} (v : α) (p : α → Prop) [Decidable (p v)]
   else
     .errors { head := err, tail := [] }
 ```
-在函数的参数列表中，类型类 {anchorTerm checkSubtype}`[Decidable (p v)]` 出现在参数 {anchorName checkSubtype}`v` 和 {anchorName checkSubtype}`p` 的规范之后是很重要的。
-否则，它将引用一组额外的自动隐式参数，而不是手动提供的值。
-{anchorName checkSubtype}`Decidable` 实例允许使用 {kw}`if` 检查命题 {anchorTerm checkSubtype}`p v`。
+在该函数的参数列表中，类型类 {anchorTerm checkSubtype}`[Decidable (p v)]` 出现在参数 {anchorName checkSubtype}`v` 和 {anchorName checkSubtype}`p` 的指定之后，这一点很重要。
+否则，它将指向一组额外的自动隐式参数，而不是指向手动提供的值。
+正是 {anchorName checkSubtype}`Decidable` 实例使得命题 {anchorTerm checkSubtype}`p v` 可以用 {kw}`if` 检查。
 
-两种人类情况不需要任何额外的工具：
+这两种人类情形不需要任何额外工具：
 
 ```anchor checkHumanBefore1970
 def checkHumanBefore1970 (input : RawInput) :
@@ -177,7 +179,7 @@ def checkHumanAfter1970 (input : RawInput) :
       checkName input.name
 ```
 
-三种情况的验证器可以使用 {anchorTerm OrElseSugar}`<|>` 组合：
+这三种情形的验证器可以使用 {anchorTerm OrElseSugar}`<|>` 组合起来：
 
 ```anchor checkLegacyInput
 def checkLegacyInput (input : RawInput) :
@@ -187,7 +189,7 @@ def checkLegacyInput (input : RawInput) :
   checkHumanAfter1970 input
 ```
 
-成功的情况返回 {anchorName LegacyCheckedInput}`LegacyCheckedInput` 的构造子，正如预期的那样：
+成功的情形如预期那样返回 {anchorName LegacyCheckedInput}`LegacyCheckedInput` 的构造子：
 ```anchor trollGroomers
 #eval checkLegacyInput ⟨"Johnny's Troll Groomers", "FIRM"⟩
 ```
@@ -207,7 +209,7 @@ Validate.ok (LegacyCheckedInput.humanBefore1970 1963 "Johnny")
 Validate.ok (LegacyCheckedInput.humanBefore1970 1963 "")
 ```
 
-最糟糕的输入返回所有可能的失败：
+最坏的可能输入会返回所有可能的失败：
 ```anchor allFailures
 #eval checkLegacyInput ⟨"", "1970"⟩
 ```
@@ -221,30 +223,31 @@ Validate.errors
 ```
 
 
-# Alternative 类
+# {lit}`Alternative` 类
 %%%
 tag := "Alternative"
+file := "The-Alternative-Class"
 %%%
 
-许多类型支持失败和恢复的概念。
-来自 {ref "nondeterministic-search"}[在各种单子中求值算术表达式] 一节中的 {anchorName AlternativeMany}`Many` 单子就是这样一种类型，{anchorName AlternativeOption}`Option` 也是。
-两者都支持失败而不提供原因（不像 {anchorName ApplicativeExcept}`Except` 和 {anchorName Validate}`Validate`，它们需要一些关于出了什么问题的指示）。
+许多类型都支持某种失败与恢复的概念。
+关于{ref "nondeterministic-search"}[在多种单子中求值算术表达式]一节中的 {anchorName AlternativeMany}`Many` 单子就是这样一种类型，{anchorName AlternativeOption}`Option` 也是如此。
+二者都支持不提供原因的失败（这不同于例如 {anchorName ApplicativeExcept}`Except` 和 {anchorName Validate}`Validate`，它们要求给出某种关于出错原因的指示）。
 
-{anchorName FakeAlternative}`Alternative` 类描述了具有用于失败和恢复的额外运算符的应用函子：
+{anchorName FakeAlternative}`Alternative` 类描述了具有额外的失败与恢复运算符的应用函子：
 
 ```anchor FakeAlternative
 class Alternative (f : Type → Type) extends Applicative f where
   failure : f α
   orElse : f α → (Unit → f α) → f α
 ```
-就像 {anchorTerm misc}`Add α` 的实现者免费获得 {anchorTerm misc}`HAdd α α α` 实例一样，{anchorName FakeAlternative}`Alternative` 的实现者免费获得 {anchorName OrElse}`OrElse` 实例：
+正如 {anchorTerm misc}`Add α` 的实现者可以免费获得 {anchorTerm misc}`HAdd α α α` 实例一样，{anchorName FakeAlternative}`Alternative` 的实现者也可以免费获得 {anchorName OrElse}`OrElse` 实例：
 
 ```anchor AltOrElse
 instance [Alternative f] : OrElse (f α) where
   orElse := Alternative.orElse
 ```
 
-{anchorName ApplicativeOption}`Option` 的 {anchorName FakeAlternative}`Alternative` 实现保留第一个非 {anchorName ApplicativeOption}`none` 参数：
+{anchorName ApplicativeOption}`Option` 的 {anchorName FakeAlternative}`Alternative` 实现会保留第一个非 {anchorName ApplicativeOption}`none` 参数：
 
 ```anchor AlternativeOption
 instance : Alternative Option where
@@ -253,7 +256,7 @@ instance : Alternative Option where
     | some x, _ => some x
     | none, y => y ()
 ```
-同样，{anchorName AlternativeMany}`Many` 的实现遵循 {moduleName (module := Examples.Monads.Many)}`Many.union` 的一般结构，由于导致惰性的 {anchorName guard}`Unit` 参数放置位置不同而略有差异：
+类似地，{anchorName AlternativeMany}`Many` 的实现遵循 {moduleName (module := Examples.Monads.Many)}`Many.union` 的一般结构，只是由于诱导惰性的 {anchorName guard}`Unit` 参数放置位置不同而有一些细微差异：
 
 ```anchor AlternativeMany
 def Many.orElse : Many α → (Unit → Many α) → Many α
@@ -265,8 +268,8 @@ instance : Alternative Many where
   orElse := Many.orElse
 ```
 
-像其他类型类一样，{anchorName FakeAlternative}`Alternative` 能够定义适用于实现 {anchorName FakeAlternative}`Alternative` 的 _任何_ 应用函子的各种操作。
-其中最重要的是 {anchorName guard}`guard`，当可判定命题为假时，它会导致 {anchorName guard}`failure`：
+与其他类型类一样，{anchorName FakeAlternative}`Alternative` 使得可以定义多种操作，它们适用于实现了 {anchorName FakeAlternative}`Alternative` 的_任意_应用函子。
+其中最重要的一个是 {anchorName guard}`guard`；当一个可判定命题为假时，它会导致 {anchorName guard}`failure`：
 
 ```anchor guard
 def guard [Alternative f] (p : Prop) [Decidable p] : f Unit :=
@@ -275,7 +278,7 @@ def guard [Alternative f] (p : Prop) [Decidable p] : f Unit :=
   else failure
 ```
 在单子程序中提前终止执行非常有用。
-在 {anchorName evenDivisors}`Many` 中，它可以用来过滤掉搜索的整个分支，如下面的程序计算自然数的所有偶数除数：
+在 {anchorName evenDivisors}`Many` 中，它可用于过滤掉搜索的一整个分支，如下面这个计算某个自然数的所有偶因子的程序所示：
 
 ```anchor evenDivisors
 def Many.countdown : Nat → Many Nat
@@ -288,7 +291,7 @@ def evenDivisors (n : Nat) : Many Nat := do
   guard (n % k = 0)
   pure k
 ```
-在 {anchorTerm evenDivisors20}`20` 上运行它会产生预期的结果：
+在 {anchorTerm evenDivisors20}`20` 上运行它会得到预期结果：
 ```anchor evenDivisors20
 #eval (evenDivisors 20).takeAll
 ```
@@ -300,20 +303,22 @@ def evenDivisors (n : Nat) : Many Nat := do
 # 练习
 %%%
 tag := "Alternative-exercises"
+file := "Exercises"
 %%%
 
-## 提高验证友好性
+## 改进验证的友好性
 %%%
 tag := none
+file := "Improve-Validation-Friendliness"
 %%%
 
-使用 {anchorTerm OrElseSugar}`<|>` 的 {anchorName Validate}`Validate` 程序返回的错误可能难以阅读，因为包含在错误列表中仅仅意味着可以通过 _某些_ 代码路径到达该错误。
-可以使用更结构化的错误报告来更准确地指导用户完成该过程：
+使用 {anchorTerm OrElseSugar}`<|>` 的 {anchorName Validate}`Validate` 程序所返回的错误可能难以阅读，因为被包含在错误列表中仅仅意味着该错误可以通过_某条_代码路径到达。
+可以使用一种结构更强的错误报告，更准确地引导用户完成该过程：
 
- * 将 {anchorName misc}`Validate.errors` 中的 {anchorName Validate}`NonEmptyList` 替换为裸类型变量，然后更新 {anchorTerm ApplicativeValidate}`Applicative (Validate ε)` 和 {anchorTerm OrElseValidate}`OrElse (Validate ε α)` 实例的定义，仅要求有一个可用的 {anchorTerm misc}`Append ε` 实例。
- * 定义一个函数 {anchorTerm misc}`Validate.mapErrors : Validate ε α → (ε → ε') → Validate ε' α`，它转换验证运行中的所有错误。
- * 使用数据类型 {anchorName TreeError}`TreeError` 来表示错误，重写遗留验证系统以跟踪其通过三个备选方案的路径。
- * 编写一个函数 {anchorTerm misc}`report : TreeError → String`，输出 {anchorName TreeError}`TreeError` 累积的警告和错误的对用户友好的视图。
+ * 将 {anchorName misc}`Validate.errors` 中的 {anchorName Validate}`NonEmptyList` 替换为一个裸类型变量，然后更新 {anchorTerm ApplicativeValidate}`Applicative (Validate ε)` 和 {anchorTerm OrElseValidate}`OrElse (Validate ε α)` 实例的定义，使其只要求存在可用的 {anchorTerm misc}`Append ε` 实例。
+ * 定义一个函数 {anchorTerm misc}`Validate.mapErrors : Validate ε α → (ε → ε') → Validate ε' α`，它转换一次验证运行中的所有错误。
+ * 使用数据类型 {anchorName TreeError}`TreeError` 表示错误，重写旧版验证系统，使其跟踪自己穿过这三个备选分支的路径。
+ * 编写一个函数 {anchorTerm misc}`report : TreeError → String`，输出 {anchorName TreeError}`TreeError` 所累积的警告和错误的用户友好视图。
 
 ```anchor TreeError
 inductive TreeError where

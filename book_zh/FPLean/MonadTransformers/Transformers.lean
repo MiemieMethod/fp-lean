@@ -9,42 +9,46 @@ open FPLean
 set_option verso.exampleProject "../examples"
 set_option verso.exampleModule "Examples.MonadTransformers.Defs"
 
-#doc (Manual) "单子构建工具包" =>
+#doc (Manual) "单子构造工具包" =>
+%%%
+file := "A-Monad-Construction-Kit"
+%%%
 
-{anchorName m}`ReaderT` 并不是唯一有用的单子转换器。
-本节将介绍一些额外的转换器。
+{anchorName m}`ReaderT` 远非唯一有用的单子转换器。
+本节描述若干其他转换器。
 每个单子转换器都由以下部分组成：
- 1. 一个以单子为参数定义或数据类型 {anchorName general}`T`。
-    它的类型应类似于 {anchorTerm general}`(Type u → Type v) → Type u → Type v`，尽管它可以接受单子之前的其他参数。
- 2. {anchorTerm general}`T m` 的 {anchorName general}`Monad` 实例依赖于 {anchorTerm general}`Monad m` 实例。这使得转换后的单子也可以作为单子使用。
- 3. 一个 {anchorName general}`MonadLift` 实例，可将任意单子 {anchorName general}`m` 的 {anchorTerm general}`m α` 类型的操作转换为 {anchorTerm general}`T m α` 类型的操作。这使得底层单子中的操作可以在转换后的单子中使用。
+ 1. 一个以单子作为参数的定义或数据类型 {anchorName general}`T`。
+它应当具有类似 {anchorTerm general}`(Type u → Type v) → Type u → Type v` 的类型，不过它可以在单子之前接受额外的参数。
+ 2. 一个用于 {anchorTerm general}`T m` 的 {anchorName general}`Monad` 实例，它依赖于 {anchorTerm general}`Monad m` 的实例。这使得转换后的单子能够作为单子使用。
+ 3. 一个 {anchorName general}`MonadLift` 实例，它将类型为 {anchorTerm general}`m α` 的动作转换为类型为 {anchorTerm general}`T m α` 的动作，其中 {anchorName general}`m` 是任意单子。这使得来自底层单子的动作可以在经过转换的单子中使用。
 
-此外，转换器的 {anchorName general}`Monad` 实例也应该遵守 {anchorName general}`Monad` 的约定，至少在底层的 {anchorName general}`Monad` 实例遵守的情况下。
-另外，{anchorTerm general}`monadLift (pure x : m α)` 应该等价于转换后的单子中的 {anchorTerm general}`pure x` ，而且 {anchorName general}`monadLift` 应对于 {anchorName MonadStateT}`bind` 可分配，这样 {anchorTerm general}`monadLift (x >>= f : m α)` 就等同于 {anchorTerm general}`(monadLift x : m α) >>= fun y => monadLift (f y)` 。
+此外，转换器的 {anchorName general}`Monad` 实例应当遵守 {anchorName general}`Monad` 的约定，至少在底层 {anchorName general}`Monad` 实例遵守该约定时如此。
+另外，在变换后的单子中，{anchorTerm general}`monadLift (pure x : m α)` 应当等价于 {anchorTerm general}`pure x`，并且 {anchorName general}`monadLift` 应当在 {anchorName MonadStateT}`bind` 上分配，使得 {anchorTerm general}`monadLift (x >>= f : m α)` 与 {anchorTerm general}`(monadLift x : m α) >>= fun y => monadLift (f y)` 相同。
 
-许多单子转换器还定义了 {anchorName m}`MonadReader` 风格的类型类，用于描述单子中可用的实际作用。
-这可以提供更大的灵活性：它允许编写只依赖接口的程序，而不限制底层单子必须由给定的转换器实现。
-类型类是程序表达其需求的一种方式，而单子转换器则是满足这些需求的一种便捷方式。
+许多单子转换器还会以 {anchorName m}`MonadReader` 的风格定义类型类，用来描述单子中实际可用的效果。
+这可以提供更大的灵活性：它允许编写仅依赖于某个接口的程序，而不把底层单子约束为必须由某个给定的转换器实现。
+类型类是程序表达其需求的一种方式，而单子转换器则是满足这些需求的一种便利方式。
 
 
-# 使用 {lit}`OptionT` 失败
+# 使用 {lit}`OptionT` 表示失败
 %%%
 tag := "OptionT"
+file := "Failure-with-OptionT"
 %%%
 
-由 {anchorName OptionExcept}`Option` 单子表示的失败和由 {anchorName M1eval}`Except` 单子表示的异常都有相应的转换器。
-对于 {anchorName OptionTdef}`Option` 单子，可以通过让单子包含 {anchorTerm OptionTdef}`Option α` 类型的值来为单子添加失败，否则单子将包含 {anchorName OptionTdef}`α` 类型的值。
-例如，{anchorTerm m}`IO (Option α)` 表示并不总是返回 {anchorName m}`α` 类型值的 {anchorName m}`IO` 操作。
-这就需要定义单子转换器 {anchorName OptionTdef}`OptionT`：
+由 {anchorName OptionExcept}`Option` 单子表示的失败，以及由 {anchorName M1eval}`Except` 单子表示的异常，都有相应的转换器。
+在 {anchorName OptionTdef}`Option` 的情形中，可以通过让一个单子在原本包含 {anchorName OptionTdef}`α` 类型的值之处包含 {anchorTerm OptionTdef}`Option α` 类型的值，来向该单子添加失败。
+例如，{anchorTerm m}`IO (Option α)` 表示并不总是返回 {anchorName m}`α` 类型值的 {anchorName m}`IO` 动作。
+这提示了单子转换器 {anchorName OptionTdef}`OptionT` 的定义：
 
 ```anchor OptionTdef
 def OptionT (m : Type u → Type v) (α : Type u) : Type v :=
   m (Option α)
 ```
 
-我们以一个向用户提问的程序为例来说明 {anchorName OptionTdef}`OptionT` 的作用。
-函数 {anchorName getSomeInput}`getSomeInput` 要求输入一行内容，并删除两端的空白。
-如果修剪后的输入是非空的，就会返回，但如果没有非空格字符，函数就会失败：
+作为 {anchorName OptionTdef}`OptionT` 实际使用的一个例子，考虑一个向用户提问的程序。
+函数 {anchorName getSomeInput}`getSomeInput` 请求一行输入，并移除其两端的空白字符。
+如果所得的修剪后输入非空，则返回它；但如果不存在非空白字符，则该函数失败：
 
 ```anchor getSomeInput
 def getSomeInput : OptionT IO String := do
@@ -54,14 +58,14 @@ def getSomeInput : OptionT IO String := do
     failure
   else pure trimmed
 ```
-这个应用软件可以追踪用户的姓名和他们最喜欢的甲虫种类：
+这个特定应用程序用用户的姓名和他们最喜欢的甲虫种类来跟踪用户：
 
 ```anchor UserInfo
 structure UserInfo where
   name : String
   favoriteBeetle : String
 ```
-询问用户输入并不比只使用 {anchorName m}`IO` 的函数更冗长：
+向用户请求输入并不比只使用 {anchorName m}`IO` 的函数更加冗长：
 
 ```anchor getUserInfo
 def getUserInfo : OptionT IO UserInfo := do
@@ -71,8 +75,8 @@ def getUserInfo : OptionT IO UserInfo := do
   let beetle ← getSomeInput
   pure ⟨name, beetle⟩
 ```
-然而，由于函数是在 {anchorTerm getSomeInput}`OptionT IO` 上下文中运行的，而不仅仅是在 {anchorName m}`IO` 中，因此第一次调用 {anchorName getSomeInput}`getSomeInput` 失败会导致整个 {anchorName getUserInfo}`getUserInfo` 失败，控制权永远不会到达关于甲虫的问题。
-主函数 {anchorName interact}`interact` 在纯的 {anchorName m}`IO` 上下文中调用 {anchorName interact}`getUserInfo`，这样就可以通过匹配内部的 {anchorName m}`Option` 来检查调用成功还是失败：
+然而，由于该函数运行在 {anchorTerm getSomeInput}`OptionT IO` 上下文中，而不只是运行在 {anchorName m}`IO` 中，因此第一次调用 {anchorName getSomeInput}`getSomeInput` 时的失败会导致整个 {anchorName getUserInfo}`getUserInfo` 失败，控制流永远不会到达关于甲虫的问题。
+主函数 {anchorName interact}`interact` 在纯 {anchorName m}`IO` 上下文中调用 {anchorName interact}`getUserInfo`，这使它能够通过对内部的 {anchorName m}`Option` 进行匹配来检查该调用是成功还是失败：
 
 ```anchor interact
 def interact : IO Unit := do
@@ -86,12 +90,13 @@ def interact : IO Unit := do
 ## 单子实例
 %%%
 tag := "OptionT-monad-instance"
+file := "The-Monad-Instance"
 %%%
 
-在编写单子实例发现了一个难题。
-根据类型，{anchorName MonadExceptT}`pure` 应该使用底层单子 {anchorName firstMonadOptionT}`m` 中的 {anchorName MonadMissingUni}`pure` 和 {anchorName firstMonadOptionT}`some`。
-正如 {anchorName m}`Option` 的 {anchorName firstMonadOptionT}`bind` 在第一个参数上分支，然后传播 {anchorName firstMonadOptionT}`none`，{anchorName firstMonadOptionT}`OptionT` 的 {anchorName firstMonadOptionT}`bind` 应该运行构成第一个参数的单子操作，在结果上分支，然后传播 {anchorName firstMonadOptionT}`none`。
-按照这个框架可以得到 Lean 不接受的如下定义：
+编写单子实例会揭示一个困难。
+根据类型，{anchorName MonadExceptT}`pure` 应当使用来自底层单子 {anchorName firstMonadOptionT}`m` 的 {anchorName MonadMissingUni}`pure`，并结合 {anchorName firstMonadOptionT}`some`。
+正如 {anchorName m}`Option` 的 {anchorName firstMonadOptionT}`bind` 会对第一个参数进行分支，并传播 {anchorName firstMonadOptionT}`none` 一样，{anchorName firstMonadOptionT}`OptionT` 的 {anchorName firstMonadOptionT}`bind` 应当运行构成第一个参数的单子式动作，对结果进行分支，然后传播 {anchorName firstMonadOptionT}`none`。
+按照这一草图会得到以下定义，但 Lean 不接受它：
 ```anchor firstMonadOptionT
 instance [Monad m] : Monad (OptionT m) where
   pure x := pure (some x)
@@ -100,7 +105,7 @@ instance [Monad m] : Monad (OptionT m) where
     | none => pure none
     | some v => next v
 ```
-错误信息显示了一个隐含的类型不匹配：
+错误消息显示了一个晦涩的类型不匹配：
 ```anchorError firstMonadOptionT
 Application type mismatch: The argument
   some x
@@ -111,9 +116,9 @@ but is expected to have type
 in the application
   pure (some x)
 ```
-这里的问题是 Lean 为周围的 {anchorName firstMonadOptionT}`pure` 使用选择了错误的 {anchorName firstMonadOptionT}`Monad` 实例。
-类似的错误也发生在 {anchorName firstMonadOptionT}`bind` 的定义中。
-一种解决方案是使用类型标注来引导 Lean 选择正确的 {anchorName MonadOptionTAnnots}`Monad` 实例：
+这里的问题在于，Lean 为周围对 {anchorName firstMonadOptionT}`pure` 的使用选择了错误的 {anchorName firstMonadOptionT}`Monad` 实例。
+在 {anchorName firstMonadOptionT}`bind` 的定义中也会出现类似错误。
+一种解决方法是使用类型标注来引导 Lean 选择正确的 {anchorName MonadOptionTAnnots}`Monad` 实例：
 
 ```anchor MonadOptionTAnnots
 instance [Monad m] : Monad (OptionT m) where
@@ -123,26 +128,26 @@ instance [Monad m] : Monad (OptionT m) where
     | none => pure none
     | some v => next v : m (Option _))
 ```
-虽然这种解决方案可行，但它不够优雅，代码也变得有点啰嗦。
+虽然这个解决方案可行，但它并不优雅，而且代码会变得有些嘈杂。
 
-另一种解决方案是定义函数，由函数的类型签名引导 Lean 找到正确的实例。
-事实上，{anchorName OptionTStructure}`OptionT` 自身可以定义为一个结构：
+另一种解决方案是定义一些函数，使其类型签名引导 Lean 找到正确的实例。
+事实上，{anchorName OptionTStructure}`OptionT` 本可以被定义为一个结构：
 
 ```anchor OptionTStructure
 structure OptionT (m : Type u → Type v) (α : Type u) : Type v where
   run : m (Option α)
 ```
-这可以解决这个问题，因为构造函数 {anchorName OptionTStructuredefs}`OptionT.mk` 和字段访问函数 {anchorName OptionTStructuredefs}`OptionT.run` 将引导类型类推理到正确的实例。
-但这样做的缺点是，生成的代码会更复杂，而且这些结构会使阅读证明更加困难。
-我们可以通过定义与构造函数 {anchorName OptionTStructuredefs}`OptionT.mk` 和字段 {anchorName OptionTStructuredefs}`OptionT.run` 具有相同作用的函数来实现两全其美的效果，但这些函数要与直接定义一起使用：
+这将解决该问题，因为构造子 {anchorName OptionTStructuredefs}`OptionT.mk` 和字段访问器 {anchorName OptionTStructuredefs}`OptionT.run` 会引导类型类推断找到正确的实例。
+这样做的缺点是，所得代码更复杂，并且这些结构可能使证明更难阅读。
+可以通过定义一些函数来兼得二者之长：这些函数扮演与构造子 {anchorName OptionTStructuredefs}`OptionT.mk` 和字段 {anchorName OptionTStructuredefs}`OptionT.run` 相同的角色，但适用于直接定义：
 
 ```anchor FakeStructOptionT
 def OptionT.mk (x : m (Option α)) : OptionT m α := x
 
 def OptionT.run (x : OptionT m α) : m (Option α) := x
 ```
-这两个函数直接返回的其原输入，但它们指明了旨在呈现 {anchorName FakeStructOptionT}`OptionT` 接口的代码与旨在呈现底层单子 {anchorName FakeStructOptionT}`m` 接口的代码之间的边界。
-使用这些辅助函数，{anchorName MonadOptionTFakeStruct}`Monad` 实例变得更加可读：
+这两个函数都原封不动地返回其输入，但它们标示了意在呈现 {anchorName FakeStructOptionT}`OptionT` 接口的代码与意在呈现底层单子 {anchorName FakeStructOptionT}`m` 接口的代码之间的边界。
+使用这些辅助函数，{anchorName MonadOptionTFakeStruct}`Monad` 实例变得更易读：
 
 ```anchor MonadOptionTFakeStruct
 instance [Monad m] : Monad (OptionT m) where
@@ -152,10 +157,10 @@ instance [Monad m] : Monad (OptionT m) where
     | none => pure none
     | some v => next v
 ```
-在这里，使用 {anchorName FakeStructOptionT}`OptionT.mk` 表示其参数应被视为使用 {anchorName MonadOptionTFakeStruct}`m` 接口的代码，它允许 Lean 选择正确的 {anchorName MonadOptionTFakeStruct}`Monad` 实例。
+这里，使用 {anchorName FakeStructOptionT}`OptionT.mk` 表明其参数应被视为使用 {anchorName MonadOptionTFakeStruct}`m` 接口的代码，这使 Lean 能够选择正确的 {anchorName MonadOptionTFakeStruct}`Monad` 实例。
 
-定义完单子实例后，最好检查一下单子约定是否满足。
-第一步是证明 {anchorTerm OptionTFirstLaw}`bind (pure v) f` 与 {anchorTerm OptionTFirstLaw}`f v` 相同。
+定义单子实例之后，最好检查单子契约是否得到满足。
+第一步是表明 {anchorTerm OptionTFirstLaw}`bind (pure v) f` 与 {anchorTerm OptionTFirstLaw}`f v` 相同。
 步骤如下：
 
 ```anchorEqSteps OptionTFirstLaw
@@ -201,27 +206,28 @@ OptionT.mk (f v)
 f v
 ```
 
-第二条规则指出，{anchorTerm OptionTSecondLaw}`bind w pure` 与 {anchorName OptionTSecondLaw}`w` 相同。
-为了证明这一点，展开 {anchorName OptionTSecondLaw}`bind` 和 {anchorName OptionTSecondLaw}`pure` 的定义，得出：
+第二条规则说明 {anchorTerm OptionTSecondLaw}`bind w pure` 与 {anchorName OptionTSecondLaw}`w` 相同。
+为了展示这一点，展开 {anchorName OptionTSecondLaw}`bind` 和 {anchorName OptionTSecondLaw}`pure` 的定义，得到：
 ```anchorTerm OptionTSecondLaw
 OptionT.mk do
     match ← w with
     | none => pure none
     | some v => pure (some v)
 ```
-在这个模式匹配中，两种情况的结果都与被匹配的模式相同，只是在其周围加上了 {anchorName OptionTSecondLaw}`pure`。
-换句话说，它等同于 {anchorTerm OptionTSecondLaw}`w >>= fun y => pure y`，这是 {anchorName OptionTFirstLaw}`m` 的第二个单子规则的一个实例。
+在这个模式匹配中，两个分支的结果都与被匹配的模式相同，只是在其外面包了一层 {anchorName OptionTSecondLaw}`pure`。
+换言之，它等价于 {anchorTerm OptionTSecondLaw}`w >>= fun y => pure y`，而这是 {anchorName OptionTFirstLaw}`m` 的第二条单子规则的一个实例。
 
-最后一条规则指出 {anchorTerm OptionTThirdLaw}`bind (bind v f) g` 与 {anchorTerm OptionTThirdLaw}`bind v (fun x => bind (f x) g)` 相同。
-通过扩展 {anchorName OptionTThirdLaw}`bind` 和 {anchorName OptionTSecondLaw}`pure` 的定义，然后将其委托给底层单子 {anchorName OptionTFirstLaw}`m`，可以用同样的方法对其进行检查。
+最后一条规则说明 {anchorTerm OptionTThirdLaw}`bind (bind v f) g` 与 {anchorTerm OptionTThirdLaw}`bind v (fun x => bind (f x) g)` 相同。
+可以用同样的方式检查这一点：展开 {anchorName OptionTThirdLaw}`bind` 和 {anchorName OptionTSecondLaw}`pure` 的定义，然后委托给底层单子 {anchorName OptionTFirstLaw}`m`。
 
 ## 一个 {lit}`Alternative` 实例
 %%%
 tag := "OptionT-Alternative-instance"
+file := "An-Alternative-Instance"
 %%%
 
-一种使用 {anchorName OptionTdef}`OptionT` 的便捷方法是通过 {anchorName AlternativeOptionT}`Alternative` 类型类。
-成功返回已经由 {anchorName AlternativeOptionT}`pure` 表示，而 {anchorName AlternativeOptionT}`Alternative` 的 {anchorName AlternativeOptionT}`failure` 和 {anchorName AlternativeOptionT}`orElse` 方法提供了一种编写程序的方式，可以从多个子程序中返回第一个成功的结果：
+使用 {anchorName OptionTdef}`OptionT` 的一种便捷方式是通过 {anchorName AlternativeOptionT}`Alternative` 类型类。
+成功返回已经由 {anchorName AlternativeOptionT}`pure` 表示，而 {anchorName AlternativeOptionT}`Alternative` 的 {anchorName AlternativeOptionT}`failure` 和 {anchorName AlternativeOptionT}`orElse` 方法提供了一种方式，用于编写从若干子程序中返回第一个成功结果的程序：
 
 ```anchor AlternativeOptionT
 instance [Monad m] : Alternative (OptionT m) where
@@ -236,9 +242,10 @@ instance [Monad m] : Alternative (OptionT m) where
 ## 提升
 %%%
 tag := "OptionT-lifting"
+file := "Lifting"
 %%%
 
-将一个操作从 {anchorName LiftOptionT}`m` 移植到 {anchorTerm LiftOptionT}`OptionT m` 只需要用 {anchorName LiftOptionT}`some` 包装计算结果：
+将一个动作从 {anchorName LiftOptionT}`m` 提升到 {anchorTerm LiftOptionT}`OptionT m`，只需要把 {anchorName LiftOptionT}`some` 包裹在该计算的结果外面：
 
 ```anchor LiftOptionT
 instance [Monad m] : MonadLift m (OptionT m) where
@@ -250,16 +257,17 @@ instance [Monad m] : MonadLift m (OptionT m) where
 # 异常
 %%%
 tag := "exceptions"
+file := "Exceptions"
 %%%
 
-单子转换器版本的 {anchorName ExceptT}`Except` 与单子转换器版本的 {anchorName m}`Option` 非常相似。
-向 {anchorTerm ExceptT}`m`{lit}` `{anchorTerm ExceptT}`α` 类型的单子动作添加 {anchorName ExceptT}`ε` 类型的异常，可以通过向 {anchorName MonadExcept}`α` 添加异常来实现，从而产生 {anchorTerm ExceptT}`m (Except ε α)`：
+{anchorName ExceptT}`Except` 的单子转换器版本与 {anchorName m}`Option` 的单子转换器版本非常相似。
+向某个类型为 {anchorTerm ExceptT}`m`{lit}` `{anchorTerm ExceptT}`α` 的单子动作添加类型为 {anchorName ExceptT}`ε` 的异常，可以通过向 {anchorName MonadExcept}`α` 添加异常来完成，从而得到类型 {anchorTerm ExceptT}`m (Except ε α)`：
 
 ```anchor ExceptT
 def ExceptT (ε : Type u) (m : Type u → Type v) (α : Type u) : Type v :=
   m (Except ε α)
 ```
-{anchorName OptionTdef}`OptionT` 提供了 {anchorName FakeStructOptionT}`OptionT.mk` 和 {anchorName FakeStructOptionT}`OptionT.run` 函数来引导类型检查器找到正确的 {anchorName MonadOptionTFakeStruct}`Monad` 实例。
+{anchorName OptionTdef}`OptionT` 提供 {anchorName FakeStructOptionT}`OptionT.mk` 和 {anchorName FakeStructOptionT}`OptionT.run` 函数，用以引导类型检查器找到正确的 {anchorName MonadOptionTFakeStruct}`Monad` 实例。
 这个技巧对 {anchorName ExceptTFakeStruct}`ExceptT` 也很有用：
 
 ```anchor ExceptTFakeStruct
@@ -267,8 +275,8 @@ def ExceptT (ε : Type u) (m : Type u → Type v) (α : Type u) : Type v :=
 
   def ExceptT.run {ε α : Type u} (x : ExceptT ε m α) : m (Except ε α) := x
 ```
-用于 {anchorName MonadExceptT}`ExceptT` 的 {anchorName MonadExceptT}`Monad` 实例与用于 {anchorName MonadOptionTFakeStruct}`OptionT` 的实例也非常相似。
-唯一不同的是，它传播的是一个特定的错误值，而不是 {anchorName MonadOptionTFakeStruct}`none`：
+{anchorName MonadExceptT}`ExceptT` 的 {anchorName MonadExceptT}`Monad` 实例也与 {anchorName MonadOptionTFakeStruct}`OptionT` 的实例非常相似。
+唯一的区别在于，它传播一个特定的错误值，而不是 {anchorName MonadOptionTFakeStruct}`none`：
 
 ```anchor MonadExceptT
 instance {ε : Type u} {m : Type u → Type v} [Monad m] :
@@ -280,10 +288,10 @@ instance {ε : Type u} {m : Type u → Type v} [Monad m] :
     | .ok x => next x
 ```
 
-{anchorName ExceptTFakeStruct}`ExceptT.mk` 和 {anchorName ExceptTFakeStruct}`ExceptT.run` 的类型签名包含一个微妙的细节：它们明确地注释了 {anchorName ExceptTFakeStruct}`α` 和 {anchorName ExceptTFakeStruct}`ε` 的宇宙层级。
-如果它们没有被明确注释，那么 Lean 会生成一个更通用的类型签名，其中它们拥有不同的多态宇宙变量。
-然而， {anchorName ExceptTFakeStruct}`ExceptT` 的定义希望它们在同一个宇宙中，因为它们都可以作为参数提供给 {anchorName ExceptTFakeStruct}`m`。
-这会导致 {anchorName MonadStateT}`Monad` 实例出现问题，即宇宙层级求解器无法找到有效的解决方案：
+{anchorName ExceptTFakeStruct}`ExceptT.mk` 和 {anchorName ExceptTFakeStruct}`ExceptT.run` 的类型签名包含一个细微之处：它们显式标注了 {anchorName ExceptTFakeStruct}`α` 和 {anchorName ExceptTFakeStruct}`ε` 的宇宙层级。
+如果不显式标注它们，那么 Lean 会生成一个更一般的类型签名，其中它们具有不同的多态宇宙变量。
+然而，{anchorName ExceptTFakeStruct}`ExceptT` 的定义期望它们位于同一宇宙中，因为它们二者都可以作为参数提供给 {anchorName ExceptTFakeStruct}`m`。
+这可能会在 {anchorName MonadStateT}`Monad` 实例中导致一个问题：宇宙层级求解器无法找到可行的解：
 
 ```anchor ExceptTNoUnis
 def ExceptT.mk (x : m (Except ε α)) : ExceptT ε m α := x
@@ -305,39 +313,40 @@ while trying to unify
 with
   ExceptT.{max ?u.10440 ?u.10439, v} ε m β✝ : Type v
 ```
-这种错误信息通常是由欠约束的宇宙变量引起的。
-诊断起来可能很棘手，但第一步可以查找某些定义中重复使用的宇宙变量，而其他定义中没有重复使用的宇宙变量。
+这类错误消息通常是由约束不足的宇宙变量引起的。
+诊断它可能比较棘手，但一个好的第一步是查找某些定义中被复用、而在另一些定义中未被复用的宇宙变量。
 
-与 {anchorName m}`Option` 不同，{anchorName m}`Except` 数据类型通常不作为数据结构使用。
-它总是作为控制结构与其 {anchorName MonadExceptT}`Monad` 实例一起使用。
-这意味着将 {anchorTerm ExceptTLiftExcept}`Except ε` 操作提升到 {anchorTerm ExceptTLiftExcept}`ExceptT ε m` 以及对底层单子 {anchorName ExceptTLiftExcept}`m` 的操作都是合理的。
-通过用 {anchorName ExceptTLiftExcept}`m` 的 {anchorName ExceptTLiftExcept}`pure` 对 {anchorName ExceptTLiftExcept}`Except` 操作进行包装，可以将其提升为 {anchorName ExceptTLiftExcept}`ExceptT` 操作，因为一个只有异常作用的动作不可能有来自单子 {anchorName ExceptTLiftExcept}`m` 的任何作用：
+不同于 {anchorName m}`Option`，{anchorName m}`Except` 数据类型通常不被用作数据结构。
+它总是与其 {anchorName MonadExceptT}`Monad` 实例一起用作控制结构。
+这意味着，将 {anchorTerm ExceptTLiftExcept}`Except ε` 动作以及来自底层单子 {anchorName ExceptTLiftExcept}`m` 的动作提升到 {anchorTerm ExceptTLiftExcept}`ExceptT ε m` 中是合理的。
+将 {anchorName ExceptTLiftExcept}`Except` 动作提升为 {anchorName ExceptTLiftExcept}`ExceptT` 动作，是通过用 {anchorName ExceptTLiftExcept}`m` 的 {anchorName ExceptTLiftExcept}`pure` 将它们包装起来完成的，因为一个仅具有异常效果的动作不可能具有来自单子 {anchorName ExceptTLiftExcept}`m` 的任何效果：
 
 ```anchor ExceptTLiftExcept
 instance [Monad m] : MonadLift (Except ε) (ExceptT ε m) where
   monadLift action := ExceptT.mk (pure action)
 ```
-由于 {anchorName ExceptTLiftExcept}`m` 中的操作不包含任何异常，因此它们的值应该用 {anchorName MonadExceptT}`Except.ok` 封装。
-这可以利用 {anchorName various}`Functor` 是 {anchorName various}`Monad` 的超类这一事实来实现，因此可以使用 {anchorName various}`Functor.map`，将函数应用于任何单子计算的结果：
+因为来自 {anchorName ExceptTLiftExcept}`m` 的动作本身不含任何异常，所以它们的值应当包装在 {anchorName MonadExceptT}`Except.ok` 中。
+这可以利用 {anchorName various}`Functor` 是 {anchorName various}`Monad` 的超类这一事实来完成，因此可以使用 {anchorName various}`Functor.map` 将函数应用于任意单子计算的结果：
 
 ```anchor ExceptTLiftM
 instance [Monad m] : MonadLift m (ExceptT ε m) where
   monadLift action := ExceptT.mk (.ok <$> action)
 ```
 
-## 异常的类型类
+## 用于异常的类型类
 %%%
 tag := "exceptions-type-classes"
+file := "Type-Classes-for-Exceptions"
 %%%
 
-异常处理从根本上说包括两种操作：抛出异常的能力和恢复异常的能力。
-到目前为止，我们分别使用 {anchorName m}`Except` 的构造函数和模式匹配来实现这一点。
-然而，这将使用异常的程序与异常处理作用的特定编码联系在一起。
-使用类型类来捕获这些操作，可以让使用异常的程序在 _任何_ 支持抛出和捕获的单子中使用。
+异常处理从根本上由两种操作组成：抛出异常的能力，以及从异常中恢复的能力。
+到目前为止，这分别是通过 {anchorName m}`Except` 的构造子和模式匹配来实现的。
+然而，这会将使用异常的程序绑定到异常处理效应的一种特定编码。
+使用类型类来刻画这些操作，使得使用异常的程序能够用于_任何_支持抛出和捕获的单子。
 
-抛出异常应该以异常作为参数，而且应该允许在任何要求执行单子动作的上下文中抛出异常。
-规范中 “任何上下文” 的部分可以写成一种类型，即 {anchorTerm MonadExcept}`m α` ——— 因为没有办法产生任意类型的值，所以 {anchorName MonadExcept}`throw` 操作必须能使控制权离开程序的这一部分。
-捕获异常应该接受任何单子操作和处理程序，处理程序应该解释如何从异常返回到操作的类型：
+抛出异常应当以一个异常作为参数，并且在任何需要单子动作的上下文中都应当允许这样做。
+规范中“任何上下文”的部分可以通过写作 {anchorTerm MonadExcept}`m α` 表示为一个类型——因为无法产生任意类型的值，所以 {anchorName MonadExcept}`throw` 操作必定在做某种使控制流离开程序该部分的事情。
+捕获异常应当接受任意单子动作以及一个处理器，而该处理器应当说明如何从一个异常回到该动作的类型：
 
 ```anchor MonadExcept
 class MonadExcept (ε : outParam (Type u)) (m : Type v → Type w) where
@@ -345,23 +354,23 @@ class MonadExcept (ε : outParam (Type u)) (m : Type v → Type w) where
   tryCatch : m α → (ε → m α) → m α
 ```
 
-{anchorName MonadExcept}`MonadExcept` 的宇宙层级与 {anchorName ExceptT}`ExceptT` 不同。
-在 {anchorName ExceptT}`ExceptT` 中，{anchorName ExceptT}`ε` 和 {anchorName ExceptT}`α` 具有相同的层级，而 {anchorName MonadExcept}`MonadExcept` 则没有这种限制。
-这是因为 {anchorName MonadExcept}`MonadExcept` 从不将异常值置于 {anchorName MonadExcept}`m` 内。
-在这个定义中，最通用的宇宙签名承认 {anchorName MonadExcept}`ε` 和 {anchorName MonadExcept}`α` 是完全独立的。
-更通用意味着类型类可以为更多类型实例化。
+{anchorName MonadExcept}`MonadExcept` 上的宇宙层级不同于 {anchorName ExceptT}`ExceptT` 的宇宙层级。
+在 {anchorName ExceptT}`ExceptT` 中，{anchorName ExceptT}`ε` 和 {anchorName ExceptT}`α` 具有相同的层级，而 {anchorName MonadExcept}`MonadExcept` 不施加这样的限制。
+这是因为 {anchorName MonadExcept}`MonadExcept` 从不把异常值放入 {anchorName MonadExcept}`m` 中。
+最一般的宇宙签名承认这样一个事实：在这个定义中，{anchorName MonadExcept}`ε` 和 {anchorName MonadExcept}`α` 是完全独立的。
+更加一般意味着该类型类可以为更广泛的类型实例化。
 
-下面是一个简单的除法服务，作为使用 {anchorName MonadExcept}`MonadExcept` 的一个示例程序。
-程序分为两部分：前端提供基于字符串的用户界面，用于处理错误；后端实际执行除法操作。
-前后端都可以抛出异常，前者用于处理格式错误的输入，后者用于处理除数为零的错误。
-定义异常为一种归纳类型：
+使用 {anchorName MonadExcept}`MonadExcept` 的一个示例程序是一个简单的除法服务。
+该程序分为两部分：一个前端，提供基于字符串的用户界面并处理错误；以及一个后端，实际执行除法。
+前端和后端都可以抛出异常，前者用于处理格式不正确的输入，后者用于处理除以零的错误。
+这些异常是一个归纳类型：
 
 ```anchor ErrEx
 inductive Err where
   | divByZero
   | notANumber : String → Err
 ```
-后端检查是否为零，如果为零，则进行除法：
+后端检查是否为零，并在可以时执行除法：
 
 ```anchor divBackend
 def divBackend [Monad m] [MonadExcept Err m] (n k : Int) : m Int :=
@@ -369,8 +378,8 @@ def divBackend [Monad m] [MonadExcept Err m] (n k : Int) : m Int :=
     throw .divByZero
   else pure (n / k)
 ```
-如果传入的字符串不是数字，前端的辅助函数 {anchorName asNumber}`asNumber` 会抛出异常。
-整个前端会将输入转换为 {anchorName asNumber}`Int` 并调用后端，通过返回友好的错误字符串来处理异常：
+前端的辅助函数 {anchorName asNumber}`asNumber` 在传入的字符串不是数字时抛出异常。
+整个前端将其输入转换为 {anchorName asNumber}`Int`，并调用后端；它通过返回一个友好的字符串错误来处理异常：
 
 ```anchor asNumber
 def asNumber [Monad m] [MonadExcept Err m] (s : String) : m Int :=
@@ -386,8 +395,8 @@ def divFrontend [Monad m] [MonadExcept Err m] (n k : String) : m String :=
       | .divByZero => pure "Division by zero!"
       | .notANumber s => pure s!"Not a number: \"{s}\""
 ```
-抛出和捕获异常非常常见，因此 Lean 提供了使用 {anchorName divFrontendSugary}`MonadExcept` 的特殊语法。
-正如 {lit}`+` 是 {anchorName various}`HAdd.hAdd` 的缩写，{kw}`try` 和 {kw}`catch` 可以作为 {anchorName MonadExcept}`tryCatch` 方法的缩写：
+抛出和捕获异常十分常见，因此 Lean 为使用 {anchorName divFrontendSugary}`MonadExcept` 提供了一种特殊语法。
+正如 {lit}`+` 是 {anchorName various}`HAdd.hAdd` 的简写一样，{kw}`try` 和 {kw}`catch` 可以用作 {anchorName MonadExcept}`tryCatch` 方法的简写：
 
 ```anchor divFrontendSugary
 def divFrontend [Monad m] [MonadExcept Err m] (n k : String) : m String :=
@@ -398,17 +407,18 @@ def divFrontend [Monad m] [MonadExcept Err m] (n k : String) : m String :=
     | .notANumber s => pure s!"Not a number: \"{s}\""
 ```
 
-除了 {anchorName m}`Except` 和 {anchorName ExceptT}`ExceptT` 之外，还有一些有用的 {anchorName MonadExcept}`MonadExcept` 实例，用于处理其他类型的异常，这些异常乍看起来可能不像是异常。
-例如，{anchorName m}`Option` 导致的失败可以被看作是抛出了一个不包含任何数据的异常，因此有一个实例 {anchorTerm OptionExcept}`MonadExcept Unit Option` 允许将 {kw}`try`{lit}` ...`{kw}`catch`{lit}` ...` 语法与 {anchorName m}`Option` 一起使用。
+除了 {anchorName m}`Except` 和 {anchorName ExceptT}`ExceptT` 之外，对于其他乍看之下可能不像异常的类型，也存在有用的 {anchorName MonadExcept}`MonadExcept` 实例。
+例如，由 {anchorName m}`Option` 导致的失败可以看作抛出一个完全不含任何数据的异常，因此存在一个 {anchorTerm OptionExcept}`MonadExcept Unit Option` 实例，允许将 {kw}`try`{lit}` ...`{kw}`catch`{lit}` ...` 语法与 {anchorName m}`Option` 一起使用。
 
 # 状态
 %%%
 tag := "state-monad"
+file := "State"
 %%%
 
-通过让单子动作接受一个起始状态作为参数，并返回一个最终状态及其结果，就可以在单子中加入对可变状态的模拟。
-状态单子的绑定操作符将一个动作的最终状态作为下一个动作的参数，从而将状态贯穿整个程序。
-这种模式也可以用单子转换器来表示：
+通过使单子动作接受一个初始状态作为参数，并将最终状态与其结果一同返回，可以向单子添加对可变状态的模拟。
+状态单子的 bind 运算符将一个动作的最终状态作为参数提供给下一个动作，从而使状态贯穿整个程序。
+这一模式也可以表示为单子转换器：
 
 ```anchor DefStateT
 def StateT (σ : Type u)
@@ -417,8 +427,8 @@ def StateT (σ : Type u)
 ```
 
 
-同样，该单子实例与 {anchorName State (module := Examples.Monads)}`State` 非常相似。
-唯一不同的是，输入和输出状态是在底层单子中传递和返回的，而不是纯代码：
+同样，单子实例与 {anchorName State (module := Examples.Monads)}`State` 的单子实例非常相似。
+唯一的区别在于，输入状态和输出状态是在底层单子中传递并返回的，而不是通过纯代码来处理：
 
 ```anchor MonadStateT
 instance [Monad m] : Monad (StateT σ m) where
@@ -428,10 +438,10 @@ instance [Monad m] : Monad (StateT σ m) where
     next v s'
 ```
 
-相应的类型类有 {anchorName MonadState}`get` 和 {anchorName MonadState}`set` 方法。
+相应的类型类具有 {anchorName MonadState}`get` 和 {anchorName MonadState}`set` 方法。
 {anchorName MonadState}`get` 和 {anchorName MonadState}`set` 的一个缺点是，在更新状态时很容易 {anchorName MonadState}`set` 错误的状态。
-这是因为检索状态、更新状态并保存更新后的状态是编写某些程序的一种很自然的方式。
-例如，下面的程序会计算一串字母中不含音素的英语元音和辅音的数量：
+这是因为，获取状态、更新状态、再保存更新后的状态，是编写某些程序的一种自然方式。
+例如，以下程序统计一个字母字符串中不带变音符号的英语元音和辅音的数量：
 
 ```anchor countLetters
 structure LetterCounts where
@@ -470,14 +480,14 @@ def countLetters (str : String) : StateT LetterCounts (Except Err) Unit :=
       loop cs
   loop str.toList
 ```
-非常容易将 {lit}`set st` 误写成 {anchorTerm countLetters}`set st'` 。
-在大型程序中，这种错误会导致难以诊断的 bug。
+很容易把 {anchorTerm countLetters}`set st'` 写成 {lit}`set st`。
+在大型程序中，这类错误可能导致难以诊断的 bug。
 
-虽然使用嵌套操作来调用 {anchorName countLetters}`get` 可以解决这个问题，但它不能解决所有此类问题。
-例如，一个函数可能会根据另外两个字段的值来更新结构体上的一个字段。
-这就需要对 {anchorName countLetters}`get` 进行两次单独的嵌套操作调用。
-由于 Lean 编译器包含的优化功能只有在对值进行单个引用时才有效，因此重复引用状态可能会导致代码速度大大降低。
-使用 {anchorName countLettersModify}`modify`（即使用函数转换状态）可以解决潜在的性能问题和 bug：
+虽然在调用 {anchorName countLetters}`get` 时使用嵌套动作可以解决这个问题，但它不能解决所有这类问题。
+例如，一个函数可能会基于某个结构中另外两个字段的值来更新其中一个字段。
+这将需要对 {anchorName countLetters}`get` 进行两次独立的嵌套动作调用。
+由于 Lean 编译器包含一些只有在某个值仅有一个引用时才有效的优化，复制对状态的引用可能会导致代码显著变慢。
+通过使用 {anchorName countLettersModify}`modify` 可以同时规避潜在的性能问题和潜在的错误；{anchorName countLettersModify}`modify` 使用一个函数来转换状态：
 
 ```anchor countLettersModify
 def countLetters (str : String) : StateT LetterCounts (Except Err) Unit :=
@@ -496,8 +506,8 @@ def countLetters (str : String) : StateT LetterCounts (Except Err) Unit :=
       loop cs
   loop str.toList
 ```
-类型类包含一个类似于 {anchorName modify}`modify` 的函数，称为 {anchorName modify}`modifyGet`，它允许函数在一个步骤中同时计算返回值和转换旧状态。
-该函数返回一个二元组，其中第一个元素是返回值，第二个元素是新状态；{anchorName modify}`modify` 只是将 {anchorName modify}`Unit` 的构造函数添加到 {anchorName modify}`modifyGet` 中使用的二元组中：
+该类型类包含一个名为 {anchorName modify}`modifyGet`、类似于 {anchorName modify}`modify` 的函数，它允许函数在单一步骤中同时计算返回值并变换旧状态。
+该函数返回一个对，其中第一个元素是返回值，第二个元素是新状态；{anchorName modify}`modify` 只是把 {anchorName modify}`Unit` 的构造子添加到 {anchorName modify}`modifyGet` 中所用的对上：
 
 ```anchor modify
 def modify [MonadState σ m] (f : σ → σ) : m Unit :=
@@ -513,87 +523,93 @@ class MonadState (σ : outParam (Type u)) (m : Type u → Type v) :
   set : σ → m PUnit
   modifyGet : (σ → α × σ) → m α
 ```
-{anchorName MonadState}`PUnit` 是 {anchorName modify}`Unit` 类型的一个版本，它具有宇宙多态性，允许以 {anchorTerm MonadState}`Type u` 代替 {anchorTerm MonadState}`Type`。
-虽然可以用 {anchorName MonadState}`get` 和 {anchorName MonadState}`set` 来提供 {anchorName MonadState}`modifyGet` 的默认实现，但这样就无法进行使 {anchorName MonadState}`modifyGet` 有用的优化，从而使该方法变得无用。
+{anchorName MonadState}`PUnit` 是 {anchorName modify}`Unit` 类型的一个版本，它具有宇宙多态性，从而允许它位于 {anchorTerm MonadState}`Type u` 中而不是 {anchorTerm MonadState}`Type` 中。
+虽然可以依据 {anchorName MonadState}`get` 和 {anchorName MonadState}`set` 为 {anchorName MonadState}`modifyGet` 提供默认实现，但这样不会容许那些使 {anchorName MonadState}`modifyGet` 一开始就有用的优化，从而会使该方法失去作用。
 
-# {lit}`Of` 类和 {lit}`The` 函数
+# {lit}`Of` 类与 {lit}`The` 函数
 %%%
 tag := "of-and-the"
+file := "Of-Classes-and-The-Functions"
 %%%
 
-到目前为止，每个需要额外信息的单子类型类，如 {anchorName MonadExcept}`MonadExcept` 的异常类型或 {anchorName MonadState}`MonadState` 的状态类型，都有这类额外信息作为输出参数。
-对于简单的程序来说，这通常很方便，因为结合使用了 {anchorName MonadStateT}`StateT`、{anchorName m}`ReaderT` 和 {anchorName ExceptT}`ExceptT` 的单子只有单一的状态类型、环境类型和异常类型。
-然而，随着单子的复杂性增加，它们可能会涉及多个状态或错误类型。
-在这种情况下，输出参数的使用使得无法在同一个 {kw}`do` 块中同时针对两种状态。
+到目前为止，每个接受额外信息的单子类型类，例如 {anchorName MonadExcept}`MonadExcept` 的异常类型或 {anchorName MonadState}`MonadState` 的状态类型，都将这类额外信息作为输出参数。
+对于简单程序，这通常很方便，因为一个分别结合一次 {anchorName MonadStateT}`StateT`、{anchorName m}`ReaderT` 和 {anchorName ExceptT}`ExceptT` 用法的单子，只有一个状态类型、环境类型和异常类型。
+然而，随着单子的复杂性增长，它们可能涉及多个状态类型或错误类型。
+在这种情况下，使用输出参数会使得在同一个 {kw}`do` 块中同时以两个状态为目标成为不可能。
 
-应对这些情况，还有一些额外的类型类，其中的额外信息不是输出参数。
-这些版本的类型类在名称中使用了 {lit}`Of` 字样。
-例如，{anchorName getTheType}`MonadStateOf` 与 {anchorName MonadState}`MonadState` 类似，但没有 {anchorName MonadState}`outParam` 修饰符。
+对于这些情形，存在一些附加的类型类，其中额外信息不是输出参数。
+这些类型类的版本在名称中使用词 {lit}`Of`。
+例如，{anchorName getTheType}`MonadStateOf` 类似于 {anchorName MonadState}`MonadState`，但没有 {anchorName MonadState}`outParam` 修饰符。
 
-这些类使用 {anchorName various}`semiOutParam` 来表示各自的状态、环境或异常类型，而不是 {anchorName MonadState}`outParam`。
-与 {anchorName MonadState}`outParam` 一样，{anchorName various}`semiOutParam` 也不需要在 Lean 开始搜索实例之前就知道。
-但是，有一个重要的区别：{anchorName MonadState}`outParam` 在搜索实例时会被忽略，因此它们是真正的输出。
-如果在搜索之前就知道了一个 {anchorName MonadState}`outParam`，那么 Lean 只会检查搜索结果是否与已知结果相同。
-另一方面，如果在搜索开始前就知道了一个 {anchorName various}`semiOutParam`，那么它就可以像输入参数一样用来缩小候选范围。
+这些类并不使用 {anchorName MonadState}`outParam`，而是为各自的状态、环境或异常类型使用 {anchorName various}`semiOutParam`。
+类似于 {anchorName MonadState}`outParam`，在 Lean 开始搜索实例之前，并不要求 {anchorName various}`semiOutParam` 已知。
+然而，有一个重要区别：在搜索实例时会忽略 {anchorName MonadState}`outParam`，因此它们是真正的输出。
+如果在搜索之前已知某个 {anchorName MonadState}`outParam`，那么 Lean 只会检查搜索结果是否与已知内容相同。
+另一方面，在搜索开始之前已知的 {anchorName various}`semiOutParam` 可以用于缩小候选范围，就像输入参数一样。
 
-当状态单子的状态类型是 {anchorName MonadState}`outParam` 时，每个单子最多只能有一种状态类型。
-这很方便，因为它改进了类型推断：可以在更多情况下推断出状态类型。
-但这也很不方便，因为由多次使用 {anchorName countLetters}`StateT` 构建的单子无法提供有用的 {anchorName modify}`MonadState` 实例。
-然而，使用 {anchorName modifyTheType}`MonadStateOf` 会让 Lean 在选择使用哪个实例时考虑状态类型，因此一个单子可以提供多种类型的状态。
-这样做的缺点是，如果状态类型没有被明确指定，得到的实例可能不是预期的实例，从而导致令人困惑的错误信息。
+当状态单子的状态类型是一个 {anchorName MonadState}`outParam` 时，每个单子至多只能有一种状态类型。
+这是方便的，因为它改善了类型推断：状态类型可以在更多情形下被推断出来。
+这也是不方便的，因为由多次使用 {anchorName countLetters}`StateT` 构造出的单子无法提供有用的 {anchorName modify}`MonadState` 实例。
+然而，使用 {anchorName modifyTheType}`MonadStateOf` 会使 Lean 在可用时将状态类型纳入考虑，以选择要使用的实例，因此一个单子可以提供多种状态类型。
+其缺点是，当状态类型没有被足够明确地指定时，所得实例可能不是原本期望的那个，这可能导致令人困惑的错误消息。
 
-同样，也有一些版本的类型类方法接受额外信息的类型作为 _显式_ 参数，而不是隐式参数。
-对于 {anchorName modifyTheType}`MonadStateOf`，有 {anchorTerm getTheType}`getThe`，类型为
+类似地，也存在一些类型类方法的版本，它们将附加信息的类型作为_显式_参数而不是隐式参数来接受。
+对于 {anchorName modifyTheType}`MonadStateOf`，有类型为如下形式的 {anchorTerm getTheType}`getThe`
 ```anchorTerm getTheType
 (σ : Type u) → {m : Type u → Type v} → [MonadStateOf σ m] → m σ
 ```
-以及 {anchorTerm modifyTheType}`modifyThe`，类型为
+以及类型为如下形式的 {anchorTerm modifyTheType}`modifyThe`
 ```anchorTerm modifyTheType
 (σ : Type u) → {m : Type u → Type v} → [MonadStateOf σ m] → (σ → σ) → m PUnit
 ```
-没有 {lit}`setThe` 函数，因为新状态的类型足以决定使用哪个状态单子转换器。
+这里没有 {lit}`setThe`，因为新状态的类型足以决定使用哪个外围状态单子转换器。
 
-在 Lean 标准库中，有非 {lit}`Of` 版本的类型类实例是根据带 {lit}`Of` 版本的类型类实例定义的。
-换句话说，实现 {lit}`Of` 版本可以同时实现这两个版本。
-一般来说，实现 {lit}`Of` 版本是个好主意，然后开始使用类的非 {lit}`Of` 版本编写程序，如果输出参数变得不方便，就过渡到 {lit}`Of` 版本。
+在 Lean 标准库中，存在这些类的非 {lit}`Of` 版本的实例，它们是根据带有 {lit}`Of` 的版本的实例定义的。
+换言之，实现 {lit}`Of` 版本会同时得到二者的实现。
+通常较好的做法是实现 {lit}`Of` 版本，然后开始使用该类的非 {lit}`Of` 版本来编写程序；如果输出参数变得不便，再过渡到 {lit}`Of` 版本。
 
-# 转换器和 {lit}`Id`
+# 转换器与 {lit}`Id`
 %%%
 tag := "transformers-and-Id"
+file := "Transformers-and-Id"
 %%%
 
-恒等单子 {anchorName various}`Id` 是没有任何作用的单子，可用于上下文因某种原因需要单子，但实际上不需要的情况。
-{anchorName various}`Id` 的另一个用途是作为单子转换器栈的底层。
-例如，{anchorTerm StateTDoubleB}`StateT σ Id` 的作用与 {anchorTerm set (module:=Examples.Monads)}`State σ` 相同。
+恒等单子 {anchorName various}`Id` 是一个完全没有任何效果的单子，用于那些由于某种原因期望一个单子、但实际上并不需要任何效果的语境中。
+{anchorName various}`Id` 的另一种用途是作为单子转换器栈的底部。
+例如，{anchorTerm StateTDoubleB}`StateT σ Id` 的工作方式就和 {anchorTerm set (module:=Examples.Monads)}`State σ` 一样。
 
 
 # 练习
 %%%
 tag := "monad-transformer-exercises"
+file := "Exercises"
 %%%
 
-## 单子约定
+## 单子契约
 %%%
 tag := none
+file := "Monad-Contract"
 %%%
 
-用纸笔检查本节中每个单子转换器是否符合单子转换器的规则。
+用纸笔检查本节中每个单子转换器都满足单子转换器约定的规则。
 
-## 日志转换器
+## 日志记录转换器
 %%%
 tag := none
+file := "Logging-Transformer"
 %%%
 
 定义 {anchorName WithLog (module:=Examples.Monads)}`WithLog` 的单子转换器版本。
-同时定义相应的类型类 {lit}`MonadWithLog`，并编写一个结合日志和异常的程序。
+同时定义相应的类型类 {lit}`MonadWithLog`，并编写一个结合日志记录和异常的程序。
 
 ## 文件计数
 %%%
 tag := none
+file := "Counting-Files"
 %%%
 
-用 {anchorName MonadStateT}`StateT` 来修改 {lit}`doug` 的单子，使它能统计所看到的目录和文件的数量。
-在执行结束时，它应该显示如下报告：
+用 {anchorName MonadStateT}`StateT` 修改 {lit}`doug` 的单子，使其统计所见目录和文件的数量。
+执行结束时，它应显示类似如下的报告：
 ```
   Viewed 38 files in 5 directories.
 ```

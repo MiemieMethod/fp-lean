@@ -9,28 +9,29 @@ open FPLean
 set_option verso.exampleProject "../examples"
 set_option verso.exampleModule "Examples.FunctorApplicativeMonad"
 
-#doc (Manual) "应用函子的契约" =>
+#doc (Manual) "应用函子约定" =>
 %%%
 tag := "applicative-laws"
+file := "The-Applicative-Contract"
 %%%
 
-就像 {anchorName ApplicativeLaws}`Functor`、{anchorName ApplicativeLaws}`Monad` 以及实现了 {anchorName SizedCreature}`BEq` 和 {anchorName MonstrousAssistantMore}`Hashable` 的类型一样，{anchorName ApplicativeLaws}`Applicative` 也有一套所有实例都应遵守的规则。
+就像 {anchorName ApplicativeLaws}`Functor`、{anchorName ApplicativeLaws}`Monad`，以及实现 {anchorName SizedCreature}`BEq` 和 {anchorName MonstrousAssistantMore}`Hashable` 的类型一样，{anchorName ApplicativeLaws}`Applicative` 也有一组所有实例都应遵守的规则。
 
-应用函子应该遵循四条规则：
-1. 应遵循同一律，即 {anchorTerm ApplicativeLaws}`pure id <*> v = v`
-2. 应遵循函数复合律，即 {anchorTerm ApplicativeLaws}`pure (· ∘ ·) <*> u <*> v <*> w = u <*> (v <*> w)`
-3. 对纯操作进行排序应等同于无操作，即 {anchorTerm ApplicativeLaws}`pure f <*> pure x`{lit}` = `{anchorTerm ApplicativeLaws}`pure (f x)`
-4. 纯操作的顺序不应影响结果，即 {anchorTerm ApplicativeLaws}`u <*> pure x = pure (fun f => f x) <*> u`
+应用函子应当遵循四条规则：
+1. 它应当遵守恒等律，即 {anchorTerm ApplicativeLaws}`pure id <*> v = v`
+2. 它应当遵守函数复合，因此 {anchorTerm ApplicativeLaws}`pure (· ∘ ·) <*> u <*> v <*> w = u <*> (v <*> w)`
+3. 对纯操作进行定序应当是无操作，因此 {anchorTerm ApplicativeLaws}`pure f <*> pure x`{lit}` = `{anchorTerm ApplicativeLaws}`pure (f x)`
+4. 纯操作的顺序无关紧要，因此 {anchorTerm ApplicativeLaws}`u <*> pure x = pure (fun f => f x) <*> u`
 
-要检验对于 {anchorTerm ApplicativeOption}`Applicative Option` 实例的这些规则，首先将 {anchorName ApplicativeLaws}`pure` 展开为 {anchorName ApplicativeOption}`some`。
+要检查 {anchorTerm ApplicativeOption}`Applicative Option` 实例的这些规则，首先将 {anchorName ApplicativeLaws}`pure` 展开为 {anchorName ApplicativeOption}`some`。
 
-第一条规则表明 {anchorTerm ApplicativeOptionLaws1}`some id <*> v = v`。
-{anchorName ApplicativeOption}`Option` 的 {anchorName fakeSeq}`seq` 定义指明，这与 {anchorTerm ApplicativeOptionLaws1}`id <$> v = v` 相同，这是已被检查过的 {anchorName ApplicativeLaws}`Functor` 规则之一。
+第一条规则说明 {anchorTerm ApplicativeOptionLaws1}`some id <*> v = v`。
+{anchorName ApplicativeOption}`Option` 的 {anchorName fakeSeq}`seq` 定义说明这等同于 {anchorTerm ApplicativeOptionLaws1}`id <$> v = v`，而这是已经检查过的 {anchorName ApplicativeLaws}`Functor` 规则之一。
 
-第二条规则指出 {anchorTerm ApplicativeOptionLaws2}`some (· ∘ ·) <*> u <*> v <*> w = u <*> (v <*> w)`。
-如果 {anchorName ApplicativeOptionLaws2}`u`、{anchorName ApplicativeOptionLaws2}`v` 或 {anchorName ApplicativeOptionLaws2}`w` 中有任何一个是 {anchorName ApplicativeOption}`none`，则两边均为 {anchorName ApplicativeOption}`none`，因此该属性成立。
-假设 {anchorName ApplicativeOptionLaws2}`u` 是 {anchorTerm OptionHomomorphism1}`some f`，{anchorName ApplicativeOptionLaws2}`v` 是 {anchorTerm OptionHomomorphism1}`some g`，{anchorName ApplicativeOptionLaws2}`w` 是 {anchorTerm OptionHomomorphism1}`some x`，那么这等价于声明 {anchorTerm OptionHomomorphism}`some (· ∘ ·) <*> some f <*> some g <*> some x = some f <*> (some g <*> some x)`。
-对两边求值得到相同的结果：
+第二条规则表明 {anchorTerm ApplicativeOptionLaws2}`some (· ∘ ·) <*> u <*> v <*> w = u <*> (v <*> w)`。
+如果 {anchorName ApplicativeOptionLaws2}`u`、{anchorName ApplicativeOptionLaws2}`v` 或 {anchorName ApplicativeOptionLaws2}`w` 中的任意一个是 {anchorName ApplicativeOption}`none`，那么等式两边都是 {anchorName ApplicativeOption}`none`，因此该性质成立。
+假设 {anchorName ApplicativeOptionLaws2}`u` 是 {anchorTerm OptionHomomorphism1}`some f`，{anchorName ApplicativeOptionLaws2}`v` 是 {anchorTerm OptionHomomorphism1}`some g`，并且 {anchorName ApplicativeOptionLaws2}`w` 是 {anchorTerm OptionHomomorphism1}`some x`，那么这等价于说 {anchorTerm OptionHomomorphism}`some (· ∘ ·) <*> some f <*> some g <*> some x = some f <*> (some g <*> some x)`。
+对两边求值会得到相同的结果：
 ```anchorEvalSteps OptionHomomorphism1
 some (· ∘ ·) <*> some f <*> some g <*> some x
 ===>
@@ -50,7 +51,7 @@ some f <*> (some (g x))
 some (f (g x))
 ```
 
-第三条规则直接源于 {anchorName fakeSeq}`seq` 的定义：
+第三条规则直接由 {anchorName fakeSeq}`seq` 的定义推出：
 ```anchorEvalSteps OptionPureSeq
 some f <*> some x
 ===>
@@ -59,13 +60,14 @@ f <$> some x
 some (f x)
 ```
 
-在第四种情况下，假设 {anchorName ApplicativeLaws}`u` 是 {anchorTerm OptionPureSeq}`some f`，因为如果它是 {anchorName AlternativeOption}`none`，则等式的两边都是 {anchorName AlternativeOption}`none`。
-{anchorTerm OptionPureSeq}`some f <*> some x` 的求值结果直接为 {anchorTerm OptionPureSeq}`some (f x)`，正如 {anchorTerm OptionPureSeq2}`some (fun g => g x) <*> some f` 也是如此。
+在第四种情形中，假设 {anchorName ApplicativeLaws}`u` 是 {anchorTerm OptionPureSeq}`some f`，因为如果它是 {anchorName AlternativeOption}`none`，则等式两边都是 {anchorName AlternativeOption}`none`。
+{anchorTerm OptionPureSeq}`some f <*> some x` 直接求值为 {anchorTerm OptionPureSeq}`some (f x)`，{anchorTerm OptionPureSeq2}`some (fun g => g x) <*> some f` 亦然。
 
 
-# 所有的应用函子都是函子
+# 所有应用函子都是函子
 %%%
 tag := "applicatives-are-functors"
+file := "All-Applicatives-are-Functors"
 %%%
 
 {anchorName ApplicativeMap}`Applicative` 的两个运算符足以定义 {anchorName ApplicativeMap}`map`：
@@ -75,14 +77,14 @@ def map [Applicative f] (g : α → β) (x : f α) : f β :=
   pure g <*> x
 ```
 
-然而，只有当 {anchorName ApplicativeLaws}`Applicative` 的契约保证了 {anchorName ApplicativeLaws}`Functor` 的契约时，这才能用于实现 {anchorName ApplicativeLaws}`Functor`。
-{anchorName ApplicativeLaws}`Functor` 的第一条规则是 {anchorTerm AppToFunTerms}`id <$> x = x`，这直接源于 {anchorName ApplicativeLaws}`Applicative` 的第一条规则。
+然而，只有在 {anchorName ApplicativeLaws}`Applicative` 的契约保证 {anchorName ApplicativeLaws}`Functor` 的契约时，才能用它来实现 {anchorName ApplicativeLaws}`Functor`。
+{anchorName ApplicativeLaws}`Functor` 的第一条规则是 {anchorTerm AppToFunTerms}`id <$> x = x`，这直接由 {anchorName ApplicativeLaws}`Applicative` 的第一条规则推出。
 {anchorName ApplicativeLaws}`Functor` 的第二条规则是 {anchorTerm AppToFunTerms}`map (f ∘ g) x = map f (map g x)`。
-这里展开 {anchorName AppToFunTerms}`map` 的定义得到 {anchorTerm AppToFunTerms}`pure (f ∘ g) <*> x = pure f <*> (pure g <*> x)`。
-利用纯操作排序等同于无操作的规则，左边可以重写为 {anchorTerm AppToFunTerms}`pure (· ∘ ·) <*> pure f <*> pure g <*> x`。
-这是应用函子遵循函数复合律规则的一个实例。
+在这里展开 {anchorName AppToFunTerms}`map` 的定义会得到 {anchorTerm AppToFunTerms}`pure (f ∘ g) <*> x = pure f <*> (pure g <*> x)`。
+使用纯操作的顺序执行是无操作这一规则，左侧可以改写为 {anchorTerm AppToFunTerms}`pure (· ∘ ·) <*> pure f <*> pure g <*> x`。
+这是应用函子尊重函数复合这一规则的一个实例。
 
-这证明了 {anchorName ApplicativeMap}`Applicative` 扩展 {anchorName ApplicativeLaws}`Functor` 的定义是合理的，其中 {anchorTerm ApplicativeExtendsFunctorOne}`map` 的默认定义是根据 {anchorName ApplicativeExtendsFunctorOne}`pure` 和 {anchorName ApplicativeExtendsFunctorOne}`seq` 给出的：
+这证明了如下 {anchorName ApplicativeMap}`Applicative` 定义的合理性：它扩展 {anchorName ApplicativeLaws}`Functor`，并给出用 {anchorName ApplicativeExtendsFunctorOne}`pure` 和 {anchorName ApplicativeExtendsFunctorOne}`seq` 表示的 {anchorTerm ApplicativeExtendsFunctorOne}`map` 的默认定义：
 
 ```anchor ApplicativeExtendsFunctorOne
 class Applicative (f : Type → Type) extends Functor f where
@@ -91,13 +93,14 @@ class Applicative (f : Type → Type) extends Functor f where
   map g x := seq (pure g) (fun () => x)
 ```
 
-# 所有的单子都是应用函子
+# 所有单子都是应用函子
 %%%
 tag :="monads-are-applicative"
+file := "All-Monads-are-Applicative-Functors"
 %%%
 
-{anchorName MonadExtends}`Monad` 的实例已经需要 {anchorName MonadSeq}`pure` 的实现。
-结合 {anchorName MonadExtends}`bind`，这足以定义 {anchorName MonadSeq}`seq`：
+{anchorName MonadExtends}`Monad` 的一个实例已经要求实现 {anchorName MonadSeq}`pure`。
+这与 {anchorName MonadExtends}`bind` 合在一起，足以定义 {anchorName MonadSeq}`seq`：
 
 ```anchor MonadSeq
 def seq [Monad m] (f : m (α → β)) (x : Unit → m α) : m β := do
@@ -105,13 +108,13 @@ def seq [Monad m] (f : m (α → β)) (x : Unit → m α) : m β := do
   let y ← x ()
   pure (g y)
 ```
-再次检查 {anchorName MonadSeq}`Monad` 契约是否蕴含 {anchorName MonadExtends}`Applicative` 契约，如果 {anchorName MonadSeq}`Monad` 扩展了 {anchorName MonadExtends}`Applicative`，这将允许将其用作 {anchorTerm MonadExtends}`seq` 的默认定义。
+再次，检查 {anchorName MonadSeq}`Monad` 约定蕴含 {anchorName MonadExtends}`Applicative` 约定，将允许在 {anchorName MonadSeq}`Monad` 扩展 {anchorName MonadExtends}`Applicative` 时，将此作为 {anchorTerm MonadExtends}`seq` 的默认定义。
 
-本节的其余部分包含一个论证，即这个基于 {anchorName MonadExtends}`bind` 的 {anchorTerm MonadExtends}`seq` 实现实际上满足 {anchorName MonadExtends}`Applicative` 契约。
-函数式编程的美妙之处之一在于，这种论证可以用纸笔推导出来，使用的就是 {ref "evaluating"}[关于求值表达式的初始章节] 中的求值规则。
-在阅读这些论证时思考操作的含义有时会有助于理解。
+本节余下部分给出一个论证，说明这个基于 {anchorName MonadExtends}`bind` 的 {anchorTerm MonadExtends}`seq` 实现事实上满足 {anchorName MonadExtends}`Applicative` 契约。
+函数式编程的美妙之处之一在于，这类论证可以用铅笔在纸上完成，只需使用 {ref "evaluating"}[关于表达式求值的起始小节]中的那类求值规则。
+在阅读这些论证时思考这些运算的含义，有时有助于理解。
 
-将 {kw}`do` 记法替换为显式使用 {lit}`>>=` 可以更容易地应用 {anchorName MonadSeqDesugar}`Monad` 规则：
+将 {kw}`do` 记法替换为对 {lit}`>>=` 的显式使用，会使应用 {anchorName MonadSeqDesugar}`Monad` 规则更容易：
 
 ```anchor MonadSeqDesugar
 def seq [Monad m] (f : m (α → β)) (x : Unit → m α) : m β := do
@@ -121,14 +124,14 @@ def seq [Monad m] (f : m (α → β)) (x : Unit → m α) : m β := do
 ```
 
 
-要检查此定义是否遵循同一律，请检查 {anchorTerm mSeqRespIdInit}`seq (pure id) (fun () => v) = v`。
-左侧等价于 {anchorTerm mSeqRespIdInit}`pure id >>= fun g => (fun () => v) () >>= fun y => pure (g y)`。
-中间的 unit 函数可以立即消除，得到 {anchorTerm mSeqRespIdInit}`pure id >>= fun g => v >>= fun y => pure (g y)`。
-利用 {anchorName mSeqRespIdInit}`pure` 是 {anchorTerm mSeqRespIdInit}`>>=` 的左单位元这一事实，这等同于 {anchorTerm mSeqRespIdInit}`v >>= fun y => pure (id y)`，即 {anchorTerm mSeqRespIdInit}`v >>= fun y => pure y`。
-因为 {anchorTerm mSeqRespIdInit}`fun x => f x` 与 {anchorName mSeqRespIdInit}`f` 相同，这等同于 {anchorTerm mSeqRespIdInit}`v >>= pure`，并且利用 {anchorName mSeqRespIdInit}`pure` 是 {anchorTerm mSeqRespIdInit}`>>=` 的右单位元这一事实，可以得到 {anchorName mSeqRespIdInit}`v`。
+要检查此定义是否遵守恒等律，需要检查 {anchorTerm mSeqRespIdInit}`seq (pure id) (fun () => v) = v`。
+左边等价于 {anchorTerm mSeqRespIdInit}`pure id >>= fun g => (fun () => v) () >>= fun y => pure (g y)`。
+中间的单位函数可以立即消去，得到 {anchorTerm mSeqRespIdInit}`pure id >>= fun g => v >>= fun y => pure (g y)`。
+利用 {anchorName mSeqRespIdInit}`pure` 是 {anchorTerm mSeqRespIdInit}`>>=` 的左单位元这一事实，这与 {anchorTerm mSeqRespIdInit}`v >>= fun y => pure (id y)` 相同，而 {anchorTerm mSeqRespIdInit}`v >>= fun y => pure (id y)` 就是 {anchorTerm mSeqRespIdInit}`v >>= fun y => pure y`。
+因为 {anchorTerm mSeqRespIdInit}`fun x => f x` 与 {anchorName mSeqRespIdInit}`f` 相同，所以这与 {anchorTerm mSeqRespIdInit}`v >>= pure` 相同；再利用 {anchorName mSeqRespIdInit}`pure` 是 {anchorTerm mSeqRespIdInit}`>>=` 的右单位元这一事实，可以得到 {anchorName mSeqRespIdInit}`v`。
 
-这种非正式的推理可以通过一些重新格式化使其更易于阅读。
-在下表中，将 “{lit}`EXPR1 ={ REASON }= EXPR2`” 读作 “{lit}`EXPR1` 与 {lit}`EXPR2` 相同，因为 {lit}`REASON`”：
+这种非形式化推理可以通过稍作重新排版而变得更易读。
+在下表中，将“{lit}`EXPR1 ={ REASON }= EXPR2`”读作“{lit}`EXPR1` 与 {lit}`EXPR2` 相同，因为 {lit}`REASON`”：
 
 ```anchorEqSteps mSeqRespId
 pure id >>= fun g => v >>= fun y => pure (g y)
@@ -157,9 +160,9 @@ v
 
 
 
-要检查它是否遵循函数复合律，请检查 {anchorTerm ApplicativeLaws}`pure (· ∘ ·) <*> u <*> v <*> w = u <*> (v <*> w)`。
+要检查它是否尊重函数复合，需检查 {anchorTerm ApplicativeLaws}`pure (· ∘ ·) <*> u <*> v <*> w = u <*> (v <*> w)`。
 第一步是用 {anchorName MonadSeqDesugar}`seq` 的这个定义替换 {lit}`<*>`。
-之后，使用 {anchorName ApplicativeLaws}`Monad` 契约中的同一律和结合律规则进行一系列（有点长）步骤，足以从一个推导到另一个：
+此后，使用 {anchorName ApplicativeLaws}`Monad` 约定中的恒等律和结合律的一系列（稍长的）步骤，足以从一边得到另一边：
 ```anchorEqSteps mSeqRespComp
 seq (seq (seq (pure (· ∘ ·)) (fun _ => u))
       (fun _ => v))
@@ -278,7 +281,7 @@ seq u (fun () => seq v (fun () => w))
 ```
 
 
-要检查对纯操作进行排序是否等同于无操作：
+为了检查对纯操作进行顺序执行是一个无操作：
 ```anchorEqSteps mSeqPureNoOp
 seq (pure f) (fun () => pure x)
 ={
@@ -301,7 +304,7 @@ pure (f x)
 ```
 
 
-最后，要检查纯操作的顺序是否不影响结果：
+最后，检查纯操作的顺序无关紧要：
 ```anchorEqSteps mSeqPureNoOrder
 seq u (fun () => pure x)
 ={
@@ -335,7 +338,7 @@ seq (pure (fun f => f x)) (fun () => u)
 ```
 
 
-这证明了 {anchorName ApplicativeLaws}`Monad` 扩展 {anchorName ApplicativeLaws}`Applicative` 的定义是合理的，其中 {anchorTerm MonadExtends}`seq` 的默认定义如下：
+这说明可以合理地定义一个扩展 {anchorName ApplicativeLaws}`Applicative` 的 {anchorName ApplicativeLaws}`Monad`，并为 {anchorTerm MonadExtends}`seq` 给出默认定义：
 
 ```anchor MonadExtends
 class Monad (m : Type → Type) extends Applicative m where
@@ -345,23 +348,24 @@ class Monad (m : Type → Type) extends Applicative m where
     bind (x ()) fun y =>
     pure (g y)
 ```
-{anchorName MonadExtends}`Applicative` 自己的 {anchorTerm ApplicativeExtendsFunctorOne}`map` 默认定义意味着每个 {anchorName MonadExtends}`Monad` 实例也会自动生成 {anchorName MonadExtends}`Applicative` 和 {anchorName ApplicativeExtendsFunctorOne}`Functor` 实例。
+{anchorName MonadExtends}`Applicative` 自身对 {anchorTerm ApplicativeExtendsFunctorOne}`map` 的默认定义意味着，每个 {anchorName MonadExtends}`Monad` 实例也会自动生成 {anchorName MonadExtends}`Applicative` 和 {anchorName ApplicativeExtendsFunctorOne}`Functor` 实例。
 
-# 附加规定
+# 附加约定
 %%%
 tag := "additional-stipulations"
+file := "Additional-Stipulations"
 %%%
 
-除了遵守与每个类型类相关的单独契约外，{anchorName ApplicativeLaws}`Functor`、{anchorName ApplicativeLaws}`Applicative` 和 {anchorName ApplicativeLaws}`Monad` 的组合实现应该与这些默认实现等效地工作。
-换句话说，同时提供 {anchorName ApplicativeLaws}`Applicative` 和 {anchorName ApplicativeLaws}`Monad` 实例的类型，其 {anchorTerm MonadExtends}`seq` 实现不应与 {anchorName MonadSeq}`Monad` 实例生成的默认实现版本有不同的工作方式。
-这一点很重要，因为多态函数可能会被重构，用等效的 {lit}`<*>` 替换 {lit}`>>=` 的使用，或者用等效的 {lit}`>>=` 替换 {lit}`<*>` 的使用。
+除了遵守与每个类型类相关联的各自约定之外，组合实现 {anchorName ApplicativeLaws}`Functor`、{anchorName ApplicativeLaws}`Applicative` 和 {anchorName ApplicativeLaws}`Monad` 应当与这些默认实现等价地工作。
+换言之，一个同时提供 {anchorName ApplicativeLaws}`Applicative` 和 {anchorName ApplicativeLaws}`Monad` 实例的类型，不应有一个 {anchorTerm MonadExtends}`seq` 的实现，其行为不同于 {anchorName MonadSeq}`Monad` 实例作为默认实现所生成的版本。
+这一点很重要，因为多态函数可能会被重构，将 {lit}`>>=` 的使用替换为 {lit}`<*>` 的等价使用，或者将 {lit}`<*>` 的使用替换为 {lit}`>>=` 的等价使用。
 这种重构不应改变使用此代码的程序的含义。
 
-这条规则解释了为什么不应使用 {anchorName ValidateAndThen}`Validate.andThen` 在 {anchorName ApplicativeLaws}`Monad` 实例中实现 {anchorName MonadExtends}`bind`。
-就其本身而言，它遵守单子契约。
-然而，当它被用来实现 {anchorTerm MonadExtends}`seq` 时，其行为与 {anchorTerm MonadExtends}`seq` 本身并不等效。
-为了看看它们的区别，以两个都返回错误的计算为例。
-首先看一个应该返回两个错误的例子，一个来自验证函数（这也可能源于函数的先前参数），另一个来自验证参数：
+这条规则解释了为什么不应在 {anchorName ApplicativeLaws}`Monad` 实例中使用 {anchorName ValidateAndThen}`Validate.andThen` 来实现 {anchorName MonadExtends}`bind`。
+就其自身而言，它遵守单子约定。
+然而，当它被用来实现 {anchorTerm MonadExtends}`seq` 时，其行为并不等价于 {anchorTerm MonadExtends}`seq` 本身。
+为了看出它们的差异，考虑两个计算的例子，这两个计算都会返回错误。
+先从一个应当返回两个错误的情形开始：一个错误来自验证函数（它同样也可能来自该函数的先前参数），另一个错误来自验证实参：
 
 ```anchor counterexample
 def notFun : Validate String (Nat → String) :=
@@ -371,7 +375,7 @@ def notArg : Validate String Nat :=
   .errors { head := "Second error", tail := [] }
 ```
 
-将它们与 {anchorName Validate}`Validate` 的 {anchorName ApplicativeValidate}`Applicative` 实例中的 {lit}`<*>` 版本结合使用，会导致两个错误都报告给用户：
+将它们与 {anchorName Validate}`Validate` 的 {anchorName ApplicativeValidate}`Applicative` 实例中的 {lit}`<*>` 版本组合，会导致两个错误都报告给用户：
 ```anchorEvalSteps realSeq
 notFun <*> notArg
 ===>
@@ -398,7 +402,7 @@ match notArg with
 }
 ```
 
-使用 {lit}`>>=` 实现的 {anchorName MonadSeqDesugar}`seq` 版本（这里重写为 {anchorName fakeSeq}`andThen`），结果只有第一个错误可用：
+使用以 {lit}`>>=` 实现的 {anchorName MonadSeqDesugar}`seq` 版本（这里改写为 {anchorName fakeSeq}`andThen`）时，结果是只能得到第一个错误：
 ```anchorEvalSteps fakeSeq
 seq notFun (fun () => notArg)
 ===>

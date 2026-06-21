@@ -9,18 +9,20 @@ open FPLean
 set_option verso.exampleProject "../examples"
 set_option verso.exampleModule "Examples.Monads.Conveniences"
 
-#doc (Manual) "其他便利功能" =>
+#doc (Manual) "额外便利" =>
 %%%
 tag := "monads-conveniences"
+file := "Additional-Conveniences"
 %%%
 
-# 共享参数类型
+# 共享的参数类型
 %%%
 tag := "shared-argument-types"
+file := "Shared-Argument-Types"
 %%%
 
-定义具有相同类型的多个参数时，可以把它们写在同一个冒号之前。
-例如：
+在定义一个接受多个相同类型参数的函数时，可以把这些参数都写在同一个冒号之前。
+例如，
 
 ```anchor equalHuhOld
 def equal? [BEq α] (x : α) (y : α) : Option α :=
@@ -29,7 +31,7 @@ def equal? [BEq α] (x : α) (y : α) : Option α :=
   else
     none
 ```
-可以写成
+可以写作
 
 ```anchor equalHuhNew
 def equal? [BEq α] (x y : α) : Option α :=
@@ -38,24 +40,25 @@ def equal? [BEq α] (x y : α) : Option α :=
   else
     none
 ```
-这在类型签名很长的时候特别有用。
+当类型签名很大时，这尤其有用。
 
-# 开头的点号
+# 前导点记法
 %%%
 tag := "leading-dot-notation"
+file := "Leading-Dot-Notation"
 %%%
 
-一个归纳类型的所有构造子都存在于一个命名空间中。
-因此允许不同的归纳类型有同名构造子，但是这也会导致程序变得啰嗦。
-当问题中的归纳类型已知时，可以命名空间可以省略，只需要在构造子前保留点号，Lean可以根据该处期望的类型来决定如何选择构造子。
-例如将二叉树镜像的函数：
+归纳类型的构造子位于命名空间中。
+这允许多个相关的归纳类型使用相同的构造子名称，但也可能导致程序变得冗长。
+在已知所讨论的归纳类型的上下文中，可以通过在构造子名称前加一个点来省略命名空间，Lean 会使用期望类型来解析构造子名称。
+例如，镜像一棵二叉树的函数可以写作：
 
 ```anchor mirrorOld
 def BinTree.mirror : BinTree α → BinTree α
   | BinTree.leaf => BinTree.leaf
   | BinTree.branch l x r => BinTree.branch (mirror r) x (mirror l)
 ```
-省略命名空间使代码显著变短，但代价是在没有Lean编译器，例如code review时，代码会变得难以阅读：
+省略命名空间会使它显著缩短，但代价是在不包含 Lean 编译器的上下文（例如代码审查工具）中，程序会更难阅读：
 
 ```anchor mirrorNew
 def BinTree.mirror : BinTree α → BinTree α
@@ -63,8 +66,8 @@ def BinTree.mirror : BinTree α → BinTree α
   | .branch l x r => .branch (mirror r) x (mirror l)
 ```
 
-通过期望的类型来消除命名空间的歧义，同样可以应用于构造子之外的名称。
-例如{anchorName BinTreeEmpty}`BinTree.empty`定义为一种创建{anchorName BinTreeEmpty}`BinTree`的方式，那么它也可以和点号一起使用：
+使用表达式的期望类型来消解命名空间歧义，也适用于构造子以外的名称。
+如果 {anchorName BinTreeEmpty}`BinTree.empty` 被定义为创建 {anchorName BinTreeEmpty}`BinTree` 的另一种方式，那么它也可以与点记法一起使用：
 
 ```anchor BinTreeEmpty
 def BinTree.empty : BinTree α := .leaf
@@ -76,13 +79,14 @@ def BinTree.empty : BinTree α := .leaf
 BinTree.empty : BinTree Nat
 ```
 
-# 或-模式
+# 或模式
 %%%
 tag := "or-patterns"
+file := "Or-Patterns"
 %%%
 
-当有多个模式匹配的分支时，例如{kw}`match`表达式，那么不同的模式可以共享同一个结果表达式。
-表示一周的每一天的类型{anchorName Weekday}`Weekday`：
+在允许多个模式的上下文中，例如 {kw}`match` 表达式，多个模式可以共享其结果表达式。
+表示星期几的数据类型 {anchorName Weekday}`Weekday`：
 
 ```anchor Weekday
 inductive Weekday where
@@ -96,7 +100,7 @@ inductive Weekday where
 deriving Repr
 ```
 
-可以用模式匹配检查某一天是否是周末：
+可以使用模式匹配来检查某一天是否是周末：
 
 ```anchor isWeekendA
 def Weekday.isWeekend (day : Weekday) : Bool :=
@@ -105,7 +109,7 @@ def Weekday.isWeekend (day : Weekday) : Bool :=
   | Weekday.sunday => true
   | _ => false
 ```
-首先可以用点号来简化：
+这已经可以通过使用构造子的点记法来简化：
 
 ```anchor isWeekendB
 def Weekday.isWeekend (day : Weekday) : Bool :=
@@ -114,7 +118,7 @@ def Weekday.isWeekend (day : Weekday) : Bool :=
   | .sunday => true
   | _ => false
 ```
-因为周末的两天都有相同的结果{anchorName isWeekendC}`true`，所以可以精简成：
+由于两个周末模式具有相同的结果表达式（{anchorName isWeekendC}`true`），它们可以合并为一个：
 
 ```anchor isWeekendC
 def Weekday.isWeekend (day : Weekday) : Bool :=
@@ -122,7 +126,7 @@ def Weekday.isWeekend (day : Weekday) : Bool :=
   | .saturday | .sunday => true
   | _ => false
 ```
-进一步可以简化成没有参数名称的函数：
+这还可以进一步简化为一个不命名参数的版本：
 
 ```anchor isWeekendD
 def Weekday.isWeekend : Weekday → Bool
@@ -130,27 +134,28 @@ def Weekday.isWeekend : Weekday → Bool
   | _ => false
 ```
 
-实际上结果表达式只是简单地被复制。所以模式也可以绑定变量，这个例子在和类型(Sum Type)两边具有相同类型时，将{anchorName SumNames}`inl`和{anchorName SumNames}`inr`构造子去除：
+在幕后，结果表达式只是被复制到每个模式中。
+这意味着模式可以绑定变量，如下面这个例子所示：它从一个和类型中移除 {anchorName SumNames}`inl` 和 {anchorName SumNames}`inr` 构造子，而这两个构造子都包含同一类型的值：
 
 ```anchor condense
 def condense : α ⊕ α → α
   | .inl x | .inr x => x
 ```
-但是因为结果表达式只是被复制，所以模式绑定的变量也可以具有不同类型。
-重载的函数可以让同一个结果表达式用于多个绑定不同类型的变量的模式：
+由于结果表达式会被复制，由模式绑定的变量不必具有相同的类型。
+可以使用适用于多种类型的重载函数，来编写一个单一的结果表达式，使其适用于绑定不同类型变量的模式：
 
 ```anchor stringy
 def stringy : Nat ⊕ Weekday → String
   | .inl x | .inr x => s!"It is {repr x}"
 ```
-实践中，只有在所有模式都存在的变量才可以在结果表达式中引用，因为这条表达式必须对所有分支都有意义。
-{anchorName getTheNat}`getTheNat`中只有{anchorName getTheNat}`n`可以被访问，使用{anchorName getTheNat}`x`或{anchorName getTheNat}`y`将会导致错误。
+在实践中，只有所有模式共享的变量才能在结果表达式中被引用，因为结果必须对每个模式都有意义。
+在 {anchorName getTheNat}`getTheNat` 中，只有 {anchorName getTheNat}`n` 可以被访问；尝试使用 {anchorName getTheNat}`x` 或 {anchorName getTheNat}`y` 都会导致错误。
 
 ```anchor getTheNat
 def getTheNat : (Nat × α) ⊕ (Nat × β) → Nat
   | .inl (n, x) | .inr (n, y) => n
 ```
-这种类似的情况中访问{anchorName getTheAlpha}`x`同样会导致错误，因为{anchorName getTheAlpha}`x`在第二个模式中不存在：
+试图在类似定义中访问 {anchorName getTheAlpha}`x` 会导致错误，因为第二个模式中没有可用的 {anchorName getTheAlpha}`x`：
 ```anchor getTheAlpha
 def getTheAlpha : (Nat × α) ⊕ (Nat × α) → α
   | .inl (n, x) | .inr (n, y) => x
@@ -159,8 +164,8 @@ def getTheAlpha : (Nat × α) ⊕ (Nat × α) → α
 Unknown identifier `x`
 ```
 
-简单地对结果表达式进行复制，会导致某些令人惊讶的行为。
-例如，下列定义是合法的，因为{anchorName SumNames}`inr`分支实际上引用的是全局定义{anchorName getTheString}`str`：
+结果表达式本质上被复制粘贴到模式匹配的每个分支这一事实，可能导致一些令人意外的行为。
+例如，以下定义是可接受的，因为结果表达式的 {anchorName SumNames}`inr` 版本引用的是 {anchorName getTheString}`str` 的全局定义：
 
 ```anchor getTheString
 def str := "Some string"
@@ -168,15 +173,15 @@ def str := "Some string"
 def getTheString : (Nat × String) ⊕ (Nat × β) → String
   | .inl (n, str) | .inr (n, y) => str
 ```
-在不同分支上调用该函数会让人困惑。
-第一种情况中，需要提供类型标记告诉Lean类型{anchorName getTheString}`β`是什么：
+在两个构造子上调用此函数会揭示这种令人困惑的行为。
+在第一种情况下，需要一个类型标注来告诉 Lean {anchorName getTheString}`β` 应当是什么类型：
 ```anchor getOne
 #eval getTheString (.inl (20, "twenty") : (Nat × String) ⊕ (Nat × String))
 ```
 ```anchorInfo getOne
 "twenty"
 ```
-第二种情况被使用的是全局定义：
+在第二种情况下，使用全局定义：
 ```anchor getTwo
 #eval getTheString (.inr (20, "twenty"))
 ```
@@ -184,5 +189,5 @@ def getTheString : (Nat × String) ⊕ (Nat × β) → String
 "Some string"
 ```
 
-使用或-模式可以极大简化某些定义，让它们更加清晰，例如{anchorName isWeekendD}`Weekday.isWeekend`。
-但因为存在可能导致困惑的行为，需要十分小心地使用，特别是涉及不同类型的变量，或不相交的变量集合时。
+使用或模式可以极大地简化某些定义并提高其清晰度，如 {anchorName isWeekendD}`Weekday.isWeekend` 所示。
+由于存在产生混淆行为的可能性，使用它们时应当谨慎，尤其是在涉及多种类型的变量或互不相交的变量集合时。

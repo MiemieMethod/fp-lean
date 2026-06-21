@@ -32,14 +32,15 @@ def versionString : RoleExpander
 
 %%%
 authors := ["David Thrane Christiansen"]
+file := "Functional-Programming-in-Lean"
 %%%
 
 
-_版权所有 Microsoft Corporation 2023 和 Lean FRO, LLC 2023–2025_
+_版权所有 Microsoft Corporation 2023 及 Lean FRO, LLC 2023–2025_
 
 
 
-这是一本关于将 Lean 作为编程语言使用的免费书籍。所有代码示例都使用 Lean 版本 {versionString}[] 进行测试。
+本书是一本关于将 Lean 用作编程语言的免费书籍。所有代码示例均已使用 Lean 发行版 {versionString}[] 进行测试。
 
 {include 1 FPLean.Intro}
 

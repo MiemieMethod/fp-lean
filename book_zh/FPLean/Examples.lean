@@ -558,9 +558,6 @@ macro_rules
 
 def withNl (s : String) : String := if s.endsWith "\n" then s else s ++ "\n"
 
-def normalizeNewlines (s : String) : String :=
-  s.replace "\r\n" "\n" |>.replace "\r" "\n"
-
 structure ContainerConfig where
   container : Ident
   dir : StrLit
@@ -720,7 +717,7 @@ def commandOutCodeBlock : CodeBlockExpander
     let (container, command) ← ArgParse.run ((·, ·) <$> .positional `container .ident <*> .positional `command .strLit) args
     let output ← Commands.commandOut container command
 
-    _ ← ExpectString.expectString "command output" outStr (withNl output) (useLine := fun l => !l.trimAscii.isEmpty)
+    _ ← ExpectString.expectString "command output" outStr (withNl output) (useLine := fun l => !l.trimAscii.isEmpty) (preEq := (·.trimAscii.copy))
 
     logSilentInfo output
     return #[← ``(Block.code $(quote output))]
@@ -770,9 +767,6 @@ private inductive CommandSpec where
   | quote (cmd : String)
   | out (text : String)
 
-private def needsShell (command : String) : Bool :=
-  ["<", ">", "|", "&", ";", "*", "?", "$(", "`"].any (fun pat => command.contains pat)
-
 @[code_block_expander commands]
 def commands : CodeBlockExpander
   | args, str => do
@@ -810,7 +804,7 @@ def commands : CodeBlockExpander
         else
           out := out.push (command, true)
           outStr := outStr ++ s!"$ {command}\n"
-        let output ← Commands.command container dir.getString (Syntax.mkStrLit command (info := str.raw.getHeadInfo)) (viaShell := needsShell command)
+        let output ← Commands.command container dir.getString (Syntax.mkStrLit command (info := str.raw.getHeadInfo)) (viaShell := true)
         unless output.stdout.isEmpty do
           out := out.push (output.stdout, false)
           outStr := outStr ++ withNl output.stdout
@@ -821,7 +815,7 @@ def commands : CodeBlockExpander
         out := out.push (txt, false)
         outStr := outStr ++ withNl txt
     unless str.getString.trimAscii.isEmpty && outStr.trimAscii.isEmpty do
-      _ ← ExpectString.expectString "commands" str outStr
+      _ ← ExpectString.expectString "commands" str outStr (preEq := (·.trimAscii.copy))
     if «show» then
       pure #[← ``(Block.other (Block.shellCommands $(quote out)) #[])]
     else pure #[]

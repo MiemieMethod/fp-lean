@@ -11,18 +11,20 @@ set_option verso.exampleProject "../examples"
 set_option verso.exampleModule "FelineLib"
 
 
-#doc (Manual) "额外的便利功能" =>
+#doc (Manual) "附加便利功能" =>
 %%%
 tag := "hello-world-conveniences"
+file := "Additional-Conveniences"
 %%%
 
-# 嵌套活动
+# 嵌套动作
 %%%
 tag := "nested-actions"
+file := "Nested-Actions"
 %%%
 
 :::paragraph
-{lit}`feline` 中的许多函数都表现出一种重复模式，其中 {anchorName dump}`IO` 活动的结果被赋予一个名称，然后立即且仅使用一次。
+{lit}`feline` 中的许多函数都表现出一种重复模式：为某个 {anchorName dump}`IO` 动作的结果命名，然后立即且仅使用一次。
 例如，在 {moduleName}`dump` 中：
 ```anchor dump
 partial def dump (stream : IO.FS.Stream) : IO Unit := do
@@ -35,13 +37,13 @@ partial def dump (stream : IO.FS.Stream) : IO Unit := do
     dump stream
 ```
 
-模式出现在 {moduleName (anchor:=stdoutBind)}`stdout` 中：
+该模式出现在 {moduleName (anchor:=stdoutBind)}`stdout` 中：
 ```anchor stdoutBind
     let stdout ← IO.getStdout
     stdout.write buf
 ```
 
-类似地，{moduleName}`fileStream` 包含以下代码片段：
+类似地，{moduleName}`fileStream` 包含以下片段：
 ```anchor fileExistsBind
   let fileExists ← filename.pathExists
   if not fileExists then
@@ -49,8 +51,8 @@ partial def dump (stream : IO.FS.Stream) : IO Unit := do
 :::
 
 :::paragraph
-当 Lean 编译 {moduleTerm}`do` 块时，由括号下紧跟左箭头组成的表达式被提升到最近的封闭 {moduleTerm}`do`，它们的结果被绑定到唯一的名称。
-这个唯一的名称替换表达式的原始位置。
+当 Lean 编译一个 {moduleTerm}`do` 块时，由紧接在圆括号之下的左箭头构成的表达式会被提升到最近的外层 {moduleTerm}`do`，并且其结果会被绑定到一个唯一名称。
+这个唯一名称会替代表达式原来的位置。
 这意味着 {moduleName (module := Examples.Cat)}`dump` 也可以写成如下形式：
 
 ```anchor dump (module:=Examples.Cat)
@@ -63,12 +65,12 @@ partial def dump (stream : IO.FS.Stream) : IO Unit := do
     dump stream
 ```
 
-这个版本的 {anchorName dump (module := Examples.Cat)}`dump` 避免了引入只使用一次的名称，这可以大大简化程序。
-Lean 从嵌套表达式上下文中提升的 {moduleName (module := Examples.Cat)}`IO` 活动称为*嵌套活动*。
+这个版本的 {anchorName dump (module := Examples.Cat)}`dump` 避免引入只使用一次的名称，这可以极大地简化程序。
+Lean 从嵌套表达式上下文中提升出来的 {moduleName (module := Examples.Cat)}`IO` 动作称为_嵌套动作_。
 :::
 
 :::paragraph
-{moduleName (module := Examples.Cat)}`fileStream` 可以使用相同的技术来简化：
+{moduleName (module := Examples.Cat)}`fileStream` 可以用同样的技术加以简化：
 
 ```anchor fileStream (module := Examples.Cat)
 def fileStream (filename : System.FilePath) : IO (Option IO.FS.Stream) := do
@@ -80,15 +82,15 @@ def fileStream (filename : System.FilePath) : IO (Option IO.FS.Stream) := do
     pure (some (IO.FS.Stream.ofHandle handle))
 ```
 
-在这种情况下，{anchorName fileStream (module := Examples.Cat)}`handle` 的局部名称也可以使用嵌套活动来消除，但生成的表达式会很长且复杂。
-尽管使用嵌套活动通常是好的风格，但有时命名中间结果仍然是有帮助的。
+在这种情况下，也可以使用嵌套动作来消除 {anchorName fileStream (module := Examples.Cat)}`handle` 的局部名称，但所得表达式会很长且复杂。
+尽管使用嵌套动作通常是良好的风格，有时为中间结果命名仍然可能有所帮助。
 :::
 
-然而，重要的是要记住，嵌套活动只是在周围的 {moduleTerm (module := Examples.Cat)}`do` 块中出现的 {moduleName (module := Examples.Cat)}`IO` 活动的简短记法。
-执行它们所涉及的副作用仍然以相同的顺序发生，副作用的执行不与表达式的求值交织在一起。
-因此，嵌套活动不能从 {kw}`if` 的分支中提升。
+然而，重要的是要记住，嵌套动作只是出现在外围 {moduleTerm (module := Examples.Cat)}`do` 块中的 {moduleName (module := Examples.Cat)}`IO` 动作的一种较短记法。
+执行它们所涉及的副作用仍然按相同的顺序发生，并且副作用的执行不会与表达式求值交错进行。
+因此，嵌套动作不能从 {kw}`if` 的分支中提升出来。
 
-作为这可能令人困惑的示例，考虑以下辅助定义，它们在向世界宣布已被执行后返回数据：
+举一个可能令人困惑的例子，请考虑以下辅助定义：它们在向外界宣告自己已被执行之后返回数据。
 
 ```anchor getNumA (module := Examples.Cat)
 def getNumA : IO Nat := do
@@ -102,9 +104,9 @@ def getNumB : IO Nat := do
   pure 7
 ```
 
-这些定义旨在替代更复杂的 {anchorName getNumB (module:=Examples.Cat)}`IO` 代码，这些代码可能验证用户输入、读取数据库或打开文件。
+这些定义旨在替代更复杂的 {anchorName getNumB (module:=Examples.Cat)}`IO` 代码；这种代码可能会验证用户输入、读取数据库，或打开文件。
 
-当数字 A 为五时打印 {moduleTerm (module := Examples.Cat)}`0`，否则打印数字 B 的程序可能如下所示：
+一个在数字 A 为五时打印 {moduleTerm (module := Examples.Cat)}`0`、否则打印数字 B 的程序，可以写成如下形式：
 
 ```anchor testEffects (module := Examples.Cat)
 def test : IO Unit := do
@@ -112,7 +114,7 @@ def test : IO Unit := do
   (← IO.getStdout).putStrLn s!"The answer is {a}"
 ```
 
-这个程序等效于：
+这个程序等价于：
 
 ```anchor testEffectsExpanded (module := Examples.Cat)
 def test : IO Unit := do
@@ -122,8 +124,8 @@ def test : IO Unit := do
   (← IO.getStdout).putStrLn s!"The answer is {a}"
 ```
 
-它无论 {moduleName (module := Examples.Cat)}`getNumA` 的结果是否等于 {moduleTerm (module := Examples.Cat)}`5` 都会运行 {moduleName (module := Examples.Cat)}`getNumB`。
-为了防止这种混淆，嵌套活动不允许在不是 {moduleTerm (module := Examples.Cat)}`do` 中的行的 {kw}`if` 中使用，并产生以下错误消息：
+它会运行 {moduleName (module := Examples.Cat)}`getNumB`，而不管 {moduleName (module := Examples.Cat)}`getNumA` 的结果是否等于 {moduleTerm (module := Examples.Cat)}`5`。
+为防止这种混淆，不允许在并非自身就是 {moduleTerm (module := Examples.Cat)}`do` 中一行的 {kw}`if` 内使用嵌套动作，并会产生以下错误消息：
 
 ```anchorError testEffects (module := Examples.Cat)
 invalid use of `(<- ...)`, must be nested inside a 'do' expression
@@ -133,15 +135,16 @@ invalid use of `(<- ...)`, must be nested inside a 'do' expression
 # {lit}`do` 的灵活布局
 %%%
 tag := "do-layout-syntax"
+file := "Flexible-Layouts-for-do"
 %%%
 
 在 Lean 中，{moduleTerm (module := Examples.Cat)}`do` 表达式对空白敏感。
-{moduleTerm (module := Examples.Cat)}`do` 中的每个 {moduleName (module := Examples.Cat)}`IO` 活动或局部绑定都应该在自己的行上开始，并且它们都应该有相同的缩进。
-几乎所有的 {moduleTerm (module := Examples.Cat)}`do` 使用都应该这样写。
-然而，在一些罕见的情况下，可能需要手动控制空白和缩进，或者在单行上有多个小活动可能会很方便。
-在这些情况下，换行符可以用分号替换，缩进可以用大括号替换。
+{moduleTerm (module := Examples.Cat)}`do` 中的每个 {moduleName (module := Examples.Cat)}`IO` 动作或局部绑定都应从独立的一行开始，并且它们都应具有相同的缩进。
+几乎所有 {moduleTerm (module := Examples.Cat)}`do` 的用法都应以这种方式书写。
+然而，在某些少见的上下文中，可能需要手动控制空白和缩进，或者将多个小动作放在同一行会更方便。
+在这些情况下，可以用分号替代换行，并用花括号替代缩进。
 
-例如，以下所有程序都是等效的：
+例如，以下所有程序都是等价的：
 
 ```anchor helloOne (module := Examples.Cat)
 -- This version uses only whitespace-sensitive layout
@@ -177,26 +180,27 @@ def main : IO Unit := do
 ```
 
 
-地道的 Lean 代码很少在 {moduleTerm (module := Examples.Cat)}`do` 中使用大括号。
+惯用的 Lean 代码很少将花括号与 {moduleTerm (module := Examples.Cat)}`do` 一起使用。
 
-# 使用 {kw}`#eval` 运行 {lit}`IO` 活动
+# 使用 {kw}`#eval` 运行 {lit}`IO` 动作
 %%%
 tag := "eval-io"
+file := "Running-IO-Actions-With-___eval"
 %%%
 
-Lean 的 {moduleTerm (module := Examples.Cat)}`#eval` 命令可以用来执行 {moduleName (module := Examples.Cat)}`IO` 活动，而不仅仅是求值它们。
-通常，向 Lean 文件添加 {moduleTerm (module := Examples.Cat)}`#eval` 命令会使 Lean 求值提供的表达式，将结果值转换为字符串，并在工具提示和信息窗口中提供该字符串。
-与因为 {moduleName (module := Examples.Cat)}`IO` 活动无法转换为字符串而失败不同，{moduleTerm (module := Examples.Cat)}`#eval` 执行它们，执行它们的副作用。
-如果执行的结果是 {moduleName (module := Examples.Cat)}`Unit` 值 {moduleTerm (module := Examples.Cat)}`()`，则不显示结果字符串，但如果它是可以转换为字符串的类型，则 Lean 显示结果值。
+Lean 的 {moduleTerm (module := Examples.Cat)}`#eval` 命令可用于执行 {moduleName (module := Examples.Cat)}`IO` 动作，而不只是对它们求值。
+通常，在 Lean 文件中添加 {moduleTerm (module := Examples.Cat)}`#eval` 命令会使 Lean 对所给表达式求值，将所得值转换为字符串，并将该字符串作为工具提示以及在信息窗口中提供。
+{moduleTerm (module := Examples.Cat)}`#eval` 不会因为 {moduleName (module := Examples.Cat)}`IO` 动作无法转换为字符串而失败，而是会执行它们，实施其副作用。
+如果执行结果是 {moduleName (module := Examples.Cat)}`Unit` 值 {moduleTerm (module := Examples.Cat)}`()`，则不会显示结果字符串；但如果它是可以转换为字符串的类型，那么 Lean 会显示所得值。
 
 :::paragraph
-这意味着，给定 {moduleName (module := Examples.HelloWorld)}`countdown` 和 {moduleName (module := Examples.HelloWorld)}`runActions` 的先前定义，
+这意味着，在给定 {moduleName (module := Examples.HelloWorld)}`countdown` 和 {moduleName (module := Examples.HelloWorld)}`runActions` 先前定义的情况下，
 
 ```anchor evalDoesIO (module := Examples.HelloWorld)
 #eval runActions (countdown 3)
 ```
 
-会显示
+显示
 
 ```anchorInfo evalDoesIO (module := Examples.HelloWorld)
 3
@@ -206,11 +210,11 @@ Blast off!
 ```
 :::
 
-这是运行 {moduleName (module := Examples.HelloWorld)}`IO` 活动产生的输出，而不是活动本身的某种不透明表示。
-换句话说，对于 {moduleName (module := Examples.HelloWorld)}`IO` 活动，{moduleTerm (module := Examples.HelloWorld)}`#eval` 既*求值*提供的表达式又*执行*结果活动值。
+这是运行 {moduleName (module := Examples.HelloWorld)}`IO` 动作所产生的输出，而不是该动作本身的某种不透明表示。
+换言之，对于 {moduleName (module := Examples.HelloWorld)}`IO` 动作，{moduleTerm (module := Examples.HelloWorld)}`#eval` 既会_求值_所提供的表达式，也会_执行_所得的动作值。
 
-使用 {moduleTerm (module := Examples.HelloWorld)}`#eval` 快速测试 {moduleName (module := Examples.HelloWorld)}`IO` 活动比编译和运行整个程序要方便得多。
-然而，存在一些限制。
-例如，从标准输入读取只是返回空输入。
-此外，每当 Lean 需要更新它提供给用户的诊断信息时，{moduleName (module := Examples.HelloWorld)}`IO` 活动就会重新执行，这可能在不可预测的时间发生。
-例如，读取和写入文件的活动可能会意外地这样做。
+用 {moduleTerm (module := Examples.HelloWorld)}`#eval` 快速测试 {moduleName (module := Examples.HelloWorld)}`IO` 动作，可能比编译并运行整个程序方便得多。
+然而，这也有一些限制。
+例如，从标准输入读取只会返回空输入。
+此外，每当 Lean 需要更新其提供给用户的诊断信息时，{moduleName (module := Examples.HelloWorld)}`IO` 动作都会被重新执行，而这可能发生在不可预测的时刻。
+例如，一个读写文件的动作可能会出乎意料地这样做。

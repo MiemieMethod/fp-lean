@@ -11,29 +11,30 @@ example_module Examples.Intro
 set_option verso.exampleProject "../examples"
 set_option verso.exampleModule "Examples.Intro"
 
-#doc (Manual) "数据类型和模式匹配" =>
+#doc (Manual) "数据类型与模式" =>
 %%%
 tag := "datatypes-and-patterns"
+file := "Datatypes-and-Patterns"
 %%%
 
-结构使多个独立的数据片段能够组合成一个连贯的整体，由一个全新的类型表示。
-将值集合组合在一起的类型（如结构）称为 *积类型（Product Types）*。
-但是，许多域概念不能自然地表示为结构。
-例如，应用程序可能需要跟踪用户权限，其中一些用户是文档所有者，一些可以编辑文档，其他人只能阅读它们。
-计算器有许多二元运算符，如加法、减法和乘法。
-结构不提供编码多种选择的简单方法。
+结构使得多个相互独立的数据片段能够组合成一个连贯的整体，并由一个全新的类型来表示。
+像结构这样把一组值组合在一起的类型称为_积类型_。
+然而，许多领域概念无法自然地表示为结构。
+例如，一个应用程序可能需要跟踪用户权限，其中一些用户是文档所有者，一些用户可以编辑文档，而另一些用户只能读取文档。
+计算器具有若干二元运算符，例如加法、减法和乘法。
+结构并不提供一种简便方式来编码多种选择。
 
-类似地，虽然结构是跟踪固定字段集的绝佳方法，但许多应用程序需要可能包含任意数量元素的数据。
-大多数经典数据结构（如树和列表）都具有递归结构，其中列表的尾部本身就是一个列表，或者二叉树的左右分支本身就是二叉树。
-在上述计算器中，表达式本身的结构是递归的。
-例如，加法表达式中的被加数本身可能是乘法表达式。
+类似地，虽然结构体是跟踪固定字段集合的绝佳方式，但许多应用需要可能包含任意数量元素的数据。
+多数经典数据结构，如树和列表，都具有递归结构：列表的尾部本身是一个列表，或者二叉树的左右分支本身也是二叉树。
+在前述计算器中，表达式自身的结构是递归的。
+例如，加法表达式中的各个加数本身可能是乘法表达式。
 
-允许选择的数据类型称为 *和类型（Sum Types）*，可以包含自身实例的数据类型称为 *递归数据类型（Recursive Datatypes）*。
-递归和类型称为 *归纳数据类型（Inductive Datatypes）*，因为可以使用数学归纳法来证明关于它们的陈述。
+允许选择的数据类型称为_和类型_，而能够包含其自身实例的数据类型称为_递归数据类型_。
+递归和类型称为_归纳数据类型_，因为可以使用数学归纳法来证明关于它们的陈述。
 在编程时，归纳数据类型通过模式匹配和递归函数来使用。
 
 :::paragraph
-许多内置类型实际上是标准库中的归纳数据类型。
+许多内建类型实际上是标准库中的归纳数据类型。
 例如，{anchorName Bool}`Bool` 是一个归纳数据类型：
 
 ```anchor Bool
@@ -42,27 +43,27 @@ inductive Bool where
   | true : Bool
 ```
 
-这个定义有两个主要部分。
-第一行提供新类型的名称（{anchorName Bool}`Bool`），而其余行各自描述一个构造器。
-与结构的构造器一样，归纳数据类型的构造器仅仅是其他数据的惰性接收者和容器，而不是插入任意初始化和验证代码的地方。
-与结构不同，归纳数据类型可以有多个构造器。
-这里有两个构造器，{anchorName Bool}`true` 和 {anchorName Bool}`false`，都不接受任何参数。
-就像结构声明将其名称放在以声明类型命名的命名空间中一样，归纳数据类型将其构造器的名称放在一个命名空间中。
-在 Lean 标准库中，{anchorName BoolNames}`true` 和 {anchorName BoolNames}`false` 从这个命名空间重新导出，以便可以单独编写，而不是分别作为 {anchorName BoolNames}`Bool.true` 和 {anchorName BoolNames}`Bool.false`。
+此定义有两个主要部分。
+第一行给出了新类型的名称（{anchorName Bool}`Bool`），而其余各行分别描述一个构造子。
+与结构的构造子一样，归纳数据类型的构造子只是惰性的接收者和其他数据的容器，而不是插入任意初始化和验证代码的位置。
+不同于结构，归纳数据类型可以有多个构造子。
+这里有两个构造子，{anchorName Bool}`true` 和 {anchorName Bool}`false`，且二者都不接受任何实参。
+正如结构声明会把其名称放入一个以所声明类型命名的命名空间中，归纳数据类型也会把其构造子的名称放入一个命名空间中。
+在 Lean 标准库中，{anchorName BoolNames}`true` 和 {anchorName BoolNames}`false` 从此命名空间重新导出，因此它们可以单独书写，而不必分别写作 {anchorName BoolNames}`Bool.true` 和 {anchorName BoolNames}`Bool.false`。
 :::
 
 :::paragraph
-从数据建模的角度来看，归纳数据类型在许多相同的上下文中使用，其他语言中可能使用密封抽象类。
-在 C# 或 Java 等语言中，可能会编写类似的 {anchorName Bool}`Bool` 定义：
+从数据建模的角度看，归纳数据类型用于许多与其他语言中密封抽象类类似的场景。
+在 C# 或 Java 这样的语言中，可以写出类似的 {anchorName Bool}`Bool` 定义：
 ```CSharp
 abstract class Bool {}
 class True : Bool {}
 class False : Bool {}
 ```
-但是，这些表示的具体细节是相当不同的。特别是，每个非抽象类都创建了新类型和新的数据分配方式。在面向对象的示例中，{CSharp}`True` 和 {CSharp}`False` 都是比 {CSharp}`Bool` 更具体的类型，而 Lean 定义仅引入新类型 {anchorName Bool}`Bool`。
+然而，这些表示的具体细节相当不同。特别是，每个非抽象类都会同时创建一个新类型和分配数据的新方式。在面向对象的例子中，{CSharp}`True` 和 {CSharp}`False` 都是比 {CSharp}`Bool` 更具体的类型，而 Lean 的定义只引入了新类型 {anchorName Bool}`Bool`。
 :::
 
-非负整数的类型 {anchorName Nat}`Nat` 是一个归纳数据类型：
+非负整数类型 {anchorName Nat}`Nat` 是一种归纳数据类型：
 
 ```anchor Nat
 inductive Nat where
@@ -71,16 +72,16 @@ inductive Nat where
 ```
 
 这里，{anchorName NatNames}`zero` 表示 0，而 {anchorName NatNames}`succ` 表示某个其他数的后继。
-{anchorName NatNames}`succ` 声明中提到的 {anchorName Nat}`Nat`，正是正在定义的这个 {anchorName Nat}`Nat` 类型。
-_后继_意为“大一的数”，所以 5 的后继是 6，而 32,185 的后继是 32,186。
-按照这个定义，{anchorEvalStep four 1}`4` 表示为 {anchorEvalStep four 0}`Nat.succ (Nat.succ (Nat.succ (Nat.succ Nat.zero)))`。
-这个定义几乎就像 {anchorName even}`Bool` 的定义，只是名称稍有不同。
-唯一真正的区别是 {anchorName NatNames}`succ` 后面跟着 {anchorTerm Nat}`(n : Nat)`，这说明构造子 {anchorName NatNames}`succ` 接受一个类型为 {anchorName Nat}`Nat` 的参数，而该参数恰好名为 {anchorName Nat}`n`。
-名称 {anchorName NatNames}`zero` 和 {anchorName NatNames}`succ` 位于以其类型命名的命名空间中，因此必须分别称为 {anchorName NatNames}`Nat.zero` 和 {anchorName NatNames}`Nat.succ`。
+在 {anchorName NatNames}`succ` 的声明中提到的 {anchorName Nat}`Nat` 正是正在被定义的类型 {anchorName Nat}`Nat` 本身。
+_后继_的意思是“比……大一”，因此五的后继是六，32,185 的后继是 32,186。
+使用这个定义，{anchorEvalStep four 1}`4` 表示为 {anchorEvalStep four 0}`Nat.succ (Nat.succ (Nat.succ (Nat.succ Nat.zero)))`。
+这个定义几乎就像 {anchorName even}`Bool` 的定义，只是名称略有不同。
+唯一真正的区别是 {anchorName NatNames}`succ` 后面跟着 {anchorTerm Nat}`(n : Nat)`，它指定构造子 {anchorName NatNames}`succ` 接受一个类型为 {anchorName Nat}`Nat` 的参数，而该参数恰好命名为 {anchorName Nat}`n`。
+名称 {anchorName NatNames}`zero` 和 {anchorName NatNames}`succ` 位于一个以其类型命名的命名空间中，因此必须分别以 {anchorName NatNames}`Nat.zero` 和 {anchorName NatNames}`Nat.succ` 引用它们。
 
-参数名称（如 {anchorName Nat}`n`）可能出现在 Lean 的错误消息中以及编写数学证明时提供的反馈中。
-Lean 还有一个可选语法，用于按名称提供参数。
-但是，通常参数名称的选择不如结构字段名称的选择重要，因为它不构成 API 的很大一部分。
+参数名称（例如 {anchorName Nat}`n`）可能出现在 Lean 的错误消息中，也可能出现在编写数学证明时提供的反馈中。
+Lean 还提供了一种可选语法，用于按名称提供参数。
+不过，一般而言，参数名称的选择不如结构字段名称的选择重要，因为它并不构成 API 的那么大一部分。
 
 在 C# 或 Java 中，{CSharp}`Nat` 可以定义如下：
 ```CSharp
@@ -93,11 +94,11 @@ class Succ : Nat {
     }
 }
 ```
-就像上面的 {anchorName Bool}`Bool` 示例一样，这定义了比 Lean 等价物更多的类型。
-此外，这个示例突出了 Lean 数据类型构造器更像抽象类的子类，而不像 C# 或 Java 中的构造器，因为这里显示的构造器包含要执行的初始化代码。
+正如上面的 {anchorName Bool}`Bool` 示例一样，这定义的类型比 Lean 中的对应物更多。
+此外，这个示例凸显出：Lean 数据类型的构造子更像抽象类的子类，而不像 C# 或 Java 中的构造函数，因为这里展示的构造函数包含要执行的初始化代码。
 
-和类型也类似于在 TypeScript 中使用字符串标签来编码识别联合。
-在 TypeScript 中，{typescript}`Nat` 可以定义如下：
+和类型也类似于在 TypeScript 中使用字符串标签来编码可辨识联合。
+在 TypeScript 中，{typescript}`Nat` 可以如下定义：
 ```typescript
 interface Zero {
     tag: "zero";
@@ -110,19 +111,20 @@ interface Succ {
 
 type Nat = Zero | Succ;
 ```
-就像 C# 和 Java 一样，这种编码最终比 Lean 中的类型更多，因为 {typescript}`Zero` 和 {typescript}`Succ` 各自都是一个类型。
-它也说明了 Lean 构造器对应于 JavaScript 或 TypeScript 中包含标识内容标签的对象。
+就像 C# 和 Java 一样，这种编码最终得到的类型比 Lean 中更多，因为 {typescript}`Zero` 和 {typescript}`Succ` 各自都是独立的类型。
+它还说明，Lean 的构造子对应于 JavaScript 或 TypeScript 中包含标签的对象，该标签用于标识其内容。
 
 # 模式匹配
 %%%
 tag := "pattern-matching"
+file := "Pattern-Matching"
 %%%
 
-在许多语言中，这些类型的数据通过首先使用实例检查操作符来检查收到的是哪个子类，然后读取给定子类中可用字段的值来使用。
-实例检查确定运行哪些代码，确保该代码所需的数据可用，而字段本身提供数据。
-在 Lean 中，这两个目的同时由 *模式匹配（Pattern Matching）* 完成。
+在许多语言中，使用这类数据时，首先用 instance-of 运算符检查收到的是哪个子类，然后读取该给定子类中可用字段的值。
+instance-of 检查决定运行哪段代码，从而确保该代码所需的数据可用，而字段本身则提供这些数据。
+在 Lean 中，这两个目的由_模式匹配_同时实现。
 
-使用模式匹配的函数示例是 {anchorName isZero}`isZero`，这是一个函数，当其参数为 {anchorName isZero}`Nat.zero` 时返回 {anchorName isZero}`true`，否则返回 false。
+使用模式匹配的函数示例之一是 {anchorName isZero}`isZero`，它是一个函数：当其实参为 {anchorName isZero}`Nat.zero` 时返回 {anchorName isZero}`true`，否则返回 false。
 
 ```anchor isZero
 def isZero (n : Nat) : Bool :=
@@ -131,12 +133,12 @@ def isZero (n : Nat) : Bool :=
   | Nat.succ k => false
 ```
 
-{kw}`match` 表达式提供函数的参数 {anchorName isZero}`n` 进行解构。
-如果 {anchorName isZero}`n` 由 {anchorName isZero}`Nat.zero` 构造，则采用模式匹配的第一个分支，结果为 {anchorName isZero}`true`。
-如果 {anchorName isZero}`n` 由 {anchorName isZero}`Nat.succ` 构造，则采用第二个分支，结果为 {anchorName isZero}`false`。
+{kw}`match` 表达式获得函数的参数 {anchorName isZero}`n` 以进行解构。
+如果 {anchorName isZero}`n` 是由 {anchorName isZero}`Nat.zero` 构造的，那么将采用模式匹配的第一个分支，结果为 {anchorName isZero}`true`。
+如果 {anchorName isZero}`n` 是由 {anchorName isZero}`Nat.succ` 构造的，那么将采用第二个分支，结果为 {anchorName isZero}`false`。
 
 :::paragraph
-逐步地，{anchorEvalStep isZeroZeroSteps 0}`isZero Nat.zero` 的求值过程如下：
+逐步来看，{anchorEvalStep isZeroZeroSteps 0}`isZero Nat.zero` 的求值过程如下：
 
 ```anchorEvalSteps  isZeroZeroSteps
 isZero Nat.zero
@@ -150,7 +152,7 @@ true
 :::
 
 :::paragraph
-{anchorEvalStep isZeroFiveSteps 0}`isZero 5` 的求值类似地进行：
+{anchorEvalStep isZeroFiveSteps 0}`isZero 5` 的求值过程类似：
 
 ```anchorEvalSteps  isZeroFiveSteps
 isZero 5
@@ -165,14 +167,14 @@ false
 ```
 :::
 
-{anchorName isZero}`isZero` 模式第二分支中的 {anchorName isZero}`k` 不是装饰性的。
-它使作为 {anchorName isZero}`Nat.succ` 参数的 {anchorName isZero}`Nat` 以提供的名称可见。
-然后可以使用该较小的数字来计算表达式的最终结果。
+{anchorName isZero}`isZero` 中模式第二个分支里的 {anchorName isZero}`k` 并非装饰性的。
+它使作为 {anchorName isZero}`Nat.succ` 的参数的 {anchorName isZero}`Nat` 以给定名称变得可见。
+随后可以使用这个较小的数来计算表达式的最终结果。
 
 
 :::paragraph
-正如某个数字 $`n` 的后继比 $`n` 大一（即 $`n + 1`），数字的前驱比它小一。
-如果 {anchorName pred}`pred` 是一个查找 {anchorName pred}`Nat` 的前驱的函数，那么以下示例应该找到预期的结果：
+正如某个数 $`n` 的后继比 $`n` 大一（即 $`n + 1`）一样，一个数的前驱比它小一。
+如果 {anchorName pred}`pred` 是求 {anchorName pred}`Nat` 的前驱的函数，那么下面的示例应当得到预期结果：
 
 ```anchor  predFive
 #eval pred 5
@@ -192,8 +194,8 @@ false
 :::
 
 :::paragraph
-因为 {anchorName Nat}`Nat` 不能表示负数，{anchorName NatNames}`Nat.zero` 有点让人困惑。
-通常，在使用 {anchorName Nat}`Nat` 时，通常会产生负数的运算符被重新定义为产生 {anchorName NatNames}`zero` 本身：
+因为 {anchorName Nat}`Nat` 不能表示负数，{anchorName NatNames}`Nat.zero` 有些令人困惑。
+通常，在使用 {anchorName Nat}`Nat` 时，原本会产生负数的运算符会被重新定义为产生 {anchorName NatNames}`zero` 本身：
 
 ```anchor predZero
 #eval pred 0
@@ -204,10 +206,10 @@ false
 :::
 
 
-要找到 {anchorName pred}`Nat` 的前驱，第一步是检查使用哪个构造器创建它。
-如果是 {anchorName pred}`Nat.zero`，则结果为 {anchorName pred}`Nat.zero`。
-如果是 {anchorName pred}`Nat.succ`，则名称 {anchorName pred}`k` 用于引用其下面的 {anchorName plus}`Nat`。
-这个 {anchorName pred}`Nat` 是所需的前驱，所以 {anchorName pred}`Nat.succ` 分支的结果是 {anchorName pred}`k`。
+要寻找 {anchorName pred}`Nat` 的前驱，第一步是检查用哪个构造子创建了它。
+如果它是 {anchorName pred}`Nat.zero`，那么结果是 {anchorName pred}`Nat.zero`。
+如果它是 {anchorName pred}`Nat.succ`，那么名称 {anchorName pred}`k` 用来指称其下方的 {anchorName plus}`Nat`。
+而这个 {anchorName pred}`Nat` 正是所需的前驱，因此 {anchorName pred}`Nat.succ` 分支的结果是 {anchorName pred}`k`。
 
 ```anchor pred
 def pred (n : Nat) : Nat :=
@@ -217,7 +219,7 @@ def pred (n : Nat) : Nat :=
 ```
 
 :::paragraph
-将此函数应用于 {anchorTerm predFiveSteps}`5` 产生以下步骤：
+将此函数应用于 {anchorTerm predFiveSteps}`5` 会产生以下步骤：
 
 ```anchorEvalSteps  predFiveSteps
 pred 5
@@ -233,8 +235,8 @@ match Nat.succ 4 with
 :::
 
 :::paragraph
-模式匹配可以与结构以及和类型一起使用。
-例如，从 {anchorName depth}`Point3D` 提取第三维的函数可以写成如下形式：
+模式匹配既可用于结构体，也可用于和类型。
+例如，一个从 {anchorName depth}`Point3D` 中提取第三个维度的函数可以写作如下：
 
 ```anchor depth
 def depth (p : Point3D) : Float :=
@@ -242,26 +244,27 @@ def depth (p : Point3D) : Float :=
   | { x:= h, y := w, z := d } => d
 ```
 
-在这种情况下，只使用 {anchorName fragments}`Point3D.z` 访问器会简单得多，但结构模式有时是编写函数的最简单方法。
+在这种情况下，直接使用 {anchorName fragments}`Point3D.z` 访问器本来要简单得多，但结构模式有时是编写函数的最简单方式。
 :::
 
 # 递归函数
 %%%
 tag := "recursive-functions"
+file := "Recursive-Functions"
 %%%
 
-引用正在定义的名称的定义称为 *递归定义（Recursive Definitions）*。
-归纳数据类型允许是递归的；实际上，{anchorName Nat}`Nat` 是这种数据类型的示例，因为 {anchorName Nat}`succ` 需要另一个 {anchorName Nat}`Nat`。
-递归数据类型可以表示任意大的数据，仅受可用内存等技术因素限制。
-正如在数据类型定义中不可能为每个自然数写下一个构造器一样，也不可能为每种可能性写下模式匹配情况。
+引用正在被定义的名称的定义称为_递归定义_。
+归纳数据类型允许递归；事实上，{anchorName Nat}`Nat` 就是这种数据类型的一个例子，因为 {anchorName Nat}`succ` 要求另一个 {anchorName Nat}`Nat`。
+递归数据类型可以表示任意大的数据，只受可用内存等技术因素限制。
+正如不可能在数据类型定义中为每个自然数写出一个构造子，也不可能为每一种可能性写出一个模式匹配分支。
 
 :::paragraph
-递归数据类型与递归函数很好地互补。
-在 {anchorName even}`Nat` 上的简单递归函数检查其参数是否为偶数。
-在这种情况下，{anchorName even}`Nat.zero` 是偶数。
-像这样的代码的非递归分支称为 *基本情况（Base Cases）*。
+递归数据类型与递归函数相辅相成。
+一个关于 {anchorName even}`Nat` 的简单递归函数会检查其参数是否为偶数。
+在此情形中，{anchorName even}`Nat.zero` 是偶数。
+像这样的非递归代码分支称为_基本情形_。
 奇数的后继是偶数，偶数的后继是奇数。
-这意味着用 {anchorName even}`Nat.succ` 构建的数字是偶数当且仅当其参数不是偶数。
+这意味着，用 {anchorName even}`Nat.succ` 构造出的数为偶数，当且仅当它的参数不是偶数。
 
 ```anchor even
 def even (n : Nat) : Bool :=
@@ -273,16 +276,16 @@ def even (n : Nat) : Bool :=
 :::
 
 
-这种思维模式对于在 {anchorName even}`Nat` 上编写递归函数是典型的。
-首先，确定对 {anchorName even}`Nat.zero` 做什么。
-然后，确定如何将任意 {anchorName even}`Nat` 的结果转换为其后继的结果，并将此转换应用于递归调用的结果。
-这种模式称为 *结构递归（Structural Recursion）*。
+这种思考模式是为 {anchorName even}`Nat` 编写递归函数时的典型方式。
+首先，确定对 {anchorName even}`Nat.zero` 应当做什么。
+然后，确定如何把任意 {anchorName even}`Nat` 的结果转换为其后继的结果，并将这个转换应用于递归调用的结果。
+这种模式称为_结构递归_。
 
 :::paragraph
-与许多语言不同，Lean 默认确保每个递归函数最终会到达基本情况。
-从编程角度来看，这排除了意外的无限循环。
-但这个特性在证明定理时特别重要，因为无限循环会造成重大困难。
-其结果是 Lean 不会接受尝试在原始数字上递归调用自身的 {anchorName even}`even` 版本：
+与许多语言不同，Lean 默认确保每个递归函数最终都会到达一个基本情形。
+从编程角度看，这排除了意外的无限循环。
+但在证明定理时，这一特性尤其重要，因为无限循环会造成重大困难。
+其结果是，Lean 不会接受试图在原始数上递归调用自身的 {anchorName even}`even` 版本：
 
 ```anchor evenLoops
 def evenLoops (n : Nat) : Bool :=
@@ -290,7 +293,7 @@ def evenLoops (n : Nat) : Bool :=
   | Nat.zero => true
   | Nat.succ k => not (evenLoops n)
 ```
-错误消息的重要部分是 Lean 无法确定递归函数总是到达基本情况（因为它没有）。
+该错误消息的重要部分在于，Lean 无法判定这个递归函数总是会到达一个基本情形（因为它并不会）。
 
 ```anchorError evenLoops
 fail to show termination for
@@ -307,9 +310,9 @@ well-founded recursion cannot be used, `evenLoops` does not take any (non-fixed)
 :::
 
 :::paragraph
-尽管加法需要两个参数，但只需要检查其中一个。
-要将零加到数字 $`n`，只需返回 $`n`。
-要将 $`k` 的后继加到 $`n`，取将 $`k` 加到 $`n` 的结果的后继。
+尽管加法接受两个参数，但只需要检查其中一个。
+要把零加到一个数 $`n` 上，只需返回 $`n`。
+要把 $`k` 的后继加到 $`n` 上，则取将 $`k` 加到 $`n` 的结果的后继。
 
 ```anchor plus
 def plus (n : Nat) (k : Nat) : Nat :=
@@ -321,8 +324,8 @@ def plus (n : Nat) (k : Nat) : Nat :=
 :::
 
 :::paragraph
-在 {anchorName plus}`plus` 的定义中，选择名称 {anchorName plus}`k'` 来表示它与参数 {anchorName plus}`k` 相关联，但不相同。
-例如，走过 {anchorEvalStep plusThreeTwo 0}`plus 3 2` 的求值产生以下步骤：
+在 {anchorName plus}`plus` 的定义中，选择名称 {anchorName plus}`k'` 是为了表明它与实参 {anchorName plus}`k` 有关联，但并不相同。
+例如，逐步考察 {anchorEvalStep plusThreeTwo 0}`plus 3 2` 的求值过程，会得到以下步骤：
 
 ```anchorEvalSteps  plusThreeTwo
 plus 3 2
@@ -352,8 +355,8 @@ Nat.succ (Nat.succ 3)
 :::
 
 :::paragraph
-思考加法的一种方法是 $`n + k` 将 {anchorName times}`Nat.succ` 应用到 $`n` 上 $`k` 次。
-类似地，乘法 $`n × k` 将 $`n` 加到自身 $`k` 次，减法 $`n - k` 取 $`n` 的前驱 $`k` 次。
+理解加法的一种方式是：$`n + k` 将 {anchorName times}`Nat.succ` 作用 $`k` 次于 $`n`。
+类似地，乘法 $`n × k` 将 $`n` 与自身相加 $`k` 次，而减法 $`n - k` 取 $`n` 的前驱 $`k` 次。
 
 ```anchor times
 def times (n : Nat) (k : Nat) : Nat :=
@@ -372,10 +375,10 @@ def minus (n : Nat) (k : Nat) : Nat :=
 :::
 
 :::paragraph
-不是每个函数都可以使用结构递归轻松编写。
-将加法理解为迭代 {anchorName plus}`Nat.succ`，乘法理解为迭代加法，减法理解为迭代前驱，这表明除法的实现是迭代减法。
-在这种情况下，如果分子小于除数，结果为零。
-否则，结果是将分子分子减去除数再除以除数的后继。
+并非每个函数都能容易地用结构递归来编写。
+把加法理解为反复进行 {anchorName plus}`Nat.succ`，把乘法理解为反复进行加法，把减法理解为反复进行前驱，这些理解提示我们可将除法实现为反复进行减法。
+在这种情况下，如果被除数小于除数，则结果为零。
+否则，结果就是用被除数减去除数后再除以除数所得结果的后继。
 
 ```anchor div
 def div (n : Nat) (k : Nat) : Nat :=
@@ -386,9 +389,9 @@ def div (n : Nat) (k : Nat) : Nat :=
 :::
 
 :::paragraph
-只要第二个参数不是 {anchorTerm div}`0`，这个程序就会终止，因为它总是向基本情况进展。
-但是，它不是结构递归的，因为它不遵循为零找到结果并将较小 {anchorName div}`Nat` 的结果转换为其后继结果的模式。
-特别是，函数的递归调用应用于另一个函数调用的结果，而不是输入构造器的参数。
+只要第二个参数不是 {anchorTerm div}`0`，该程序就会终止，因为它总是朝着基本情形取得进展。
+然而，它并不是结构递归的，因为它并不遵循先为零寻找结果、再将较小 {anchorName div}`Nat` 的结果转换为其后继的结果这一模式。
+特别地，该函数的递归调用被应用于另一个函数调用的结果，而不是应用于输入构造子的参数。
 因此，Lean 用以下消息拒绝它：
 
 ```anchorError div
@@ -412,6 +415,6 @@ h✝ : ¬n < k
 ⊢ n - k < n
 ```
 
-此消息意味着 {anchorName div}`div` 需要手动终止证明。
-这个主题在 {ref "division-as-iterated-subtraction"}[最后一章] 中探讨。
+这条消息意味着 {anchorName div}`div` 需要一个手工的终止性证明。
+这一主题将在 {ref "division-as-iterated-subtraction"}[最后一章]中探讨。
 :::

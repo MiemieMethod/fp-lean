@@ -9,27 +9,27 @@ open FPLean
 set_option verso.exampleProject "../examples"
 set_option verso.exampleModule "Examples.Monads.Class"
 
-#doc (Manual) "Monad类型类" =>
+#doc (Manual) "Monad 类型类" =>
 %%%
 tag := "monad-type-class"
+file := "The-Monad-Type-Class"
 %%%
 
 :::paragraph
-无需为每个单子都实现 {lit}`ok` 或 {lit}`andThen` 这样的运算符，Lean标准库包含一个类型类，
-允许它们被重载，以便相同的运算符可用于 *任何* 单子。
-单子有两个操作，分别相当于 {lit}`ok` 和 {lit}`andThen`：
+不必为每个是单子的类型分别导入像 {lit}`ok` 或 {lit}`andThen` 这样的运算符，Lean 标准库包含一个类型类，允许对它们进行重载，从而同一组运算符可用于_任意_单子。
+单子有两个操作，它们等价于 {lit}`ok` 和 {lit}`andThen`：
 
 ```anchor FakeMonad
 class Monad (m : Type → Type) where
   pure : α → m α
   bind : m α → (α → m β) → m β
 ```
-这个定义略微简化了。
-Lean 标准库中的实际定义更复杂一些，稍后会介绍。
+这个定义略作了简化。
+Lean 库中的实际定义稍微更复杂一些，并将在后文给出。
 :::
 
 :::paragraph
-{anchorName MonadOptionExcept}`Option` 和 {anchorTerm MonadOptionExcept}`Except ε` 的 {anchorName MonadOptionExcept}`Monad` 实例，可以通过调整它们各自的 {lit}`andThen` 操作的定义来创建：
+可以通过调整它们各自的 {lit}`andThen` 操作的定义，来创建 {anchorName MonadOptionExcept}`Option` 和 {anchorTerm MonadOptionExcept}`Except ε` 的 {anchorName MonadOptionExcept}`Monad` 实例：
 
 ```anchor MonadOptionExcept
 instance : Monad Option where
@@ -49,10 +49,10 @@ instance : Monad (Except ε) where
 :::
 
 :::paragraph
-例如 {lit}`firstThirdFifthSeventh` 原本对 {anchorTerm Names}`Option α` 和 {anchorTerm Names}`Except String α` 类型分别定义。
-现在，它可以被定义为对 *任何* 单子都有效的多态函数。
-但是，它需要接受一个参数作为查找函数，因为不同的单子可能以不同的方式找不到结果。
-{anchorName FakeMonad}`bind` 的中缀运算符是 {lit}`>>=`, 它扮演与示例中 {lit}`~~>` 相同的角色。
+例如，{lit}`firstThirdFifthSeventh` 曾分别针对 {anchorTerm Names}`Option α` 和 {anchorTerm Names}`Except String α` 返回类型来定义。
+现在，它可以针对_任何_单子以多态方式定义。
+不过，它确实需要一个查找函数作为参数，因为不同的单子可能会以不同方式无法找到结果。
+{anchorName FakeMonad}`bind` 的中缀版本是 {lit}`>>=`，它在示例中扮演与 {lit}`~~>` 相同的角色。
 
 ```anchor firstThirdFifthSeventhMonad
 def firstThirdFifthSeventh [Monad m] (lookup : List α → Nat → m α)
@@ -66,7 +66,7 @@ def firstThirdFifthSeventh [Monad m] (lookup : List α → Nat → m α)
 :::
 
 :::paragraph
-给定作为示例的slowMammals和fastBirds列表，该 {anchorName firstThirdFifthSeventhMonad}`firstThirdFifthSeventh` 实现可与 {moduleName}`Option` 一起使用：
+给定慢速哺乳动物和快速鸟类的示例列表，{anchorName firstThirdFifthSeventhMonad}`firstThirdFifthSeventh` 的这一实现可以与 {moduleName}`Option` 一起使用：
 
 ```anchor animals
 def slowMammals : List String :=
@@ -97,8 +97,7 @@ some ("Peregrine falcon", "Golden eagle", "Spur-winged goose", "Anna's hummingbi
 :::
 
 :::paragraph
-在将 {anchorName getOrExcept}`Except` 的查找函数 {lit}`get` 重命名为更具体的形式后，
-完全相同的 {anchorName firstThirdFifthSeventhMonad}`firstThirdFifthSeventh` 实现也可以与 {anchorName getOrExcept}`Except` 一起使用：
+在将 {anchorName getOrExcept}`Except` 的查找函数 {lit}`get` 重命名为更具体的名称之后，完全相同的 {anchorName firstThirdFifthSeventhMonad}`firstThirdFifthSeventh` 实现也可以与 {anchorName getOrExcept}`Except` 一起使用：
 
 ```anchor getOrExcept
 def getOrExcept (xs : List α) (i : Nat) : Except String α :=
@@ -120,17 +119,18 @@ Except.error "Index 2 not found (maximum is 1)"
 ```anchorInfo okFast
 Except.ok ("Peregrine falcon", "Golden eagle", "Spur-winged goose", "Anna's hummingbird")
 ```
-{anchorName firstThirdFifthSeventhMonad}`m` 必须有 {anchorName firstThirdFifthSeventhMonad}`Monad` 实例，这一事实这意味着可以使用 {lit}`>>=` 和 {anchorName firstThirdFifthSeventhMonad}`pure` 运算符。
+{anchorName firstThirdFifthSeventhMonad}`m` 必须具有一个 {anchorName firstThirdFifthSeventhMonad}`Monad` 实例这一事实意味着 {lit}`>>=` 和 {anchorName firstThirdFifthSeventhMonad}`pure` 操作是可用的。
 :::
 
-# 通用的单子运算符
+# 一般的单子操作
 %%%
 tag := "monad-class-polymorphism"
+file := "General-Monad-Operations"
 %%%
 
 :::paragraph
-由于许多不同类型都是单子，因此对 *任何* 单子多态的函数非常强大。
-例如，函数 {anchorName mapM}`mapM` 是 {anchorName Names (show:=map)}`Functor.map` 的另一个版本，它使用 {anchorName mapM}`Monad` 将函数调用的结果按顺序连接起来：
+由于许多不同类型都是单子，对_任意_单子具有多态性的函数非常强大。
+例如，函数 {anchorName mapM}`mapM` 是 {anchorName Names (show:=map)}`Functor.map` 的一个版本，它使用 {anchorName mapM}`Monad` 来顺序执行并组合函数应用所得的结果：
 
 ```anchor mapM
 def mapM [Monad m] (f : α → m β) : List α → m (List β)
@@ -140,19 +140,16 @@ def mapM [Monad m] (f : α → m β) : List α → m (List β)
     mapM f xs >>= fun tl =>
     pure (hd :: tl)
 ```
-函数参数 {anchorName mapM}`f` 的返回类型决定了将使用哪个 {anchorName mapM}`Monad` 实例。
-换句话说，{anchorName mapM}`mapM`可用于生成日志的函数、可能失败的函数、或使用可变状态的函数。
-由于 {anchorName mapM}`f` 的类型直接决定了可用的效应(Effects)，因此API设计人员可以对其进行严格控制。
-*译者注：效应(Effects)是函数式编程中与 Monad 密切相关的主题，*
-*实际上对效应的控制比此处原文所述更复杂一些，但超出了本文的内容。*
-*另外副作用(Side Effects)也是一种效应。*
+函数参数 {anchorName mapM}`f` 的返回类型决定将使用哪个 {anchorName mapM}`Monad` 实例。
+换言之，{anchorName mapM}`mapM` 可用于产生日志的函数、可能失败的函数，或使用可变状态的函数。
+由于 {anchorName mapM}`f` 的类型决定了可用的效果，API 设计者可以对它们进行严格控制。
 :::
 
 :::paragraph
-如[本章简介](monads.md#对树节点编号)所介绍的，{anchorTerm StateEx}`State σ α`表示使用类型为 {anchorName StateEx}`σ` 的可变变量，并返回类型为 {anchorName StateEx}`α` 的值的程序。
-这些程序实际上是从起始状态到值和最终状态构成的对(pair)的函数。
-{anchorName StateMonad}`Monad`类型类要求：类型参数期望另一个类型参数，即它应该是{anchorTerm StateEx}`Type → Type`。
-这意味着 {anchorName StateMonad}`State` 的实例应提及状态类型{anchorName StateMonad}`σ`，使它成为实例的参数：
+如{ref "numbering-tree-nodes"}[本章引言]所述，{anchorTerm StateEx}`State σ α` 表示使用类型为 {anchorName StateEx}`σ` 的可变变量并返回类型为 {anchorName StateEx}`α` 的值的程序。
+这些程序实际上是从初始状态到一个由值和最终状态组成的二元组的函数。
+{anchorName StateMonad}`Monad` 类要求其参数期望一个单一类型参数；也就是说，它应当是一个 {anchorTerm StateEx}`Type → Type`。
+这意味着 {anchorName StateMonad}`State` 的实例应提及状态类型 {anchorName StateMonad}`σ`，而该状态类型会成为该实例的一个参数：
 
 ```anchor StateMonad
 instance : Monad (State σ) where
@@ -162,7 +159,8 @@ instance : Monad (State σ) where
       let (s', x) := first s
       next x s'
 ```
-这意味着在使用 {anchorName StateMonad}`bind` 对 {anchorName StateEx}`get` 和 {anchorName StateEx}`set` 排序时，状态的类型不能更改，这是具有状态的计算的合理规则。运算符 {anchorName increment}`increment` 将保存的状态加上一定量，并返回原值：
+这意味着，在使用 {anchorName StateMonad}`bind` 排序的对 {anchorName StateEx}`get` 和 {anchorName StateEx}`set` 的调用之间，状态的类型不能改变；对于有状态计算而言，这是一个合理的规则。
+运算符 {anchorName increment}`increment` 将保存的状态增加给定的量，并返回旧值：
 
 ```anchor increment
 def increment (howMuch : Int) : State Int Int :=
@@ -173,10 +171,10 @@ def increment (howMuch : Int) : State Int Int :=
 :::
 
 :::paragraph
-将 {anchorName mapMincrementOut}`mapM` 和 {anchorName mapMincrementOut}`increment` 一起使用会得到一个：计算列表元素加和的程序。
-更具体地说，可变变量包含到目前为止的和，而作为结果的列表包含各个步骤前状态变量的值。
-换句话说，{anchorTerm mapMincrement}`mapM increment`的类型为{anchorTerm mapMincrement}`List Int → State Int (List Int)`，展开 {anchorName StateMonad}`State` 的定义得到{anchorTerm mapMincrement2}`List Int → Int → (Int× List Int)`。
-它将初始值作为参数，应为{anchorTerm mapMincrementOut}`0`：
+将 {anchorName mapMincrementOut}`mapM` 与 {anchorName mapMincrementOut}`increment` 一起使用，会得到一个计算列表中各项之和的程序。
+更具体地说，可变变量包含当前为止的和，而结果列表包含逐步累计的和。
+换言之，{anchorTerm mapMincrement}`mapM increment` 的类型为 {anchorTerm mapMincrement}`List Int → State Int (List Int)`，展开 {anchorName StateMonad}`State` 的定义会得到 {anchorTerm mapMincrement2}`List Int → Int → (Int × List Int)`。
+它以初始和作为参数，该参数应为 {anchorTerm mapMincrementOut}`0`：
 ```anchor mapMincrementOut
 #eval mapM increment [1, 2, 3, 4, 5] 0
 ```
@@ -186,8 +184,8 @@ def increment (howMuch : Int) : State Int Int :=
 :::
 
 :::paragraph
-可以使用 {anchorName MonadWriter}`WithLog` 表示[日志记录效应](monads.md#日志记录)。
-就和 {anchorName StateEx}`State` 一样，它的 {anchorName MonadWriter}`Monad` 实例对于被记录数据的类型也是多态的：
+一个 {ref "logging"}[日志效应] 可以使用 {anchorName MonadWriter}`WithLog` 表示。
+就像 {anchorName StateEx}`State` 一样，它的 {anchorName MonadWriter}`Monad` 实例关于所记录数据的类型是多态的：
 
 ```anchor MonadWriter
 instance : Monad (WithLog logged) where
@@ -200,7 +198,7 @@ instance : Monad (WithLog logged) where
 :::
 
 :::paragraph
-{anchorName saveIfEven}`saveIfEven`函数记录偶数，但将参数原封不动返回：
+{anchorName saveIfEven}`saveIfEven` 是一个记录偶数日志、但原样返回其参数的函数：
 
 ```anchor saveIfEven
 def saveIfEven (i : Int) : WithLog Int Int :=
@@ -209,7 +207,7 @@ def saveIfEven (i : Int) : WithLog Int Int :=
    else pure ()) >>= fun () =>
   pure i
 ```
-将 {anchorName mapMsaveIfEven}`mapM` 和该函数一起使用，会生成一个记录偶数的日志、和未更改的输入列表：
+将此函数与 {anchorName mapMsaveIfEven}`mapM` 一起使用，会得到一个日志，其中包含与未改变的输入列表配对的偶数：
 ```anchor mapMsaveIfEven
 #eval mapM saveIfEven [1, 2, 3, 4, 5]
 ```
@@ -222,11 +220,13 @@ def saveIfEven (i : Int) : WithLog Int Int :=
 # 恒等单子
 %%%
 tag := "Id-monad"
+file := "The-Identity-Monad"
 %%%
 
-单子将具有效应(Effects)的程序（例如失败、异常或日志记录）编码为数据和函数的显式表示。
-有时API会使用单子来提高灵活性，但API的使用方可能不需要任何效应。
-*恒等单子* (Identity Monad)是一个没有任何效应的单子，允许将纯(pure)代码与monadic API一起使用：
+单子将带有效果的程序，例如失败、异常或日志记录，编码为由数据和函数构成的显式表示。
+然而，有时 API 会为了灵活性而写成使用单子，但该 API 的客户端可能并不需要任何被编码的效果。
+{deftech}_恒等单子_ 是一种没有效果的单子。
+它允许纯代码与单子式 API 一起使用：
 
 ```anchor IdMonad
 def Id (t : Type) : Type := t
@@ -235,16 +235,17 @@ instance : Monad Id where
   pure x := x
   bind x f := f x
 ```
-{anchorName IdMonad}`pure`的类型应为 {anchorTerm IdMore}`α → Id α`，但{anchorTerm IdMore}`Id α` *归约* 为 {anchorTerm IdMore}`α`。类似地，{anchorName IdMonad}`bind` 的类型应为{anchorTerm IdMore}`α → (α → Id β) → Id β`。
-由于这 *归约* 为 {anchorTerm IdMore}`α → (α → β) → β`，因此可以将第二个参数应用于第一个参数得到结果。
-> 译者注：此处 *归约* 一词原文为reduces to，实际含义为beta-reduction，请见类型论相关资料。
+{anchorName IdMonad}`pure` 的类型应为 {anchorTerm IdMore}`α → Id α`，但 {anchorTerm IdMore}`Id α` 会约化为 {anchorTerm IdMore}`α`。
+类似地，{anchorName IdMonad}`bind` 的类型应为 {anchorTerm IdMore}`α → (α → Id β) → Id β`。
+因为这会约化为 {anchorTerm IdMore}`α → (α → β) → β`，所以可以将第二个参数应用于第一个参数以得到结果。
 
 :::paragraph
-使用恒等单子时，{anchorName mapMId}`mapM`等同于{anchorName Names (show:=map)}`Functor.map`。但是要以这种方式调用它，Lean需要额外的提示来表明目标单子是 {anchorName mapMId}`Id`：
+使用恒等单子时，{anchorName mapMId}`mapM` 变得等价于 {anchorName Names (show:=map)}`Functor.map`
+然而，若要以这种方式调用它，Lean 需要一个提示，说明预期的单子是 {anchorName mapMId}`Id`：
 ```anchor mapMId
 def numbers := mapM (m := Id) (do return · + 1) [1, 2, 3, 4, 5]
 ```
-在类型没有提供任何具体线索来说明应使用哪个单子的上下文中使用 {anchorName mapMIdId}`mapM`，会得到 “instance problem is stuck” 消息：
+在类型没有提供任何关于应使用哪个单子的具体提示的上下文中使用 {anchorName mapMIdId}`mapM`，会产生一条 “instance problem is stuck” 消息：
 ```anchor mapMIdId
 def numbers := mapM (do return · + 1) [1, 2, 3, 4, 5]
 ```
@@ -258,52 +259,57 @@ Hint: Adding type annotations and supplying implicit arguments to functions can 
 ```
 :::
 
-# 单子约定
+# Monad 约定
 %%%
 tag := "monad-contract"
+file := "The-Monad-Contract"
 %%%
 
-正如 {anchorName MonadContract}`BEq` 和 {anchorName MonadContract}`Hashable` 的每一对实例都应该确保任何两个相等的值具有相同的哈希值，有一些是固有的约定是每个 {anchorName MonadContract}`Monad` 的实例都应遵守的。
-首先，{anchorName MonadContract}`pure`应为 {anchorName MonadContract}`bind` 的左单位元，即 {anchorTerm MonadContract}`bind (pure v) f` 应与 {anchorTerm MonadContract}`f v` 等价。
-其次，{anchorName MonadContract}`pure`应为 {anchorName MonadContract}`bind` 的右单位元，即 {anchorTerm MonadContract}`bind v pure` 应与 {anchorName MonadContract2}`v` 等价。
-最后，{anchorName MonadContract}`bind`应满足结合律，即 {anchorTerm MonadContract}`bind (bind v f) g` 应与 {anchorTerm MonadContract}`bind v (fun x => bind (f x) g)` 等价。
+正如 {anchorName MonadContract}`BEq` 和 {anchorName MonadContract}`Hashable` 的每一对实例都应保证任意两个相等的值具有相同的散列值一样，{anchorName MonadContract}`Monad` 的每个实例也应遵守一个约定。
+首先，{anchorName MonadContract}`pure` 应是 {anchorName MonadContract}`bind` 的左恒等元。
+也就是说，{anchorTerm MonadContract}`bind (pure v) f` 应与 {anchorTerm MonadContract}`f v` 相同。
+其次，{anchorName MonadContract}`pure` 应是 {anchorName MonadContract}`bind` 的右恒等元，因此 {anchorTerm MonadContract}`bind v pure` 与 {anchorName MonadContract2}`v` 相同。
+最后，{anchorName MonadContract}`bind` 应满足结合律，因此 {anchorTerm MonadContract}`bind (bind v f) g` 与 {anchorTerm MonadContract}`bind v (fun x => bind (f x) g)` 相同。
 
-这些约定保证了具有效应的程序的预期属性。
-由于 {anchorName MonadContract}`pure` 不导致效应，因此用 {anchorName MonadContract}`bind` 将其与其他效应接连执行不应改变结果。
-{anchorName MonadContract}`bind`满足的结合律则意味着先计算哪一部分无关紧要，只要保证效应的顺序不变即可。
+这一约定更一般地规定了带有效果的程序所应满足的性质。
+由于 {anchorName MonadContract}`pure` 没有效果，将它的效果与 {anchorName MonadContract}`bind` 排序不应改变结果。
+{anchorName MonadContract}`bind` 的结合律基本上说明，只要保持事情发生的顺序，排序本身的簿记方式并不重要。
 
 # 练习
 %%%
 tag := "monad-class-exercises"
+file := "Exercises"
 %%%
 
-## 映射一棵树
+## 在树上进行映射
 %%%
 tag := none
+file := "Mapping-on-a-Tree"
 %%%
 
 :::paragraph
-定义函数{anchorName ex1}`BinTree.mapM`。
-通过类比列表的{anchorName mapM}`mapM`，此函数应将单子函数应用于树中的每个节点，作为前序遍历。
+定义一个函数 {anchorName ex1}`BinTree.mapM`。
+类比于列表上的 {anchorName mapM}`mapM`，该函数应以前序遍历的方式，将一个单子函数应用到树中的每个数据项。
 类型签名应为：
 ```anchorTerm ex1
 def BinTree.mapM [Monad m] (f : α → m β) : BinTree α → m (BinTree β)
 ```
 :::
 
-## Option单子的约定
+## Option 单子的约定
 %%%
 tag := none
+file := "The-Option-Monad-Contract"
 %%%
 
 :::paragraph
-首先充分论证 {anchorName badOptionMonad}`Option` 的 {anchorName badOptionMonad}`Monad` 实例满足单子约定。
+首先，写出一个令人信服的论证，说明 {anchorName badOptionMonad}`Option` 的 {anchorName badOptionMonad}`Monad` 实例满足单子约定。
 然后，考虑以下实例：
 ```anchor badOptionMonad
 instance : Monad Option where
   pure x := some x
   bind opt next := none
 ```
-这两个方法都有正确的类型。
-但这个实例却违反了单子约定，为什么？
+这两个方法都具有正确的类型。
+为什么这个实例违反了单子契约？
 :::
